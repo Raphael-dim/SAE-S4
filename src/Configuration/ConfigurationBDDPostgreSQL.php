@@ -12,12 +12,12 @@ class ConfigurationBDDPostgreSQL implements ConfigurationBDDInterface
 
     public function getLogin(): string
     {
-        throw new Exception("Login BDD non renseigné !");
+        return "dimeckr";
     }
 
     public function getMotDePasse(): string
     {
-        throw new Exception("Mot de passe BDD non renseigné !");
+        return "061102693DC";
     }
 
     public function getDSN() : string{
