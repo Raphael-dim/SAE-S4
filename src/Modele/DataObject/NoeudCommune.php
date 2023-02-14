@@ -37,4 +37,9 @@ class NoeudCommune extends AbstractDataObject
         // Inutile car on ne fait pas d'ajout ni de mise-à-jour
         return [];
     }
+
+    public function trie($other): int
+    {
+        return $this.$this->nomCommune < $other.$this->nomCommune;
+    }
 }

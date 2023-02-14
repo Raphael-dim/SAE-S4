@@ -16,7 +16,7 @@ abstract class AbstractRepository
      * @param int|string $limit Nombre de réponses ("ALL" pour toutes les réponses)
      * @return AbstractDataObject[]
      */
-    public function recuperer($limit = 200): array
+    public function recuperer($limit = 2000): array
     {
         $nomTable = $this->getNomTable();
         $champsSelect = implode(", ", $this->getNomsColonnes());

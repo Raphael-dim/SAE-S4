@@ -1,0 +1,16 @@
+body{
+    margin:auto;
+}
+
+ul{
+    list-style: none;
+}
+
+li:nth-child(even){
+    background:lightgrey;
+}
+
+li:nth-child(odd){
+    background:white;
+}
+
