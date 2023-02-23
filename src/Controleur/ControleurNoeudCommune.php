@@ -73,6 +73,16 @@ class ControleurNoeudCommune extends ControleurGenerique
         if (!empty($_POST)) {
             $nomCommuneDepart = $_POST["nomCommuneDepart"];
             $nomCommuneArrivee = $_POST["nomCommuneArrivee"];
+            /*
+            //Pour escale
+            $nomCommunesEscale = array();
+            if(count($_POST)-3 != 0){
+                for($i = 1;$i<count($_POST)-3;$i++){
+                    $nomCommunesEscale = $_POST["nomCommuneEscale" . $i];
+                }
+            }*/
+
+
 
 
 
@@ -96,9 +106,9 @@ class ControleurNoeudCommune extends ControleurGenerique
             "id_rte500" => $noeudCommuneArrivee->getId_nd_rte()
             ])[0]->getGid();
 
-//            $pcc = new PlusCourtChemin($noeudRoutierDepartGid, $noeudRoutierArriveeGid);
-//            $distance = $pcc->calculer();
-            $distance = 1;
+            $pcc = new PlusCourtChemin($noeudRoutierDepartGid, $noeudRoutierArriveeGid);
+            $distance = $pcc->calculer();
+            //$distance = 1;
             $parametres["CommuneDepart"] = $noeudCommuneDepart;
             $parametres["CommuneArrivee"] = $noeudCommuneArrivee;
             $parametres["distance"] = $distance;
