@@ -22,14 +22,16 @@
 <script>
     //EN COURS DE DEV
 
-    let escaleHTML =
-        '<p class="InputAddOn"> ' +
-            '<label class="InputAddOn-item" for="nomCommuneArrivee_id">Nom de la commune d\'escale ' + (document.querySelectorAll(".InputAddOn").length-1) + '</label> ' +
-            '<input class="InputAddOn-field" type="text" value="" placeholder="Ex : Menton" name="nomCommuneArrivee" id="nomCommuneArrivee_id"> ' +
-        '</p>'
+    let nbEscale = 0;
 
     function test(){
-        document.querySelectorAll(".InputAddOn")[document.querySelectorAll(".InputAddOn").length-1].insertAdjacentHTML('beforebegin',escaleHTML);
+        nbEscale++;
+        let escaleHTML =
+            '<p class="InputAddOn"> ' +
+            '<label class="InputAddOn-item" for="nomCommuneEscale' + nbEscale + '_id">Nom de la commune d\'escale ' + nbEscale + '</label> ' +
+            '<input class="InputAddOn-field" type="text" value="" placeholder="Ex : Menton" name="nomCommuneEscale' + nbEscale + '" id="nomCommuneEscale' + nbEscale + '_id"> ' +
+            '</p>';
+        document.querySelector(".InputAddOn:last-of-type").insertAdjacentHTML('beforebegin',escaleHTML);
     }
 </script>
 
