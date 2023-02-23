@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title><?= $pagetitle ?></title>
     <link rel="stylesheet" href="../ressources/css/navstyle.css">
+    <link rel="stylesheet" href="../ressources/css/global.css">
 </head>
 <body>
     <header>

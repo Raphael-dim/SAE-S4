@@ -1,0 +1,42 @@
+body{
+    margin:auto;
+    background-color: #ffffff;
+    background-image:  linear-gradient(#eeeeff 2px, transparent 2px), linear-gradient(90deg, #edeeff 2px, transparent 2px), linear-gradient(#eaebff 1px, transparent 1px), linear-gradient(90deg, #f4f5ff 1px, #ffffff 1px);
+    background-size: 50px 50px, 50px 50px, 10px 10px, 10px 10px;
+    background-position: -2px -2px, -2px -2px, -1px -1px, -1px -1px;
+    background-attachment: fixed;
+}
+main{
+    margin:auto;
+    background:white;
+    padding:15px;
+    opacity: 1;
+}
+ul{
+    list-style: none;
+    padding-left:0;
+}
+
+li:nth-child(even){
+    background:lightgrey;
+}
+
+li:nth-child(odd){
+    background:white;
+}
+
+.visible{
+    display: block;
+}
+
+.hidden {
+    display:none
+}
+
+.unselected{
+    background:white;
+}
+
+.selected{
+    background:cornflowerblue;
+}

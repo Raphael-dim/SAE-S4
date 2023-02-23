@@ -16,6 +16,16 @@ class PlusCourtChemin
     ) {
     }
 
+
+
+    public function dijkstra(bool  $affichageDebug = false)
+    {
+
+
+
+
+    }
+
     public function calculer(bool $affichageDebug = false): float
     {
         $noeudRoutierRepository = new NoeudRoutierRepository();
@@ -51,6 +61,7 @@ class PlusCourtChemin
                 }
             }
         }
+
     }
 
     private function noeudALaFrontiereDeDistanceMinimale()
