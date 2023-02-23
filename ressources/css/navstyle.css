@@ -66,6 +66,10 @@ footer p {
     padding-right:1em;
 }
 
+.InputAddOn:last-of-type {
+    color: red;
+}
+
 footer {
     position: sticky;
     bottom: 0;
