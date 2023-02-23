@@ -16,7 +16,7 @@ abstract class AbstractRepository
      * @param int|string $limit Nombre de réponses ("ALL" pour toutes les réponses)
      * @return AbstractDataObject[]
      */
-    public function recuperer($limit = 2000): array
+    public function recuperer($limit = 200): array
     {
         $nomTable = $this->getNomTable();
         $champsSelect = implode(", ", $this->getNomsColonnes());
@@ -39,6 +39,7 @@ abstract class AbstractRepository
      */
     public function recupererPar(array $critereSelection, $limit = 200): array
     {
+
         $nomTable = $this->getNomTable();
         $champsSelect = implode(", ", $this->getNomsColonnes());
 
@@ -51,21 +52,46 @@ abstract class AbstractRepository
             SELECT $champsSelect FROM $nomTable WHERE $whereClause LIMIT $limit;
         SQL;
         $pdoStatement = ConnexionBaseDeDonnees::getPdo()->prepare($requeteSQL);
+
         $pdoStatement->execute($critereSelection);
 
         $objets = [];
         foreach ($pdoStatement as $objetFormatTableau) {
             $objets[] = $this->construireDepuisTableau($objetFormatTableau);
         }
+        return $objets;
+    }
 
+    public function recupererWhere(array $Clause,$limit = 200) : array {
+        $nomTable = $this->getNomTable();
+        $champsSelect = implode(", ", $this->getNomsColonnes());
+
+        $partiesWhere = array_map(function ($nomcolonne,$clause) {
+            return "LOWER($nomcolonne) $clause";
+        }, array_keys($Clause),$Clause);
+        $whereClause = join(',', $partiesWhere);
+
+        $requeteSQL = <<<SQL
+            SELECT $champsSelect FROM $nomTable WHERE $whereClause LIMIT $limit;
+        SQL;
+
+        $pdoStatement = ConnexionBaseDeDonnees::getPdo()->prepare($requeteSQL);
+
+        $pdoStatement->execute();
+
+        $objets = [];
+        foreach ($pdoStatement as $objetFormatTableau) {
+            $objets[] = $this->construireDepuisTableau($objetFormatTableau);
+        }
         return $objets;
     }
 
     public function recupererParClePrimaire(string $valeurClePrimaire): ?AbstractDataObject
     {
         $nomTable = $this->getNomTable();
+        $champsSelect = implode(", ", $this->getNomsColonnes());
         $nomClePrimaire = $this->getNomClePrimaire();
-        $sql = "SELECT * from $nomTable WHERE $nomClePrimaire=:clePrimaireTag";
+        $sql = "SELECT $champsSelect from $nomTable WHERE $nomClePrimaire=:clePrimaireTag";
         // Préparation de la requête
         $pdoStatement = ConnexionBaseDeDonnees::getPdo()->prepare($sql);
 

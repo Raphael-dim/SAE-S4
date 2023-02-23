@@ -9,6 +9,8 @@ class NoeudCommune extends AbstractDataObject
         private string $id_rte500,
         private string $nomCommune,
         private string $id_nd_rte,
+        private string $long,
+        private string $lat,
     ) {
     }
 
@@ -30,6 +32,14 @@ class NoeudCommune extends AbstractDataObject
     public function getNomCommune(): string
     {
         return $this->nomCommune;
+    }
+
+    public function getLongCommune():string{
+        return $this->long;
+    }
+
+    public function  getLatCommune():string{
+        return $this->lat;
     }
 
     public function exporterEnFormatRequetePreparee(): array
