@@ -9,7 +9,7 @@ class ControleurGenerique {
     protected static function afficherVue(string $cheminVue, array $parametres = []): void
     {
         extract($parametres);
-      
+        $messagesFlash = MessageFlash::lireTousMessages();
         require __DIR__ . "/../vue/$cheminVue";
     }
 
