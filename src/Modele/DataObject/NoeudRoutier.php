@@ -14,7 +14,7 @@ class NoeudRoutier extends AbstractDataObject
         private string $id_rte500,
     )
     {
-        $this->voisins = (new NoeudRoutierRepository())->getVoisins($this->getGid());
+        $this->voisins = (new NoeudRoutierRepository())->getVoisins2($this->getGid());
     }
 
     public function getGid(): int
