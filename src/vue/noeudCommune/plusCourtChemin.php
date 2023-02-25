@@ -1,39 +1,20 @@
 <form action="" method="post">
     <fieldset>
         <legend>Plus court chemin </legend>
-        <div style="overflow:auto; height:300px;">
-            <p class="InputAddOn">
-                <label class="InputAddOn-item" for="nomCommuneDepart_id">Nom de la commune de départ</label>
-                <input class="InputAddOn-field" type="text" value="" placeholder="Ex : Menton" name="nomCommuneDepart" id="nomCommuneDepart_id" required>
-            </p>
-            <p class="InputAddOn">
-                <label class="InputAddOn-item" for="nomCommuneArrivee_id">Nom de la commune d'arrivé</label>
-                <input class="InputAddOn-field" type="text" value="" placeholder="Ex : Menton" name="nomCommuneArrivee" id="nomCommuneArrivee_id" required>
-            </p>
-        </div>
-        <button onclick="test()" class="InputAddOn-field" style="width:100%;height: 100px">Ajouter une escale</button>
+        <p class="InputAddOn">
+            <label class="InputAddOn-item" for="nomCommuneDepart_id">Nom de la commune de départ</label>
+            <input class="InputAddOn-field" type="text" value="" placeholder="Ex : Menton" name="nomCommuneDepart" id="nomCommuneDepart_id" required>
+        </p>
+        <p class="InputAddOn">
+            <label class="InputAddOn-item" for="nomCommuneArrivee_id">Nom de la commune de départ</label>
+            <input class="InputAddOn-field" type="text" value="" placeholder="Ex : Menton" name="nomCommuneArrivee" id="nomCommuneArrivee_id" required>
+        </p>
         <input type="hidden" name="XDEBUG_TRIGGER">
         <p>
             <input class="InputAddOn-field" type="submit" value="Calculer" />
         </p>
     </fieldset>
 </form>
-
-<script>
-    //EN COURS DE DEV
-
-    let nbEscale = 0;
-
-    function test(){
-        nbEscale++;
-        let escaleHTML =
-            '<p class="InputAddOn"> ' +
-            '<label class="InputAddOn-item" for="nomCommuneEscale' + nbEscale + '_id">Nom de la commune d\'escale ' + nbEscale + '</label> ' +
-            '<input class="InputAddOn-field" type="text" value="" placeholder="Ex : Menton" name="nomCommuneEscale' + nbEscale + '" id="nomCommuneEscale' + nbEscale + '_id"> ' +
-            '</p>';
-        document.querySelector(".InputAddOn:last-of-type").insertAdjacentHTML('beforebegin',escaleHTML);
-    }
-</script>
 
 <?php if (!empty($_POST)) { ?>
     <p>

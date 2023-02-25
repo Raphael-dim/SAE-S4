@@ -14,7 +14,7 @@ class NoeudRoutierRepository extends AbstractRepository
         return new NoeudRoutier(
             $noeudRoutierTableau["gid"],
             $noeudRoutierTableau["id_rte500"],
-            $noeudRoutierTableau["geom"]
+            null
         );
     }
 
@@ -30,7 +30,7 @@ class NoeudRoutierRepository extends AbstractRepository
 
     protected function getNomsColonnes(): array
     {
-        return ["gid", "id_rte500", "geom"];
+        return ["gid", "id_rte500"];
     }
 
     // On bloque l'ajout, la màj et la suppression pour ne pas modifier la table
@@ -59,19 +59,26 @@ class NoeudRoutierRepository extends AbstractRepository
      * @param int $noeudRoutierGid
      * @return String[][]
      **/
-    public function getVoisins(NoeudRoutier $noeudRoutier): array
+    public function getVoisins(int $noeudRoutierGid): array
     {
         $requeteSQL = <<<SQL
-            select nr.gid as noeud_routier_gid, tr.gid as troncon_gid, tr.longueur
-            from noeud_routier nr, troncon_route tr
-            where ST_DWithin(tr.geom,:geomTag,0.001)
-            and ST_DWithin(tr.geom,nr.geom,0.001) and nr.gid !=:gidTag
+            (select  nr2.gid as noeud_routier_gid, tr.gid as troncon_gid, tr.longueur
+            from noeud_routier nr, troncon_route tr, noeud_routier nr2
+            where (st_distancesphere(nr.geom, st_startpoint(tr.geom)) < 1
+                and st_distancesphere(nr2.geom, st_endpoint(tr.geom)) < 1
+                and  nr.gid = :gidTag)
+            )
+            union
+            (select  nr2.gid as noeud_routier_gid, tr.gid as troncon_gid, tr.longueur
+            from noeud_routier nr, troncon_route tr, noeud_routier nr2
+            where (st_distancesphere(nr2.geom, st_startpoint(tr.geom)) < 1
+                and st_distancesphere(nr.geom, st_endpoint(tr.geom)) < 1
+                and  nr.gid = :gidTag)
+            );
         SQL;
         $pdoStatement = ConnexionBaseDeDonnees::getPdo()->prepare($requeteSQL);
         $pdoStatement->execute(array(
-            "gidTag" => $noeudRoutier->getGid(),
-            "geomTag" => $noeudRoutier->getGeom(),
-
+            "gidTag" => $noeudRoutierGid
         ));
         return $pdoStatement->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -79,7 +86,7 @@ class NoeudRoutierRepository extends AbstractRepository
     public static function getVoisins2(int $noeudRoutierGid): array
     {
         $requeteSQL = <<<SQL
-            (select * from relation r where noeud_depart_gid = :gidTag);
+            (select * from relation r where noeud_depart_gid = :gidTag or noeud_arrivee_gid = :gidTag);
         SQL;
         $pdoStatement = ConnexionBaseDeDonnees::getPdo()->prepare($requeteSQL);
         $pdoStatement->execute(array(

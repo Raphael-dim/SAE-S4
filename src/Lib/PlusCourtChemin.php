@@ -48,7 +48,12 @@ class PlusCourtChemin
             $voisins = $noeudRoutierRepository::getVoisins2($noeudRoutierGidCourant);
 
             foreach ($voisins as $voisin) {
-                $noeudVoisinGid = $voisin["noeud_arrivee_gid"];
+                if($voisin["noeud_arrivee_gid"] == $noeudRoutierGidCourant){
+                    $noeudVoisinGid = $voisin["noeud_depart_gid"];
+                }else{
+                    $noeudVoisinGid = $voisin["noeud_arrivee_gid"];
+                }
+
                 $distanceTroncon = $voisin["longueur"];
                 $distanceProposee = $this->distances[$noeudRoutierGidCourant] + $distanceTroncon;
 
