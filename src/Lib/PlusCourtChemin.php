@@ -45,9 +45,7 @@ class PlusCourtChemin
             unset($this->noeudsALaFrontiere[$noeudRoutierGidCourant]);
 
             /** @var NoeudRoutier $noeudRoutierCourant */
-            //$noeudRoutierCourant = $noeudRoutierRepository->recupererParClePrimaire($noeudRoutierGidCourant);
             $voisins = $noeudRoutierRepository::getVoisins2($noeudRoutierGidCourant);
-            //$voisins = $noeudRoutierCourant->getVoisins();
 
             foreach ($voisins as $voisin) {
                 $noeudVoisinGid = $voisin["noeud_arrivee_gid"];
