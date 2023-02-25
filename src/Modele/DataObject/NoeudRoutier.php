@@ -10,9 +10,10 @@ class NoeudRoutier extends AbstractDataObject
     private array $voisins;
 
     public function __construct(
-        private int $gid,
+        private int    $gid,
         private string $id_rte500,
-    ) {
+    )
+    {
         $this->voisins = (new NoeudRoutierRepository())->getVoisins($this->getGid());
     }
 

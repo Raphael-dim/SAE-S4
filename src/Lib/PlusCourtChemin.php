@@ -13,15 +13,13 @@ class PlusCourtChemin
     public function __construct(
         private int $noeudRoutierDepartGid,
         private int $noeudRoutierArriveeGid
-    ) {
+    )
+    {
     }
 
 
-
-    public function dijkstra(bool  $affichageDebug = false)
+    public function dijkstra(bool $affichageDebug = false)
     {
-
-
 
 
     }

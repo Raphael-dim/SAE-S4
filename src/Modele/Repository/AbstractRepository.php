@@ -8,8 +8,11 @@ use PDOException;
 abstract class AbstractRepository
 {
     protected abstract function getNomTable(): string;
+
     protected abstract function getNomClePrimaire(): string;
+
     protected abstract function getNomsColonnes(): array;
+
     protected abstract function construireDepuisTableau(array $objetFormatTableau): AbstractDataObject;
 
     /**
@@ -62,13 +65,14 @@ abstract class AbstractRepository
         return $objets;
     }
 
-    public function recupererWhere(array $Clause,$limit = 200) : array {
+    public function recupererWhere(array $Clause, $limit = 200): array
+    {
         $nomTable = $this->getNomTable();
         $champsSelect = implode(", ", $this->getNomsColonnes());
 
-        $partiesWhere = array_map(function ($nomcolonne,$clause) {
+        $partiesWhere = array_map(function ($nomcolonne, $clause) {
             return "LOWER($nomcolonne) $clause";
-        }, array_keys($Clause),$Clause);
+        }, array_keys($Clause), $Clause);
         $whereClause = join(',', $partiesWhere);
 
         $requeteSQL = <<<SQL
