@@ -7,6 +7,7 @@ use App\PlusCourtChemin\Lib\PlusCourtChemin;
 use App\PlusCourtChemin\Modele\DataObject\NoeudCommune;
 use App\PlusCourtChemin\Modele\Repository\NoeudCommuneRepository;
 use App\PlusCourtChemin\Modele\Repository\NoeudRoutierRepository;
+use App\PlusCourtChemin\Modele\Repository\TronconRouteRepository;
 
 class ControleurNoeudCommune extends ControleurGenerique
 {
@@ -96,12 +97,30 @@ class ControleurNoeudCommune extends ControleurGenerique
             "id_rte500" => $noeudCommuneArrivee->getId_nd_rte()
             ])[0]->getGid();
 
-//            $pcc = new PlusCourtChemin($noeudRoutierDepartGid, $noeudRoutierArriveeGid);
-//            $distance = $pcc->calculer();
-            $distance = 1;
+            $pcc = new PlusCourtChemin($noeudRoutierDepartGid, $noeudRoutierArriveeGid);
+
+            $result = $pcc->calculer();
+            $distance = $result[0];
+            $troncons_route = $result[1];
+
+            $troncons = [];
+
+            foreach($troncons_route as $troncon){
+                $troncons[] = (new TronconRouteRepository())->recupererParClePrimaire($troncon);
+            }
+
+
             $parametres["CommuneDepart"] = $noeudCommuneDepart;
             $parametres["CommuneArrivee"] = $noeudCommuneArrivee;
+            $parametres["noeudDepart"] = $noeudRoutierRepository->recupererPar([
+                "id_rte500" => $noeudCommuneDepart->getId_nd_rte()
+            ])[0];
+            $parametres["noeudArrivee"] = $noeudRoutierArriveeGid = $noeudRoutierRepository->recupererPar([
+                "id_rte500" => $noeudCommuneArrivee->getId_nd_rte()
+            ])[0];
             $parametres["distance"] = $distance;
+            $parametres["troncons"] = $troncons;
+
         }
 
         ControleurNoeudCommune::afficherVue('vueGenerale.php', $parametres);

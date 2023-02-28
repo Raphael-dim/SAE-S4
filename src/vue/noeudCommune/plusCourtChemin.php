@@ -29,8 +29,8 @@
     ></script>
     <script >
         function initMap() {
-            const LatLngDepart =  { lat: <?=$CommuneDepart->getLatCommune()?> , lng:<?=$CommuneDepart->getLongCommune()?> };
-            const LatLngArrivee=  { lat: <?=$CommuneArrivee->getLatCommune()?> , lng:<?=$CommuneArrivee->getLongCommune()?> };
+            const LatLngDepart =  { lat: <?=$noeudDepart->getLatNoeud()?> , lng:<?=$noeudDepart->getLongNoeud()?> };
+            const LatLngArrivee=  { lat: <?=$noeudArrivee->getLatNoeud()?> , lng:<?=$noeudArrivee->getLongNoeud()?> };
 
             const map = new google.maps.Map(document.getElementById("map"), {
                 zoom: 13,
@@ -49,18 +49,21 @@
                 title: "<?= $CommuneArrivee->getNomCommune() ?>",
             });
 
-            var line = new google.maps.Polyline({
-                path: [LatLngDepart, LatLngArrivee],
-                strokeColor: "#00c4ff",
-                strokeOpacity: 1.0,
-                strokeWeight: 10,
-                geodesic: true,
-                map: map
-            });
+            <?php foreach ($troncons as $troncon){?>
 
+                var LatLgnStart = { lat : <?=$troncon->getLatStart() ?>, lng : <?=$troncon->getLongStart() ?> };
+                var LatLgnEnd = { lat : <?=$troncon->getLatEnd() ?>, lng : <?=$troncon->getLongEnd() ?> };
+                var line = new google.maps.Polyline({
+                    path: [LatLgnStart, LatLgnEnd],
+                    strokeColor: "#00c4ff",
+                    strokeOpacity: 1.0,
+                    strokeWeight: 10,
+                    geodesic: true,
+                    map: map
+                });
+            <?php }?>
         }
 
         window.initMap = initMap;
     </script>
-
 <?php } ?>
