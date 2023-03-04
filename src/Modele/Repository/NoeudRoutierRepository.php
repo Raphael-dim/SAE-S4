@@ -86,7 +86,7 @@ class NoeudRoutierRepository extends AbstractRepository
     public static function getVoisins2(int $noeudRoutierGid): array
     {
         $requeteSQL = <<<SQL
-            (select * from relation r where noeud_depart_gid = :gidTag);
+            (select * from relation r where noeud_depart_gid = :gidTag or noeud_arrivee_gid = :gidTag);
         SQL;
         $pdoStatement = ConnexionBaseDeDonnees::getPdo()->prepare($requeteSQL);
         $pdoStatement->execute(array(
