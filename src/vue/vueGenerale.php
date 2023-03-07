@@ -1,29 +1,37 @@
+<?php
+
+
+use App\PlusCourtChemin\Lib\ConnexionUtilisateur;
+use App\PlusCourtChemin\Lib\Conteneur;
+
+$generateurUrl = Conteneur::recupererService("generateurUrl");
+$assistantUrl = Conteneur::recupererService("assistantUrl");
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <title><?= $pagetitle ?></title>
-    <link rel="stylesheet" href="../ressources/css/navstyle.css">
-    <link rel="stylesheet" href="../ressources/css/global.css">
+    <link rel="stylesheet" href="<?= $assistantUrl->getAbsoluteUrl("assets/css/navstyle.css") ?>">
+    <link rel="stylesheet" href="<?= $assistantUrl->getAbsoluteUrl("assets/css/global.css") ?>">
 </head>
 <body>
 <header>
     <nav>
         <ul>
             <li>
-                <a href="controleurFrontal.php?action=afficherListe&controleur=utilisateur">Utilisateurs</a>
+                <a href="">Utilisateurs</a>
             </li>
             <li>
-                <a href="controleurFrontal.php?action=afficherListe&controleur=noeudCommune">Communes</a>
+                <a href="">Communes</a>
             </li>
             <?php
-
-            use App\PlusCourtChemin\Lib\ConnexionUtilisateur;
 
             if (!ConnexionUtilisateur::estConnecte()) {
                 echo <<<HTML
                     <li>
-                        <a href="controleurFrontal.php?action=afficherFormulaireConnexion&controleur=utilisateur">
+                        <a href="connexion>
                             <img alt="login" src="../ressources/img/enter.png" width="18">
                         </a>
                     </li>
