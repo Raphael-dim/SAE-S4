@@ -29,13 +29,12 @@ $assistantUrl = Conteneur::recupererService("assistantUrl");
             <?php
 
             if (!ConnexionUtilisateur::estConnecte()) {
-                echo <<<HTML
+                echo '
                     <li>
-                        <a href="connexion>
-                            <img alt="login" src="../ressources/img/enter.png" width="18">
+                        <a href="connexion">
+                            <img alt="login" src="' . $assistantUrl->getAbsoluteUrl("assets/img/enter.png") . '" width="18">
                         </a>
-                    </li>
-                    HTML;
+                    </li>';
             } else {
                 $loginHTML = htmlspecialchars(ConnexionUtilisateur::getLoginUtilisateurConnecte());
                 $loginURL = rawurlencode(ConnexionUtilisateur::getLoginUtilisateurConnecte());

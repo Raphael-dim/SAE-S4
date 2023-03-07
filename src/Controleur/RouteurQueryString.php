@@ -8,7 +8,10 @@ class RouteurQueryString
     {
         $action = $_REQUEST['action'] ?? 'afficherListe';
 
-        $controleur = $_REQUEST['controleur'] ?? "noeudRoutier";
+
+        $controleur = "noeudCommune";
+        if (isset($_REQUEST['controleur']))
+        $controleur = $_REQUEST['controleur'];
 
         $controleurClassName = 'App\PlusCourtChemin\Controleur\Controleur' . ucfirst($controleur);
 
