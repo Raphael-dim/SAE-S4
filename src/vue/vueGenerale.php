@@ -21,17 +21,17 @@ $assistantUrl = Conteneur::recupererService("assistantUrl");
     <nav>
         <ul>
             <li>
-                <a href="">Utilisateurs</a>
+                <a href="./utilisateurs">Utilisateurs</a>
             </li>
             <li>
-                <a href="">Communes</a>
+                <a href="./">Communes</a>
             </li>
             <?php
 
             if (!ConnexionUtilisateur::estConnecte()) {
                 echo '
                     <li>
-                        <a href="connexion">
+                        <a href="./connexion">
                             <img alt="login" src="' . $assistantUrl->getAbsoluteUrl("assets/img/enter.png") . '" width="18">
                         </a>
                     </li>';
@@ -46,7 +46,7 @@ $assistantUrl = Conteneur::recupererService("assistantUrl");
                         </a>
                     </li>
                     <li>
-                        <a href="controleurFrontal.php?action=deconnecter&controleur=utilisateur">
+                        <a href="./deconnecter">
                             <img alt="logout" src="../ressources/img/logout.png" width="18">
                         </a>
                     </li>

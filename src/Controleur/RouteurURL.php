@@ -39,6 +39,11 @@ class RouteurURL
         $routeConnecter->setMethods(['POST']);
         $routes->add("connexion", $routeConnecter);
 
+        $routeFeed = new Route("/utilisateurs", [
+            "_controller" => [ControleurUtilisateur::class, "afficherListe"],
+        ]);
+        $routes->add("utilisateurs", $routeFeed);
+
 
         $contexteRequete = (new RequestContext())->fromRequest($requete);
         $associateurUrl = new UrlMatcher($routes, $contexteRequete);
