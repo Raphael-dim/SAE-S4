@@ -23,7 +23,8 @@ function endLoadingAction() {
 }
 
 function requeteAJAX(stringVille, callback, startLoadingAction, endLoadingAction) {
-    let url = "../src/Modele/Repository/RequeteVille.php?ville=" + encodeURIComponent(stringVille);
+    let url = "../web/controleurFrontal.php?controleur=RequeteVilleController&action=getVille&ville=" + encodeURIComponent(stringVille);
+    console.log(url);
     let requete = new XMLHttpRequest();
     startLoadingAction();
     requete.open("GET", url, true);
@@ -36,6 +37,7 @@ function requeteAJAX(stringVille, callback, startLoadingAction, endLoadingAction
 }
 
 function callback_4(req) {
+    console.log(req.responseText);
     let data = JSON.parse(req.responseText);
     let names = data.map(element => element["nom_comm"]);
     afficheVilles(names);

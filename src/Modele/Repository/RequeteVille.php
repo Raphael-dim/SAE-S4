@@ -1,9 +1,11 @@
 <?php
-use App\PlusCourtChemin\Modele\Repository\NoeudCommuneRepository;
 
 // A COMPLETER
 
 // récupération du contenu du champ, passé en get
+
+require "../src/Modele/Repository/NoeudCommuneRepository.php";
+
 $ville = $_GET['ville'];
 
 // lancement de la requête SQL avec selectByName et
