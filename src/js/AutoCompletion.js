@@ -2,8 +2,10 @@ let autoCompletionDepart = document.getElementById("autocompletionDepart");
 autoCompletionDepart.style.borderWidth = "0px";
 let autoCompletionArrivee = document.getElementById("autocompletionArrivee");
 autoCompletionArrivee.style.borderWidth = "0px";
+let villeDepart = document.getElementById("nomCommuneDepart_id");
+let villeArrivee = document.getElementById("nomCommuneArrivee_id");
 
-let autoCompletionTarget;
+let autoCompletionTarget; // LA CHAMP D'AUTOCOMPLETION ACTUELLEMENT SELECTIONNEE (soit autoCompletionDepart ou autoCompletionArrivee)
 
 function afficheVilles(tableau) {
     videVilles();
@@ -48,7 +50,6 @@ function maRequeteAJAX(chaine) {
     requeteAJAX(chaine, callback_4, startLoadingAction, endLoadingAction);
 }
 
-let villeDepart = document.getElementById("nomCommuneDepart_id");
 villeDepart.addEventListener('input', function () {
     if (villeDepart.value.length >= 2) {
         autoCompletionTarget = autoCompletionDepart;
@@ -56,7 +57,6 @@ villeDepart.addEventListener('input', function () {
     }
 });
 
-let villeArrivee = document.getElementById("nomCommuneArrivee_id");
 villeArrivee.addEventListener('input', function () {
     if (villeArrivee.value.length >= 2) {
         autoCompletionTarget = autoCompletionArrivee;
@@ -72,4 +72,12 @@ autoCompletionDepart.addEventListener('click', function (event) {
 autoCompletionArrivee.addEventListener('click', function (event) {
     villeArrivee.value = event.target.innerHTML;
     autoCompletionArrivee.innerHTML = "";
+})
+
+villeDepart.addEventListener("focusout", function () {
+    videVilles();
+})
+
+villeArrivee.addEventListener("focusout", function () {
+    videVilles();
 })
