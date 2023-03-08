@@ -6,7 +6,8 @@ use App\PlusCourtChemin\Lib\Conteneur;
 use App\PlusCourtChemin\Lib\MessageFlash;
 use Psr\Log\NullLogger;
 
-class ControleurGenerique {
+class ControleurGenerique
+{
 
     protected static function afficherVue(string $cheminVue, array $parametres = []): void
     {
@@ -16,7 +17,7 @@ class ControleurGenerique {
     }
 
     // https://stackoverflow.com/questions/768431/how-do-i-make-a-redirect-in-php
-    protected static function rediriger(string $nomRoute, $tab = NULL) : void
+    protected static function rediriger(string $nomRoute, $tab = NULL): void
     {
         //$queryString = [];
         //if ($action != "") {
@@ -41,7 +42,7 @@ class ControleurGenerique {
         }
 
         // $url = "Location: ./controleurFrontal.php?" . join("&", $queryString);
-        header("Location: ".$url);
+        header("Location: " . $url);
         exit();
     }
 
@@ -59,5 +60,4 @@ class ControleurGenerique {
             "errorMessage" => $errorMessageView
         ]);
     }
-
 }
