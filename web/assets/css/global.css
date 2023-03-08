@@ -41,7 +41,8 @@ li:nth-child(odd){
     background:cornflowerblue;
 }
 
-#autocompletion {
+.autocompletion {
+    
     width: inherit;
     background-color: white;
     border: 1px solid grey;
@@ -49,12 +50,12 @@ li:nth-child(odd){
     position: absolute;
 }
 
-#autocompletion p {
+.autocompletion p {
     margin: 0 0 0 0;
     padding: 0 5px 0 5px;
 }
 
-#autocompletion p:hover {
+.autocompletion p:hover {
     background-color: aliceblue;
     cursor: default;
 }
