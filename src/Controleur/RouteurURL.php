@@ -77,7 +77,15 @@ class RouteurURL
             "_controller" => [ControleurNoeudCommune::class, "plusCourtChemin"],
         ]);
         $routePlusCourtChemin->setMethods(['GET']);
-        $routes->add("plusCourtChemin", $routePlusCourtChemin); 
+        $routes->add("plusCourtChemin", $routePlusCourtChemin);
+
+        // ROUTE POUR plusCourtChemin de ControleurNoeudCommune
+        $routePlusCourtChemin = new Route("/cal", [
+            "_controller" => [ControleurNoeudCommune::class, "plusCourtChemin"],
+        ]);
+        $routePlusCourtChemin->setMethods(['POST']);
+        $routes->add("cal", $routePlusCourtChemin); 
+
 
 
         $contexteRequete = (new RequestContext())->fromRequest($requete);
