@@ -20,50 +20,26 @@
     <p>
         Le plus court chemin entre <?= $CommuneDepart->getNomCommune() ?> et <?= $CommuneArrivee->getNomCommune() ?> mesure <?= $distance ?>km.
     </p>
+
+    <!-------------------------------------GOOGLE MAPS API---------------------------------------->
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <div id="map" style ="height:650px;width:620px;margin:auto;"></div>
 
     <script
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCNgiSeE--QYZtlP4qYMTDatGQrDXgql8M&callback=initMap&v=weekly"
-            defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCNgiSeE--QYZtlP4qYMTDatGQrDXgql8M&v=weekly"
     ></script>
-    <script >
-        function initMap() {
-            const LatLngDepart =  { lat: <?=$noeudDepart->getLatNoeud()?> , lng:<?=$noeudDepart->getLongNoeud()?> };
-            const LatLngArrivee=  { lat: <?=$noeudArrivee->getLatNoeud()?> , lng:<?=$noeudArrivee->getLongNoeud()?> };
+    <!-------------------------------------------------------------------------------------------->
 
-            const map = new google.maps.Map(document.getElementById("map"), {
-                zoom: 13,
-                center: LatLngDepart,
-            });
+    <!---------------------------------------INIT MAP--------------------------------------------->
+    <script src = "../ressources/js/map.js"></script>
+    <script defer>
+        let CommuneDepartJSON = <?=$CommuneDepart->toJson() ?>;
+        let CommuneArriveeJSON = <?=$CommuneArrivee->toJson() ?>;
+        initMap(CommuneDepartJSON,CommuneArriveeJSON);
 
-            new google.maps.Marker({
-                position: LatLngDepart,
-                map,
-                title: "<?= $CommuneDepart->getNomCommune() ?>",
-            });
-
-            new google.maps.Marker({
-                position: LatLngArrivee,
-                map,
-                title: "<?= $CommuneArrivee->getNomCommune() ?>",
-            });
-
-            <?php foreach ($troncons as $troncon){?>
-
-                var LatLgnStart = { lat : <?=$troncon->getLatStart() ?>, lng : <?=$troncon->getLongStart() ?> };
-                var LatLgnEnd = { lat : <?=$troncon->getLatEnd() ?>, lng : <?=$troncon->getLongEnd() ?> };
-                var line = new google.maps.Polyline({
-                    path: [LatLgnStart, LatLgnEnd],
-                    strokeColor: "#00c4ff",
-                    strokeOpacity: 1.0,
-                    strokeWeight: 10,
-                    geodesic: true,
-                    map: map
-                });
-            <?php }?>
-        }
-
-        window.initMap = initMap;
+        let tabTronconJSON = <?=json_encode($troncons)?>;
+        plotTroncon(tabTronconJSON);
     </script>
+    <!-------------------------------------------------------------------------------------------->
+
 <?php } ?>
