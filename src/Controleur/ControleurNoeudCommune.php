@@ -74,7 +74,6 @@ class ControleurNoeudCommune extends ControleurGenerique
             $nomCommuneDepart = $_POST["nomCommuneDepart"];
             $nomCommuneArrivee = $_POST["nomCommuneArrivee"];
 
-
             $noeudCommuneRepository = new NoeudCommuneRepository();
 //            /** @var NoeudCommune $noeudCommuneDepart */
 //
@@ -106,8 +105,7 @@ class ControleurNoeudCommune extends ControleurGenerique
             foreach($troncons_route as $troncon){
                 $troncons[] = (new TronconRouteRepository())->recupererParClePrimaire($troncon);
             }
-
-
+            var_dump($noeudCommuneArrivee);
             $parametres["CommuneDepart"] = $noeudCommuneDepart;
             $parametres["CommuneArrivee"] = $noeudCommuneArrivee;
             $parametres["noeudDepart"] = $noeudRoutierRepository->recupererPar([
