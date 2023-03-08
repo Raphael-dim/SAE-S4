@@ -69,10 +69,15 @@ class RouteurURL
         $routeDetailCommune = new Route("/detailCommune/{idCommune}", [
             "_controller" => [ControleurNoeudCommune::class, "afficherDetail"],
         ]);
-        $routes->add("afficherDetail", $routeDetailCommune); 
+        $routes->add("afficherDetail", $routeDetailCommune);
 
 
-
+        // ROUTE POUR plusCourtChemin de ControleurNoeudCommune
+        $routePlusCourtChemin = new Route("/plusCourtChemin", [
+            "_controller" => [ControleurNoeudCommune::class, "plusCourtChemin"],
+        ]);
+        $routePlusCourtChemin->setMethods(['GET']);
+        $routes->add("plusCourtChemin", $routePlusCourtChemin); 
 
 
         $contexteRequete = (new RequestContext())->fromRequest($requete);
