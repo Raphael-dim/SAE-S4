@@ -80,11 +80,11 @@ class RouteurURL
         $routes->add("plusCourtChemin", $routePlusCourtChemin);
 
         // ROUTE POUR plusCourtChemin de ControleurNoeudCommune
-        $routePlusCourtChemin = new Route("/cal", [
+        $routePlusCourtChemin = new Route("/calculer", [
             "_controller" => [ControleurNoeudCommune::class, "plusCourtChemin"],
         ]);
         $routePlusCourtChemin->setMethods(['POST']);
-        $routes->add("cal", $routePlusCourtChemin); 
+        $routes->add("calculer", $routePlusCourtChemin); 
 
 
 

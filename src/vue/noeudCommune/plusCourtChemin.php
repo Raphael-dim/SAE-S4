@@ -1,4 +1,4 @@
-<form action="cal" method="post">
+<form action="calculer" method="post">
     <fieldset>
         <legend>Plus court chemin </legend>
         <p class="InputAddOn">
@@ -26,8 +26,14 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCNgiSeE--QYZtlP4qYMTDatGQrDXgql8M&callback=initMap&v=weekly" defer></script>
     <script>
         function initMap() {
-            const LatLngDepart =  { lat: <?=$CommuneDepart->getLatCommune()?> , lng:<?=$CommuneDepart->getLongCommune()?> };
-            const LatLngArrivee=  { lat: <?=$CommuneArrivee->getLatCommune()?> , lng:<?=$CommuneArrivee->getLongCommune()?> };
+            const LatLngDepart = {
+                lat: <?= $CommuneDepart->getLatCommune() ?>,
+                lng: <?= $CommuneDepart->getLongCommune() ?>
+            };
+            const LatLngArrivee = {
+                lat: <?= $CommuneArrivee->getLatCommune() ?>,
+                lng: <?= $CommuneArrivee->getLongCommune() ?>
+            };
 
             const map = new google.maps.Map(document.getElementById("map"), {
                 zoom: 13,
@@ -46,10 +52,16 @@
                 title: "<?= $CommuneArrivee->getNomCommune() ?>",
             });
 
-            <?php foreach ($troncons as $troncon){?>
+            <?php foreach ($troncons as $troncon) { ?>
 
-                var LatLgnStart = { lat : <?=$troncon->getLatStart() ?>, lng : <?=$troncon->getLongStart() ?> };
-                var LatLgnEnd = { lat : <?=$troncon->getLatEnd() ?>, lng : <?=$troncon->getLongEnd() ?> };
+                var LatLgnStart = {
+                    lat: <?= $troncon->getLatStart() ?>,
+                    lng: <?= $troncon->getLongStart() ?>
+                };
+                var LatLgnEnd = {
+                    lat: <?= $troncon->getLatEnd() ?>,
+                    lng: <?= $troncon->getLongEnd() ?>
+                };
                 var line = new google.maps.Polyline({
                     path: [LatLgnStart, LatLgnEnd],
                     strokeColor: "#00c4ff",
@@ -58,7 +70,7 @@
                     geodesic: true,
                     map: map
                 });
-            <?php }?>
+            <?php } ?>
         }
 
         window.initMap = initMap;
