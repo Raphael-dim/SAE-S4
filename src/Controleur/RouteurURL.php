@@ -25,12 +25,14 @@ class RouteurURL
         ]);
         $routes->add("communes", $routeFeed);
 
+
         // ROUTE POUR AFFICHER LA PAGE DE CONNEXION
         $routeConnexion = new Route("/connexion", [
             "_controller" => [ControleurUtilisateur::class, "afficherFormulaireConnexion"],
         ]);
         $routeConnexion->setMethods(['GET']);
         $routes->add("afficherFormulaireConnexion", $routeConnexion);
+
 
         // ROUTE POUR SE CONNECTER APRES AVOIR SAISI LES DONNEES
         $routeConnecter = new Route("/connexion", [
@@ -39,11 +41,28 @@ class RouteurURL
         $routeConnecter->setMethods(['POST']);
         $routes->add("connexion", $routeConnecter);
 
-        $routeFeed = new Route("/utilisateurs", [
+
+        // ROUTE POUR afficherListe des utilisateurs
+        $routeAfficherListe = new Route("/utilisateurs", [
             "_controller" => [ControleurUtilisateur::class, "afficherListe"],
         ]);
-        $routes->add("utilisateurs", $routeFeed);
+        $routes->add("utilisateurs", $routeAfficherListe);
 
+
+        // ROUTE POUR afficherFormulaireCreation 
+        $routeAfficherCreationCompte = new Route("/inscription", [
+            "_controller" => [ControleurUtilisateur::class, "afficherFormulaireCreation"],
+        ]);
+        $routeAfficherCreationCompte->setMethods(['GET']);
+        $routes->add("afficherFormulaireCreation", $routeAfficherCreationCompte);
+
+        
+        // ROUTE POUR creerDepuisFormulaire
+        $routeCreationCompte = new Route("/inscription", [
+            "_controller" => [ControleurUtilisateur::class, "creerDepuisFormulaire"],
+        ]);
+        $routeCreationCompte->setMethods(['POST']);
+        $routes->add("creerDepuisFormulaire", $routeCreationCompte);
 
         $contexteRequete = (new RequestContext())->fromRequest($requete);
         $associateurUrl = new UrlMatcher($routes, $contexteRequete);

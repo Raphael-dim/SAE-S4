@@ -41,7 +41,7 @@ class ControleurGenerique {
         }
 
         // $url = "Location: ./controleurFrontal.php?" . join("&", $queryString);
-        header("Location: ./controleurFrontal.php?" . $url);
+        header("Location: ".$url);
         exit();
     }
 
