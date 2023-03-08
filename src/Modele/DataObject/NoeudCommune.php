@@ -52,4 +52,16 @@ class NoeudCommune extends AbstractDataObject
     {
         return $this.$this->nomCommune < $other.$this->nomCommune;
     }
+
+    public function jsonSerialize() : array
+    {
+        return [
+            "gid" => $this->gid,
+            "id_rte500" => $this->id_rte500,
+            "nomCommune" => $this->nomCommune,
+            "id_nd_rte" =>  $this->id_nd_rte,
+            "long" => $this->long,
+            "lat" => $this->lat,
+        ];
+    }
 }

@@ -12,10 +12,7 @@ class TronconRoute extends AbstractDataObject
         private string $sens,
         private string $numeroRoute,
         private float $longueur,
-        private string $long_start,
-        private string $lat_start,
-        private string $long_end,
-        private string $lat_end
+        private string $geom,
     ) {
     }
 
@@ -44,25 +41,26 @@ class TronconRoute extends AbstractDataObject
         return $this->longueur;
     }
 
-    public function getLatStart():string{
-        return $this->lat_start;
+    public function getGeom():string{
+        return $this->geom;
     }
 
-    public function  getLatEnd():string{
-        return $this->lat_end;
-    }
-
-    public function getLongStart():string{
-        return $this->long_start;
-    }
-
-    public function  getLongEnd():string{
-        return $this->long_end;
-    }
 
     public function exporterEnFormatRequetePreparee(): array
     {
         // Inutile car pas d'ajout ni de màj
         return [];
+    }
+
+    public function jsonSerialize() : array
+    {
+        return [
+            "gid" => $this->gid,
+            "id_rte500" => $this->id_rte500,
+            "sens" => $this->sens,
+            "numeroRoute" =>  $this->numeroRoute,
+            "longueur" => $this->longueur,
+            "geom" => json_decode($this->geom),
+        ];
     }
 }

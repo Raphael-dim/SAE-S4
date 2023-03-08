@@ -16,10 +16,7 @@ class TronconRouteRepository extends AbstractRepository
             $noeudRoutierTableau["sens"],
             $noeudRoutierTableau["num_route"] ?? "",
             (float) $noeudRoutierTableau["longueur"],
-            $noeudRoutierTableau["st_x_s"],
-            $noeudRoutierTableau["st_y_s"],
-            $noeudRoutierTableau["st_x_e"],
-            $noeudRoutierTableau["st_y_e"],
+            $noeudRoutierTableau["geom"],
             null
         );
     }
@@ -36,7 +33,7 @@ class TronconRouteRepository extends AbstractRepository
 
     protected function getNomsColonnes(): array
     {
-        return ["gid", "id_rte500", "sens", "num_route", "longueur", "ST_X(st_startpoint(geom)) as st_x_s", "ST_Y(st_startpoint(geom)) as st_y_s","ST_X(st_endpoint(geom)) as st_x_e","ST_Y(st_endpoint(geom)) as st_y_e"];
+        return ["gid", "id_rte500", "sens", "num_route", "longueur", "ST_AsGeoJSON(geom) as geom" ];
     }
 
     // On bloque l'ajout, la màj et la suppression pour ne pas modifier la table
