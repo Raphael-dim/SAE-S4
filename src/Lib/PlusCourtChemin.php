@@ -11,12 +11,6 @@ class PlusCourtChemin
     private array $noeudsALaFrontiere;
     private array $route;
 
-    public function __construct(
-        private int $noeudRoutierDepartGid,
-        private int $noeudRoutierArriveeGid
-    )
-    {
-    }
 
 
     public function calculer(bool $affichageDebug = false): array
@@ -43,9 +37,9 @@ class PlusCourtChemin
             $voisins = $noeudRoutierRepository::getVoisins2($noeudRoutierGidCourant);
 
             foreach ($voisins as $voisin) {
-                if($voisin["noeud_arrivee_gid"] == $noeudRoutierGidCourant){
+                if ($voisin["noeud_arrivee_gid"] == $noeudRoutierGidCourant) {
                     $noeudVoisinGid = $voisin["noeud_depart_gid"];
-                }else{
+                } else {
                     $noeudVoisinGid = $voisin["noeud_arrivee_gid"];
                 }
 

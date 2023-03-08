@@ -1,5 +1,5 @@
 <div>
-    <form method="<?= $method ?>" action="controleurFrontal.php">
+    <form method="POST" action="connexion">
         <fieldset>
             <legend>Connexion</legend>
             <p class="InputAddOn">
@@ -10,10 +10,11 @@
                 <label class="InputAddOn-item" for="mdp_id">Mot de passe</label>
                 <input class="InputAddOn-field" type="password" value="" placeholder="" name="mdp" id="mdp_id" required>
             </p>
-            <input type='hidden' name='action' value='connecter'>
-            <input type='hidden' name='controleur' value='utilisateur'>
             <p>
-                <input class="InputAddOn-field" type="submit" value="Envoyer"/>
+                <input class="InputAddOn-field" type="submit" value="Envoyer" />
+            </p>
+            <p>
+                <a class="InputAddOn-field" href="./inscription" value="Créer un compte" />Créer un compte</a>
             </p>
         </fieldset>
     </form>

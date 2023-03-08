@@ -1,33 +1,40 @@
+<?php
+
+
+use App\PlusCourtChemin\Lib\ConnexionUtilisateur;
+use App\PlusCourtChemin\Lib\Conteneur;
+
+$generateurUrl = Conteneur::recupererService("generateurUrl");
+$assistantUrl = Conteneur::recupererService("assistantUrl");
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <title><?= $pagetitle ?></title>
-    <link rel="stylesheet" href="../ressources/css/navstyle.css">
-    <link rel="stylesheet" href="../ressources/css/global.css">
+    <link rel="stylesheet" href="<?= $assistantUrl->getAbsoluteUrl("assets/css/navstyle.css") ?>">
+    <link rel="stylesheet" href="<?= $assistantUrl->getAbsoluteUrl("assets/css/global.css") ?>">
 </head>
 <body>
 <header>
     <nav>
         <ul>
             <li>
-                <a href="controleurFrontal.php?action=afficherListe&controleur=utilisateur">Utilisateurs</a>
+                <a href="./utilisateurs">Utilisateurs</a>
             </li>
             <li>
-                <a href="controleurFrontal.php?action=afficherListe&controleur=noeudCommune">Communes</a>
+                <a href="./">Communes</a>
             </li>
             <?php
 
-            use App\PlusCourtChemin\Lib\ConnexionUtilisateur;
-
             if (!ConnexionUtilisateur::estConnecte()) {
-                echo <<<HTML
+                echo '
                     <li>
-                        <a href="controleurFrontal.php?action=afficherFormulaireConnexion&controleur=utilisateur">
-                            <img alt="login" src="../ressources/img/enter.png" width="18">
+                        <a href="./connexion">
+                            <img alt="login" src="' . $assistantUrl->getAbsoluteUrl("assets/img/enter.png") . '" width="18">
                         </a>
-                    </li>
-                    HTML;
+                    </li>';
             } else {
                 $loginHTML = htmlspecialchars(ConnexionUtilisateur::getLoginUtilisateurConnecte());
                 $loginURL = rawurlencode(ConnexionUtilisateur::getLoginUtilisateurConnecte());
@@ -39,7 +46,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="controleurFrontal.php?action=deconnecter&controleur=utilisateur">
+                        <a href="./deconnecter">
                             <img alt="logout" src="../ressources/img/logout.png" width="18">
                         </a>
                     </li>

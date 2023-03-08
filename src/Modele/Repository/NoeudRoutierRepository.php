@@ -87,4 +87,5 @@ class NoeudRoutierRepository extends AbstractRepository
             "gidTag" => $noeudRoutierGid
         ));
         return $pdoStatement->fetchAll(PDO::FETCH_ASSOC);
-    }}
+    }
+}

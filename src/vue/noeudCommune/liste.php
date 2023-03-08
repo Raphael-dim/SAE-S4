@@ -1,13 +1,11 @@
-
 <?php
+$nextstart = $start + $limit;
 
-$nextstart = $start+$limit;
+$nextpass = $start + 1000;
 
-$nextpass = $start+1000;
+$previousstart = $start - $limit;
 
-$previousstart = $start-$limit;
-
-$previouspass = $start-1000;
+$previouspass = $start - 1000;
 echo <<<HTML
 <a href="?action=plusCourtChemin&controleur=noeudCommune">Calculer un plus court chemin</a>
 
@@ -44,17 +42,18 @@ echo <<<HTML
 
 <ul id ="liste_Noeud_Commune">
 HTML;
-function my_sort(\App\PlusCourtChemin\Modele\DataObject\NoeudCommune $a,\App\PlusCourtChemin\Modele\DataObject\NoeudCommune $b)
+function my_sort(\App\PlusCourtChemin\Modele\DataObject\NoeudCommune $a, \App\PlusCourtChemin\Modele\DataObject\NoeudCommune $b)
 {
-        return str_replace("É","E",$a->getNomCommune())>str_replace("É","E",$b->getNomCommune());
+    return str_replace("É", "E", $a->getNomCommune()) > str_replace("É", "E", $b->getNomCommune());
 }
-usort($noeudsCommunes,"my_sort");
+
+usort($noeudsCommunes, "my_sort");
 foreach ($noeudsCommunes as $noeudCommune) {
-    echo '<li class ="commune visible '. str_replace("É","E",$noeudCommune->getNomCommune())[0].'" style = "position :relative; padding:5px;">';
+    echo '<li class ="commune visible ' . str_replace("É", "E", $noeudCommune->getNomCommune())[0] . '" style = "position :relative; padding:5px;">';
     echo $noeudCommune->getNomCommune();
     echo " <a style ='position:absolute; right:0' href=\"?action=afficherDetail&controleur=noeudCommune&gid={$noeudCommune->getGid()}\">(Détail)</a>";
     echo '</li>';
 }
 echo "</ul>\n";
 ?>
-    <script src="../ressources/js/NoeudCommune.js"></script>
+<script src="../src/js/NoeudCommune.js"></script>

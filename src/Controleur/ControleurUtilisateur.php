@@ -87,7 +87,7 @@ class ControleurUtilisateur extends ControleurGenerique
         ) {
             if ($_REQUEST["mdp"] !== $_REQUEST["mdp2"]) {
                 MessageFlash::ajouter("warning", "Mots de passe distincts.");
-                ControleurUtilisateur::rediriger("utilisateur", "afficherFormulaireCreation");
+                ControleurUtilisateur::rediriger("inscription");
             }
 
             if (!ConnexionUtilisateur::estAdministrateur()) {
@@ -96,7 +96,7 @@ class ControleurUtilisateur extends ControleurGenerique
 
             if (!filter_var($_REQUEST["email"], FILTER_VALIDATE_EMAIL)) {
                 MessageFlash::ajouter("warning", "Email non valide");
-                ControleurUtilisateur::rediriger("utilisateur", "afficherFormulaireCreation");
+                ControleurUtilisateur::rediriger("inscription");
             }
 
             $utilisateur = Utilisateur::construireDepuisFormulaire($_REQUEST);
@@ -107,14 +107,14 @@ class ControleurUtilisateur extends ControleurGenerique
             $succesSauvegarde = $utilisateurRepository->ajouter($utilisateur);
             if ($succesSauvegarde) {
                 MessageFlash::ajouter("success", "L'utilisateur a bien été créé !");
-                ControleurUtilisateur::rediriger("utilisateur", "afficherListe");
+                ControleurUtilisateur::rediriger("connexion");
             } else {
                 MessageFlash::ajouter("warning", "Login existant.");
-                ControleurUtilisateur::rediriger("utilisateur", "afficherFormulaireCreation");
+                ControleurUtilisateur::rediriger("inscription");
             }
         } else {
             MessageFlash::ajouter("danger", "Login, nom, prenom ou mot de passe manquant.");
-            ControleurUtilisateur::rediriger("utilisateur", "afficherFormulaireCreation");
+            ControleurUtilisateur::rediriger("inscription");
         }
     }
 
@@ -226,7 +226,7 @@ class ControleurUtilisateur extends ControleurGenerique
     {
         if (!(isset($_REQUEST['login']) && isset($_REQUEST['mdp']))) {
             MessageFlash::ajouter("danger", "Login ou mot de passe manquant.");
-            ControleurUtilisateur::rediriger("utilisateur", "afficherFormulaireConnexion");
+            ControleurUtilisateur::rediriger("connexion");
         }
         $utilisateurRepository = new UtilisateurRepository();
         /** @var Utilisateur $utilisateur */
@@ -234,21 +234,21 @@ class ControleurUtilisateur extends ControleurGenerique
 
         if ($utilisateur == null) {
             MessageFlash::ajouter("warning", "Login inconnu.");
-            ControleurUtilisateur::rediriger("utilisateur", "afficherFormulaireConnexion");
+            ControleurUtilisateur::rediriger("connexion");
         }
 
         if (!MotDePasse::verifier($_REQUEST["mdp"], $utilisateur->getMdpHache())) {
             MessageFlash::ajouter("warning", "Mot de passe incorrect.");
-            ControleurUtilisateur::rediriger("utilisateur", "afficherFormulaireConnexion");
+            ControleurUtilisateur::rediriger("connexion");
         }
 
         if (!VerificationEmail::aValideEmail($utilisateur)) {
             MessageFlash::ajouter("warning", "Adresse email non validée.");
-            ControleurUtilisateur::rediriger("utilisateur", "afficherFormulaireConnexion");
+            ControleurUtilisateur::rediriger("connexion");
         }
 
         ConnexionUtilisateur::connecter($utilisateur->getLogin());
-        MessageFlash::ajouter("success", "Connexion effectuée.");
+        ControleurUtilisateur::rediriger("/");
         ControleurUtilisateur::rediriger("utilisateur", "afficherDetail", ["login" => $_REQUEST["login"]]);
     }
 
@@ -281,6 +281,4 @@ class ControleurUtilisateur extends ControleurGenerique
             ControleurUtilisateur::rediriger("utilisateur", "afficherListe");
         }
     }
-
-
 }
