@@ -40,19 +40,18 @@ class ControleurNoeudCommune extends ControleurGenerique
         ]);
     }
 
-    public static function afficherDetail(): void
+    public static function afficherDetail($idCommune): void
     {
-        if (!isset($_REQUEST['gid'])) {
+        if (!isset($idCommune)) {
             MessageFlash::ajouter("danger", "Immatriculation manquante.");
-            ControleurNoeudCommune::rediriger("noeudCommune", "afficherListe");
+            ControleurNoeudCommune::rediriger("/");
         }
 
-        $gid = $_REQUEST['gid'];
-        $noeudCommune = (new NoeudCommuneRepository())->recupererParClePrimaire($gid);
+        $noeudCommune = (new NoeudCommuneRepository())->recupererParClePrimaire($idCommune);
 
         if ($noeudCommune === null) {
             MessageFlash::ajouter("warning", "gid inconnue.");
-            ControleurNoeudCommune::rediriger("noeudCommune", "afficherListe");
+            ControleurNoeudCommune::rediriger("/");
         }
 
         ControleurNoeudCommune::afficherVue('vueGenerale.php', [
