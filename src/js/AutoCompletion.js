@@ -74,10 +74,14 @@ autoCompletionArrivee.addEventListener('click', function (event) {
     autoCompletionArrivee.innerHTML = "";
 })
 
-villeDepart.addEventListener("focusout", function () {
-    videVilles();
-})
+// villeDepart.addEventListener("focusout", function (event) {
+//     console.log(Array.from(autoCompletionDepart.childNodes));
+//     if (!Array.from(autoCompletionDepart.childNodes).includes(event.target)) {
+//         videVilles();
+//     }
 
-villeArrivee.addEventListener("focusout", function () {
-    videVilles();
-})
+// })
+
+// villeArrivee.addEventListener("focusout", function (event) {
+
+// })
