@@ -11,7 +11,9 @@ class PlusCourtChemin
     private array $noeudsALaFrontiere;
     private array $route;
 
-
+    public function __construct(private int $noeudRoutierDepartGid, private int $noeudRoutierArriveeGid)
+    {
+    }
 
     public function calculer(bool $affichageDebug = false): array
     {
