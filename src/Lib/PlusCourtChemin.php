@@ -36,17 +36,14 @@ class PlusCourtChemin
             unset($this->noeudsALaFrontiere[$noeudRoutierGidCourant]);
 
             /** @var NoeudRoutier $noeudRoutierCourant */
-            $voisins = $noeudRoutierRepository::getVoisins2($noeudRoutierGidCourant);
+            $voisins = $noeudRoutierRepository->getVoisins($noeudRoutierGidCourant);
+
 
             foreach ($voisins as $voisin) {
-                if ($voisin["noeud_arrivee_gid"] == $noeudRoutierGidCourant) {
-                    $noeudVoisinGid = $voisin["noeud_depart_gid"];
-                } else {
-                    $noeudVoisinGid = $voisin["noeud_arrivee_gid"];
-                }
-
+                $noeudVoisinGid = $voisin["noeud_routier_gid"];
                 $distanceTroncon = $voisin["longueur"];
                 $distanceProposee = $this->distances[$noeudRoutierGidCourant] + $distanceTroncon;
+
 
                 if (!isset($this->distances[$noeudVoisinGid]) || $distanceProposee < $this->distances[$noeudVoisinGid]) {
                     $this->distances[$noeudVoisinGid] = $distanceProposee;
