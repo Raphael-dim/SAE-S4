@@ -75,13 +75,13 @@ class ControleurNoeudCommune extends ControleurGenerique
             $nomCommuneArrivee = $_POST["nomCommuneArrivee"];
 
             $noeudCommuneRepository = new NoeudCommuneRepository();
-//            /** @var NoeudCommune $noeudCommuneDepart */
-//
-//
+            //            /** @var NoeudCommune $noeudCommuneDepart */
+            //
+            //
             $noeudCommuneDepart = $noeudCommuneRepository->recupererPar(["nom_comm" => $nomCommuneDepart])[0];
-//            /** @var NoeudCommune $noeudCommuneArrivee */
+            //            /** @var NoeudCommune $noeudCommuneArrivee */
             $noeudCommuneArrivee = $noeudCommuneRepository->recupererPar(["nom_comm" => $nomCommuneArrivee])[0];
-//
+            //
             $noeudRoutierRepository = new NoeudRoutierRepository();
             echo "<br>";
 
@@ -102,7 +102,7 @@ class ControleurNoeudCommune extends ControleurGenerique
 
             $troncons = [];
 
-            foreach($troncons_route as $troncon){
+            foreach ($troncons_route as $troncon) {
                 $troncons[] = (new TronconRouteRepository())->recupererParClePrimaire($troncon);
             }
             $parametres["CommuneDepart"] = $noeudCommuneDepart;
@@ -115,10 +115,8 @@ class ControleurNoeudCommune extends ControleurGenerique
             ])[0];
             $parametres["distance"] = $distance;
             $parametres["troncons"] = $troncons;
-
         }
 
         ControleurNoeudCommune::afficherVue('vueGenerale.php', $parametres);
     }
-
 }

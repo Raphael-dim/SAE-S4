@@ -79,7 +79,7 @@ class RouteurURL
         $routePlusCourtChemin->setMethods(['GET']);
         $routes->add("plusCourtChemin", $routePlusCourtChemin);
 
-        // ROUTE POUR plusCourtChemin de ControleurNoeudCommune
+        // ROUTE POUR calculer le plusCourtChemin de ControleurNoeudCommune (POST)UR
         $routePlusCourtChemin = new Route("/calculer", [
             "_controller" => [ControleurNoeudCommune::class, "plusCourtChemin"],
         ]);

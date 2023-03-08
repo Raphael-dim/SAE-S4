@@ -9,10 +9,13 @@
             <label class="InputAddOn-item" for="nomCommuneArrivee_id">Nom de la commune de départ</label>
             <input class="InputAddOn-field" type="text" value="" placeholder="Ex : Menton" name="nomCommuneArrivee" id="nomCommuneArrivee_id" required>
         </p>
+        <!-- <img id="loading" src="img/loading.gif"> -->
+        <div id="autocompletion"></div>
         <input type="hidden" name="XDEBUG_TRIGGER">
         <p>
             <input class="InputAddOn-field" type="submit" value="Calculer" />
         </p>
+
     </fieldset>
 </form>
 
@@ -76,3 +79,4 @@
         window.initMap = initMap;
     </script>
 <?php } ?>
+<script src="../src/js/AutoCompletion.js" defer></script>
