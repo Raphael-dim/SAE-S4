@@ -4,6 +4,7 @@ namespace App\PlusCourtChemin\Modele\Repository;
 
 use App\PlusCourtChemin\Modele\DataObject\AbstractDataObject;
 use App\PlusCourtChemin\Modele\DataObject\NoeudCommune;
+use PDO;
 
 class NoeudCommuneRepository extends AbstractRepository
 {
@@ -32,7 +33,7 @@ class NoeudCommuneRepository extends AbstractRepository
 
     protected function getNomsColonnes(): array
     {
-        return ["gid", "id_rte500", "nom_comm", "id_nd_rte"," ST_X(geom)","ST_Y(geom)"];
+        return ["gid", "id_rte500", "nom_comm", "id_nd_rte", " ST_X(geom)", "ST_Y(geom)"];
     }
 
     // On bloque l'ajout, la màj et la suppression pour ne pas modifier la table
@@ -52,14 +53,25 @@ class NoeudCommuneRepository extends AbstractRepository
         return false;
     }
 
-    public function recuperer($start = 0,$limit = 200): array
+    public function recuperer($start = 0, $limit = 200, $nomCommune = null): array
     {
         $nomTable = $this->getNomTable();
         $champsSelect = implode(", ", $this->getNomsColonnes());
-        $requeteSQL = <<<SQL
-        SELECT $champsSelect FROM $nomTable LIMIT $limit OFFSET $start;
-        SQL;
-        $pdoStatement = ConnexionBaseDeDonnees::getPdo()->query($requeteSQL);
+        if (is_null($nomCommune)) {
+            $requeteSQL = <<<SQL
+            SELECT $champsSelect FROM $nomTable LIMIT $limit OFFSET $start;
+            SQL;
+            $pdoStatement = ConnexionBaseDeDonnees::getPdo()->query($requeteSQL);
+        } else {
+            $requeteSQL = <<<SQL
+            SELECT $champsSelect FROM $nomTable WHERE nom_comm LIKE :nameTag LIMIT limit OFFSET $start;
+            SQL;
+            $req_prep = ConnexionBaseDeDonnees::getPdo()->prepare($requeteSQL);
+            $values = array("name_tag" => $nomCommune . "%");
+            $req_prep->execute($values);
+            $req_prep->setFetchMode(PDO::FETCH_OBJ);
+            $pdoStatement = $req_prep->fetchAll();
+        }
 
         $objets = [];
         foreach ($pdoStatement as $objetFormatTableau) {
@@ -68,5 +80,4 @@ class NoeudCommuneRepository extends AbstractRepository
 
         return $objets;
     }
-
 }

@@ -77,4 +77,16 @@ class NoeudRoutierRepository extends AbstractRepository
         return $pdoStatement->fetchAll(PDO::FETCH_ASSOC);
     }
 
-   }
+
+    public static function getVoisins2(int $noeudRoutierGid): array
+    {
+        $requeteSQL = <<<SQL
+            (select * from relation r where noeud_depart_gid = :gidTag or noeud_arrivee_gid = :gidTag);
+        SQL;
+        $pdoStatement = ConnexionBaseDeDonnees::getPdo()->prepare($requeteSQL);
+        $pdoStatement->execute(array(
+            "gidTag" => $noeudRoutierGid
+        ));
+        return $pdoStatement->fetchAll(PDO::FETCH_ASSOC);
+    }
+}

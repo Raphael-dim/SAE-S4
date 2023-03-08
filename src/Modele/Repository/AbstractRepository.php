@@ -79,6 +79,7 @@ abstract class AbstractRepository
             SELECT $champsSelect FROM $nomTable WHERE $whereClause LIMIT $limit;
         SQL;
 
+        echo($requeteSQL);
         $pdoStatement = ConnexionBaseDeDonnees::getPdo()->prepare($requeteSQL);
 
         $pdoStatement->execute();

@@ -2,9 +2,12 @@
 
 namespace App\PlusCourtChemin\Controleur;
 
+use App\PlusCourtChemin\Lib\Conteneur;
 use App\PlusCourtChemin\Lib\MessageFlash;
+use Psr\Log\NullLogger;
 
-class ControleurGenerique {
+class ControleurGenerique
+{
 
     protected static function afficherVue(string $cheminVue, array $parametres = []): void
     {
@@ -14,22 +17,32 @@ class ControleurGenerique {
     }
 
     // https://stackoverflow.com/questions/768431/how-do-i-make-a-redirect-in-php
-    protected static function rediriger(string $controleur = "", string $action = "", array $query = []) : void
+    protected static function rediriger(string $nomRoute, $tab = NULL): void
     {
-        $queryString = [];
-        if ($action != "") {
-            $queryString[] = "action=" . rawurlencode($action);
+        //$queryString = [];
+        //if ($action != "") {
+        //    $queryString[] = "action=" . rawurlencode($action);
+        //}
+        //if ($controleur != "") {
+        //    $queryString[] = "controleur=" . rawurlencode($controleur);
+        //}
+        //foreach ($query as $name => $value) {
+        //    $name = rawurldecode($name);
+        //    $value = rawurldecode($value);
+        //    $queryString[] = "$name=$value";
+        //}
+        //$url = "Location: ./controleurFrontal.php?" . join("&", $queryString);
+        //header($url);
+        //exit();
+
+        if (!is_null($tab)) {
+            $url = Conteneur::recupererService('generateurUrl')->generate($nomRoute, $tab);
+        } else {
+            $url = Conteneur::recupererService('generateurUrl')->generate($nomRoute);
         }
-        if ($controleur != "") {
-            $queryString[] = "controleur=" . rawurlencode($controleur);
-        }
-        foreach ($query as $name => $value) {
-            $name = rawurldecode($name);
-            $value = rawurldecode($value);
-            $queryString[] = "$name=$value";
-        }
-        $url = "Location: ./controleurFrontal.php?" . join("&", $queryString);
-        header($url);
+
+        // $url = "Location: ./controleurFrontal.php?" . join("&", $queryString);
+        header("Location: " . $url);
         exit();
     }
 
@@ -47,5 +60,4 @@ class ControleurGenerique {
             "errorMessage" => $errorMessageView
         ]);
     }
-
 }
