@@ -37,9 +37,9 @@ function requeteAJAX(stringVille, callback, startLoadingAction, endLoadingAction
 }
 
 function callback_4(req) {
-    console.log(req.responseText);
+    console.log(JSON.parse(req.responseText));
     let data = JSON.parse(req.responseText);
-    let names = data.map(element => element["nom_comm"]);
+    let names = data.map(element => element["nomCommune"]);
     afficheVilles(names);
 }
 
