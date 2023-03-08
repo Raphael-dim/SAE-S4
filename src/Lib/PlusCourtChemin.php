@@ -9,16 +9,11 @@ class PlusCourtChemin
 {
     private array $distances;
     private array $noeudsALaFrontiere;
+    private array $route;
 
 
 
-    public function dijkstra(bool $affichageDebug = false)
-    {
-
-
-    }
-
-    public function calculer(bool $affichageDebug = false): float
+    public function calculer(bool $affichageDebug = false): array
     {
         $noeudRoutierRepository = new NoeudRoutierRepository();
 
@@ -32,7 +27,7 @@ class PlusCourtChemin
 
             // Fini
             if ($noeudRoutierGidCourant === $this->noeudRoutierArriveeGid) {
-                return $this->distances[$noeudRoutierGidCourant];
+                return [$this->distances[$noeudRoutierGidCourant],$this->route];
             }
 
             // Enleve le noeud routier courant de la frontiere
@@ -54,10 +49,11 @@ class PlusCourtChemin
                 if (!isset($this->distances[$noeudVoisinGid]) || $distanceProposee < $this->distances[$noeudVoisinGid]) {
                     $this->distances[$noeudVoisinGid] = $distanceProposee;
                     $this->noeudsALaFrontiere[$noeudVoisinGid] = true;
+                    $this->route[] = $voisin["troncon_gid"];
                 }
             }
         }
-
+        return [0,[]];
     }
 
     private function noeudALaFrontiereDeDistanceMinimale()

@@ -12,9 +12,10 @@ class NoeudRoutier extends AbstractDataObject
     public function __construct(
         private int    $gid,
         private string $id_rte500,
-    )
-    {
-        $this->voisins = (new NoeudRoutierRepository())->getVoisins2($this->getGid());
+        private string $long,
+        private string $lat,
+    ) {
+        $this->voisins = (new NoeudRoutierRepository())->getVoisins($this->getGid());
     }
 
     public function getGid(): int
@@ -30,6 +31,14 @@ class NoeudRoutier extends AbstractDataObject
     public function getVoisins(): array
     {
         return $this->voisins;
+    }
+
+    public function getLongNoeud():string{
+        return $this->long;
+    }
+
+    public function  getLatNoeud():string{
+        return $this->lat;
     }
 
     public function exporterEnFormatRequetePreparee(): array

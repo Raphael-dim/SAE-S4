@@ -14,6 +14,8 @@ class NoeudRoutierRepository extends AbstractRepository
         return new NoeudRoutier(
             $noeudRoutierTableau["gid"],
             $noeudRoutierTableau["id_rte500"],
+            $noeudRoutierTableau["st_x"],
+            $noeudRoutierTableau["st_y"],
             null
         );
     }
@@ -30,7 +32,7 @@ class NoeudRoutierRepository extends AbstractRepository
 
     protected function getNomsColonnes(): array
     {
-        return ["gid", "id_rte500"];
+        return ["gid", "id_rte500","ST_X(geom)","ST_Y(geom)"];
     }
 
     // On bloque l'ajout, la màj et la suppression pour ne pas modifier la table
@@ -50,6 +52,8 @@ class NoeudRoutierRepository extends AbstractRepository
         return false;
     }
 
+
+
     /**
      * Renvoie le tableau des voisins d'un noeud routier
      *
@@ -62,19 +66,9 @@ class NoeudRoutierRepository extends AbstractRepository
     public function getVoisins(int $noeudRoutierGid): array
     {
         $requeteSQL = <<<SQL
-            (select  nr2.gid as noeud_routier_gid, tr.gid as troncon_gid, tr.longueur
-            from noeud_routier nr, troncon_route tr, noeud_routier nr2
-            where (st_distancesphere(nr.geom, st_startpoint(tr.geom)) < 1
-                and st_distancesphere(nr2.geom, st_endpoint(tr.geom)) < 1
-                and  nr.gid = :gidTag)
-            )
+            select noeud_arrivee_gid as noeud_routier_gid,troncon_gid,longueur  from relation where noeud_depart_gid =:gidTag
             union
-            (select  nr2.gid as noeud_routier_gid, tr.gid as troncon_gid, tr.longueur
-            from noeud_routier nr, troncon_route tr, noeud_routier nr2
-            where (st_distancesphere(nr2.geom, st_startpoint(tr.geom)) < 1
-                and st_distancesphere(nr.geom, st_endpoint(tr.geom)) < 1
-                and  nr.gid = :gidTag)
-            );
+            select noeud_depart_gid as noeud_routier_gid,troncon_gid,longueur from relation where noeud_arrivee_gid =:gidTag
         SQL;
         $pdoStatement = ConnexionBaseDeDonnees::getPdo()->prepare($requeteSQL);
         $pdoStatement->execute(array(

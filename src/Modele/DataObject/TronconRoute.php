@@ -12,6 +12,10 @@ class TronconRoute extends AbstractDataObject
         private string $sens,
         private string $numeroRoute,
         private float $longueur,
+        private string $long_start,
+        private string $lat_start,
+        private string $long_end,
+        private string $lat_end
     ) {
     }
 
@@ -38,6 +42,22 @@ class TronconRoute extends AbstractDataObject
     public function getLongueur(): float
     {
         return $this->longueur;
+    }
+
+    public function getLatStart():string{
+        return $this->lat_start;
+    }
+
+    public function  getLatEnd():string{
+        return $this->lat_end;
+    }
+
+    public function getLongStart():string{
+        return $this->long_start;
+    }
+
+    public function  getLongEnd():string{
+        return $this->long_end;
     }
 
     public function exporterEnFormatRequetePreparee(): array
