@@ -47,6 +47,9 @@ li:nth-child(odd){
     border: 1px solid grey;
     line-height: 1.5;
     position: absolute;
+    overflow-y:scroll;
+    height:150px;
+    opacity:0.9;
 }
 
 #autocompletion p {
