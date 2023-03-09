@@ -1,21 +1,28 @@
 <form action="calculer" method="post">
     <fieldset>
         <legend>Plus court chemin </legend>
-        <p class="InputAddOn">
-            <label class="InputAddOn-item" for="nomCommuneDepart_id">Nom de la commune de départ</label>
-            <input class="InputAddOn-field" type="text" value="" placeholder="Ex : Menton" name="nomCommuneDepart" id="nomCommuneDepart_id" required>
-        </p>
-        <p class="InputAddOn">
-            <label class="InputAddOn-item" for="nomCommuneArrivee_id">Nom de la commune de départ</label>
-            <input class="InputAddOn-field" type="text" value="" placeholder="Ex : Menton" name="nomCommuneArrivee" id="nomCommuneArrivee_id" required>
-        </p>
-        <!-- <img id="loading" src="img/loading.gif"> -->
-        <div id="autocompletion"></div>
-        <input type="hidden" name="XDEBUG_TRIGGER">
-        <p>
-            <input class="InputAddOn-field" type="submit" value="Calculer" />
-        </p>
-
+        <div>
+            <p class="InputAddOn">
+                <label class="InputAddOn-item" for="nomCommuneDepart_id">Nom de la commune de départ</label>
+                <input class="InputAddOn-field" type="text" value="" placeholder="Ex : Menton" name="nomCommuneDepart" id="nomCommuneDepart_id" required>
+                <!-- <img id="loading" src="img/loading.gif"> -->
+            <div class="autocompletion" id="autocompletionDepart"></div>
+            </p>
+        </div>
+        <div>
+            <p class="InputAddOn">
+                <label class="InputAddOn-item" for="nomCommuneArrivee_id">Nom de la commune de départ</label>
+                <input class="InputAddOn-field" type="text" value="" placeholder="Ex : Menton" name="nomCommuneArrivee" id="nomCommuneArrivee_id" required>
+            </p>
+            <!-- <img id="loading" src="img/loading.gif"> -->
+            <div class="autocompletion" id="autocompletionArrivee"></div>
+        </div>
+        <div>
+            <input type="hidden" name="XDEBUG_TRIGGER">
+            <p>
+                <input class="InputAddOn-field" type="submit" value="Calculer" />
+            </p>
+        </div>
     </fieldset>
 </form>
 
@@ -23,60 +30,26 @@
     <p>
         Le plus court chemin entre <?= $CommuneDepart->getNomCommune() ?> et <?= $CommuneArrivee->getNomCommune() ?> mesure <?= $distance ?>km.
     </p>
+
+    <!-------------------------------------GOOGLE MAPS API---------------------------------------->
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <div id="map" style="height:650px;width:620px;margin:auto;"></div>
 
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCNgiSeE--QYZtlP4qYMTDatGQrDXgql8M&callback=initMap&v=weekly" defer></script>
-    <script>
-        function initMap() {
-            const LatLngDepart = {
-                lat: <?= $CommuneDepart->getLatCommune() ?>,
-                lng: <?= $CommuneDepart->getLongCommune() ?>
-            };
-            const LatLngArrivee = {
-                lat: <?= $CommuneArrivee->getLatCommune() ?>,
-                lng: <?= $CommuneArrivee->getLongCommune() ?>
-            };
 
-            const map = new google.maps.Map(document.getElementById("map"), {
-                zoom: 13,
-                center: LatLngDepart,
-            });
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCNgiSeE--QYZtlP4qYMTDatGQrDXgql8M&v=weekly"></script>
+    <!-------------------------------------------------------------------------------------------->
 
-            new google.maps.Marker({
-                position: LatLngDepart,
-                map,
-                title: "<?= $CommuneDepart->getNomCommune() ?>",
-            });
+    <!---------------------------------------INIT MAP--------------------------------------------->
+    <script src="../ressources/js/map.js"></script>
+    <script defer>
+        let CommuneDepartJSON = <?= $CommuneDepart->toJson() ?>;
+        let CommuneArriveeJSON = <?= $CommuneArrivee->toJson() ?>;
+        initMap(CommuneDepartJSON, CommuneArriveeJSON);
 
-            new google.maps.Marker({
-                position: LatLngArrivee,
-                map,
-                title: "<?= $CommuneArrivee->getNomCommune() ?>",
-            });
-
-            <?php foreach ($troncons as $troncon) { ?>
-
-                var LatLgnStart = {
-                    lat: <?= $troncon->getLatStart() ?>,
-                    lng: <?= $troncon->getLongStart() ?>
-                };
-                var LatLgnEnd = {
-                    lat: <?= $troncon->getLatEnd() ?>,
-                    lng: <?= $troncon->getLongEnd() ?>
-                };
-                var line = new google.maps.Polyline({
-                    path: [LatLgnStart, LatLgnEnd],
-                    strokeColor: "#00c4ff",
-                    strokeOpacity: 1.0,
-                    strokeWeight: 10,
-                    geodesic: true,
-                    map: map
-                });
-            <?php } ?>
-        }
-
-        window.initMap = initMap;
+        let tabTronconJSON = <?= json_encode($troncons) ?>;
+        plotTroncon(tabTronconJSON);
     </script>
+    <!-------------------------------------------------------------------------------------------->
+
 <?php } ?>
 <script src="../src/js/AutoCompletion.js" defer></script>

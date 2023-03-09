@@ -77,6 +77,7 @@ class NoeudRoutierRepository extends AbstractRepository
         return $pdoStatement->fetchAll(PDO::FETCH_ASSOC);
     }
 
+
     public static function getVoisins2(int $noeudRoutierGid): array
     {
         $requeteSQL = <<<SQL
