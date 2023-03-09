@@ -16,6 +16,7 @@ $assistantUrl = Conteneur::recupererService("assistantUrl");
     <title><?= $pagetitle ?></title>
     <link rel="stylesheet" href="<?= $assistantUrl->getAbsoluteUrl("assets/css/navstyle.css") ?>">
     <link rel="stylesheet" href="<?= $assistantUrl->getAbsoluteUrl("assets/css/global.css") ?>">
+    <link rel="stylesheet" href="<?= $assistantUrl->getAbsoluteUrl("assets/css/keyFrames.css") ?>">
 </head>
 
 <body>
@@ -26,7 +27,7 @@ $assistantUrl = Conteneur::recupererService("assistantUrl");
                     <a href="<?= $generateurUrl->generate("utilisateurs") ?>">Utilisateurs</a>
                 </li>
                 <li>
-                    <a href="<?= $generateurUrl->generate("communes") ?>">Communes</a>
+                    <a href="./">Communes</a>
                 </li>
                 <?php
 
@@ -57,7 +58,7 @@ $assistantUrl = Conteneur::recupererService("assistantUrl");
                 ?>
             </ul>
         </nav>
-        <div>
+        <div class="pileFlash">
             <?php
             foreach (["success", "info", "warning", "danger"] as $type) {
                 foreach ($messagesFlash[$type] as $messageFlash) {
