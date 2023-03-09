@@ -26,7 +26,7 @@ $assistantUrl = Conteneur::recupererService("assistantUrl");
                     <a href="<?= $generateurUrl->generate("utilisateurs") ?>">Utilisateurs</a>
                 </li>
                 <li>
-                    <a href="./">Communes</a>
+                    <a href="<?= $generateurUrl->generate("communes") ?>">Communes</a>
                 </li>
                 <?php
 

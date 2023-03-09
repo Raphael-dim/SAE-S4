@@ -91,7 +91,7 @@ class RouteurURL
             "_controller" => [RequeteVilleController::class, "getVille"],
         ]);
         $routeRequeteVille->setMethods(['GET']);
-        $routes->add("test", $routeRequeteVille);
+        $routes->add("autoCompletionVille", $routeRequeteVille);
 
         $contexteRequete = (new RequestContext())->fromRequest($requete);
         $associateurUrl = new UrlMatcher($routes, $contexteRequete);
