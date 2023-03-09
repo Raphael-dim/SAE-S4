@@ -5,7 +5,10 @@ autoCompletionArrivee.style.borderWidth = "0px";
 let villeDepart = document.getElementById("nomCommuneDepart_id");
 let villeArrivee = document.getElementById("nomCommuneArrivee_id");
 
+
 let autoCompletionTarget; // LA CHAMP D'AUTOCOMPLETION ACTUELLEMENT SELECTIONNEE (soit autoCompletionDepart ou autoCompletionArrivee)
+
+let request;
 
 function afficheVilles(tableau) {
     videVilles();
@@ -14,10 +17,12 @@ function afficheVilles(tableau) {
         p.innerHTML = ville;
         autoCompletionTarget.appendChild(p);
     }
+    autoCompletionTarget.classList.remove("hidden");
 }
 
 function videVilles() {
     autoCompletionTarget.innerHTML = "";
+    autoCompletionTarget.classList.add("hidden");
 }
 
 function startLoadingAction() {
@@ -29,15 +34,15 @@ function endLoadingAction() {
 }
 
 function requeteAJAX(stringVille, callback, startLoadingAction, endLoadingAction) {
-    let url = "../web/controleurFrontal.php?controleur=RequeteVilleController&action=getVille&ville=" + encodeURIComponent(stringVille);
-    let requete = new XMLHttpRequest();
+    let url = "../web/villes?ville=" + encodeURIComponent(stringVille);
+    request = new XMLHttpRequest();
     startLoadingAction();
-    requete.open("GET", url, true);
-    requete.addEventListener("load", function () {
-        callback(requete);
+    request.open("GET", url, true);
+    request.addEventListener("load", function () {
+        callback(request);
         endLoadingAction();
     });
-    requete.send(null);
+    request.send(null);
 }
 
 function callback_4(req) {
@@ -48,39 +53,67 @@ function callback_4(req) {
 
 function maRequeteAJAX(chaine) {
     requeteAJAX(chaine, callback_4, startLoadingAction, endLoadingAction);
+
+}
+
+
+function RequeteVille(Ville){
+    if (request !== undefined){
+        request.abort();
+    }
+    if (Ville.value.length==0){
+        videVilles();
+    }
+    else{
+        autoCompletionTarget = autoCompletionDepart;
+        maRequeteAJAX(Ville.value);
+    }
 }
 
 villeDepart.addEventListener('input', function () {
-    if (villeDepart.value.length >= 2) {
-        autoCompletionTarget = autoCompletionDepart;
-        maRequeteAJAX(villeDepart.value);
-    }
+    RequeteVille(villeDepart);
 });
 
 villeArrivee.addEventListener('input', function () {
-    if (villeArrivee.value.length >= 2) {
+    if (request !== undefined){
+        request.abort();
+    }
+    if (villeArrivee.value.length==0){
+        videVilles();
+    }else{
         autoCompletionTarget = autoCompletionArrivee;
         maRequeteAJAX(villeArrivee.value);
     }
 });
 
-autoCompletionDepart.addEventListener('click', function (event) {
+autoCompletionDepart.addEventListener('mousedown', function (event) {
     villeDepart.value = event.target.innerHTML;
     autoCompletionDepart.innerHTML = "";
 })
 
-autoCompletionArrivee.addEventListener('click', function (event) {
+autoCompletionArrivee.addEventListener('mousedown', function (event) {
     villeArrivee.value = event.target.innerHTML;
     autoCompletionArrivee.innerHTML = "";
 })
 
-// villeDepart.addEventListener("focusout", function (event) {
-//     console.log(Array.from(autoCompletionDepart.childNodes));
-//     if (!Array.from(autoCompletionDepart.childNodes).includes(event.target)) {
-//         videVilles();
-//     }
 
-// })
+villeDepart.addEventListener("focusout", function (event) {
+        videVilles();
+})
+
+villeArrivee.addEventListener("focusout", function (event) {
+        videVilles();
+})
+
+
+villeDepart.addEventListener("focusin", function (event) {
+    RequeteVille(villeDepart);
+})
+
+villeArrivee.addEventListener("focusin", function (event) {
+    RequeteVille(villeArrivee);
+})
+
 
 // villeArrivee.addEventListener("focusout", function (event) {
 

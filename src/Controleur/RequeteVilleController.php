@@ -10,13 +10,21 @@ class RequeteVilleController
     {
         require "../src/Modele/Repository/NoeudCommuneRepository.php";
 
+
+
         $ville = $_GET['ville'];
 
-        // lancement de la requête SQL avec selectByName et
-        // récupération du résultat de la requête SQL
-        $tab = (new NoeudCommuneRepository)->recupererWhere(["nom_comm" => "LIKE LOWER('" . $ville . "%')"], 5);
 
-        // affichage en format JSON du résultat précédent
-        echo json_encode($tab);
+        if ($ville == ""){
+            echo json_encode([]);
+        }
+        else{
+            // lancement de la requête SQL avec selectByName et
+            // récupération du résultat de la requête SQL
+            $tab = (new NoeudCommuneRepository)->recupererWhere(["nom_comm" => "LIKE LOWER('" . $ville . "%')"], 20);
+
+            // affichage en format JSON du résultat précédent
+            echo json_encode($tab);
+        }
     }
 }

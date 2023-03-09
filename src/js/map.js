@@ -5,6 +5,7 @@ const map = new google.maps.Map(document.getElementById("map"), {
 });
 
 function initMap(noeudDepart,noeudArrivee) {
+
     console.log(noeudDepart);
     console.log(noeudArrivee);
     const LatLngDepart =  { lat: parseFloat(noeudDepart["lat"]) , lng:  parseFloat(noeudDepart["long"])};
@@ -52,7 +53,5 @@ function plotTroncon(tabTroncon){
             })
         }
     });
-
-
 
 }

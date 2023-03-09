@@ -87,10 +87,11 @@ class RouteurURL
         $routes->add("calculer", $routePlusCourtChemin); 
 
         // ROUTE POUR CompletionAuto Villes
-        $routeRequeteVille = new Route("/",[
+        $routeRequeteVille = new Route("/villes",[
             "_controller" => [RequeteVilleController::class, "getVille"],
         ]);
-        $routes->add("communes", $routeRequeteVille);
+        $routeRequeteVille->setMethods(['GET']);
+        $routes->add("test", $routeRequeteVille);
 
         $contexteRequete = (new RequestContext())->fromRequest($requete);
         $associateurUrl = new UrlMatcher($routes, $contexteRequete);

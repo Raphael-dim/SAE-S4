@@ -98,14 +98,24 @@ class ControleurNoeudCommune extends ControleurGenerique
             $pcc = new PlusCourtChemin($noeudRoutierDepartGid, $noeudRoutierArriveeGid);
 
             $result = $pcc->calculer();
-            $distance = $result[0];
-            $troncons_route = $result[1];
+            $distance = 0 ;
+
+            $troncons_route = [];
+
+
+            foreach ($result as $n){
+                $distance += $n['distance'];
+                if (isset($n['troncon_gid'])) {
+                    $troncons_route[] = $n['troncon_gid'];
+                }
+            }
 
             $troncons = [];
 
             foreach ($troncons_route as $troncon) {
                 $troncons[] = (new TronconRouteRepository())->recupererParClePrimaire($troncon);
             }
+
             $parametres["CommuneDepart"] = $noeudCommuneDepart;
             $parametres["CommuneArrivee"] = $noeudCommuneArrivee;
             $parametres["noeudDepart"] = $noeudRoutierRepository->recupererPar([
