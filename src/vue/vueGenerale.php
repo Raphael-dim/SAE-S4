@@ -86,5 +86,4 @@ $assistantUrl = Conteneur::recupererService("assistantUrl");
         </p>
     </footer>
 </body>
-<?= __DIR__?>;
 </html>
