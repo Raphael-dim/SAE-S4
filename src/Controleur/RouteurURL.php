@@ -1,4 +1,5 @@
 <?php
+
 namespace App\PlusCourtChemin\Controleur;
 
 use App\PlusCourtChemin\Lib\Conteneur;
@@ -15,12 +16,13 @@ use Symfony\Component\Routing\RouteCollection;
 
 class RouteurURL
 {
-    public static function traiterRequete() {
+    public static function traiterRequete()
+    {
         $requete = Request::createFromGlobals();
         $routes = new RouteCollection();
 
         // ROUTE POUR AFFICHER TOUTES LES COMMUNES
-        $routeFeed = new Route("/", [
+        $routeFeed = new Route("/communes", [
             "_controller" => [ControleurNoeudCommune::class, "afficherListe"],
         ]);
         $routes->add("communes", $routeFeed);
@@ -56,7 +58,7 @@ class RouteurURL
         $routeAfficherCreationCompte->setMethods(['GET']);
         $routes->add("afficherFormulaireCreation", $routeAfficherCreationCompte);
 
-        
+
         // ROUTE POUR creerDepuisFormulaire de ControleurUtilisateur
         $routeCreationCompte = new Route("/inscription", [
             "_controller" => [ControleurUtilisateur::class, "creerDepuisFormulaire"],
@@ -69,7 +71,7 @@ class RouteurURL
         $routeDetailCommune = new Route("/detailCommune/{idCommune}", [
             "_controller" => [ControleurNoeudCommune::class, "afficherDetail"],
         ]);
-        $routes->add("afficherDetail", $routeDetailCommune);
+        $routes->add("detailCommune", $routeDetailCommune);
 
 
         // ROUTE POUR plusCourtChemin de ControleurNoeudCommune
@@ -79,19 +81,29 @@ class RouteurURL
         $routePlusCourtChemin->setMethods(['GET']);
         $routes->add("plusCourtChemin", $routePlusCourtChemin);
 
+
         // ROUTE POUR calculer le plusCourtChemin de ControleurNoeudCommune (POST)UR
         $routePlusCourtChemin = new Route("/calculer", [
             "_controller" => [ControleurNoeudCommune::class, "plusCourtChemin"],
         ]);
         $routePlusCourtChemin->setMethods(['POST']);
-        $routes->add("calculer", $routePlusCourtChemin); 
+        $routes->add("calculer", $routePlusCourtChemin);
+
 
         // ROUTE POUR CompletionAuto Villes
-        $routeRequeteVille = new Route("/villes",[
+        $routeRequeteVille = new Route("/villes", [
             "_controller" => [RequeteVilleController::class, "getVille"],
         ]);
         $routeRequeteVille->setMethods(['GET']);
         $routes->add("autoCompletionVille", $routeRequeteVille);
+
+
+        // ROUTE POUR afficherDetail ControleurUtilisateur
+        $routeDetailUtilisateur = new Route("/detailUtilisateur/{idUtililisateur}", [
+            "_controller" => [ControleurUtilisateur::class, "afficherDetail"],
+        ]);
+        $routes->add("detailUtilisateur", $routeDetailUtilisateur);
+
 
         $contexteRequete = (new RequestContext())->fromRequest($requete);
         $associateurUrl = new UrlMatcher($routes, $contexteRequete);

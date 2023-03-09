@@ -29,24 +29,18 @@ class ControleurUtilisateur extends ControleurGenerique
         ]);
     }
 
-    public static function afficherDetail(): void
+    public static function afficherDetail($idUtililisateur): void
     {
-        if (isset($_REQUEST['login'])) {
-            $login = $_REQUEST['login'];
-            $utilisateur = (new UtilisateurRepository())->recupererParClePrimaire($login);
-            if ($utilisateur === null) {
-                MessageFlash::ajouter("warning", "Login inconnu.");
-                ControleurUtilisateur::rediriger("utilisateur", "afficherListe");
-            } else {
-                ControleurUtilisateur::afficherVue('vueGenerale.php', [
-                    "utilisateur" => $utilisateur,
-                    "pagetitle" => "Détail de l'utilisateur",
-                    "cheminVueBody" => "utilisateur/detail.php"
-                ]);
-            }
-        } else {
-            MessageFlash::ajouter("danger", "Login manquant.");
+        $utilisateur = (new UtilisateurRepository())->recupererParClePrimaire($idUtililisateur);
+        if ($utilisateur === null) {
+            MessageFlash::ajouter("warning", "Login inconnu.");
             ControleurUtilisateur::rediriger("utilisateur", "afficherListe");
+        } else {
+            ControleurUtilisateur::afficherVue('vueGenerale.php', [
+                "utilisateur" => $utilisateur,
+                "pagetitle" => "Détail de l'utilisateur",
+                "cheminVueBody" => "utilisateur/detail.php"
+            ]);
         }
     }
 
