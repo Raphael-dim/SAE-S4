@@ -27,6 +27,11 @@ class RouteurURL
         ]);
         $routes->add("communes", $routeFeed);
 
+        $routeFeed = new Route("/", [
+            "_controller" => [ControleurNoeudCommune::class, "afficherListe"],
+        ]);
+        $routes->add("communes", $routeFeed);
+
 
         // ROUTE POUR AFFICHER LA PAGE DE CONNEXION
         $routeConnexion = new Route("/connexion", [
@@ -99,10 +104,19 @@ class RouteurURL
 
 
         // ROUTE POUR afficherDetail ControleurUtilisateur
-        $routeDetailUtilisateur = new Route("/detailUtilisateur/{idUtililisateur}", [
+        $routeDetailUtilisateur = new Route("/detailUtilisateur/{idUtilisateur}", [
             "_controller" => [ControleurUtilisateur::class, "afficherDetail"],
         ]);
+        $routeDetailUtilisateur->setMethods(['GET']);
         $routes->add("detailUtilisateur", $routeDetailUtilisateur);
+
+
+        // ROUTE POUR deconnecter de ControleurUtilisateur
+        $routeDeconnecter = new Route("/deconnecter", [
+            "_controller" => [ControleurUtilisateur::class, "deconnecter"],
+        ]);
+        $routeDeconnecter->setMethods(['GET']);
+        $routes->add("deconnecter", $routeDeconnecter);
 
 
         $contexteRequete = (new RequestContext())->fromRequest($requete);

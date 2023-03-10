@@ -29,9 +29,9 @@ class ControleurUtilisateur extends ControleurGenerique
         ]);
     }
 
-    public static function afficherDetail($idUtililisateur): void
+    public static function afficherDetail($idUtilisateur): void
     {
-        $utilisateur = (new UtilisateurRepository())->recupererParClePrimaire($idUtililisateur);
+        $utilisateur = (new UtilisateurRepository())->recupererParClePrimaire($idUtilisateur);
         if ($utilisateur === null) {
             MessageFlash::ajouter("warning", "Login inconnu.");
             ControleurUtilisateur::rediriger("utilisateur", "afficherListe");
@@ -53,14 +53,14 @@ class ControleurUtilisateur extends ControleurGenerique
             $utilisateurs = $utilisateurRepository->recuperer();
             if ($deleteSuccessful) {
                 MessageFlash::ajouter("success", "L'utilisateur a bien été supprimé !");
-                ControleurUtilisateur::rediriger("utilisateur", "afficherListe");
+                ControleurUtilisateur::rediriger("communes");
             } else {
                 MessageFlash::ajouter("warning", "Login inconnu.");
-                ControleurUtilisateur::rediriger("utilisateur", "afficherListe");
+                ControleurUtilisateur::rediriger("communes");
             }
         } else {
             MessageFlash::ajouter("danger", "Login manquant.");
-            ControleurUtilisateur::rediriger("utilisateur", "afficherListe");
+            ControleurUtilisateur::rediriger("communes");
         }
     }
 
@@ -143,7 +143,7 @@ class ControleurUtilisateur extends ControleurGenerique
             ]);
         } else {
             MessageFlash::ajouter("danger", "Login manquant.");
-            ControleurUtilisateur::rediriger("utilisateur", "afficherListe");
+            ControleurUtilisateur::rediriger("utilisateurs");
         }
     }
 
@@ -154,7 +154,7 @@ class ControleurUtilisateur extends ControleurGenerique
             && isset($_REQUEST['email'])
         )) {
             MessageFlash::ajouter("danger", "Login, nom, prenom, email ou mot de passe manquant.");
-            ControleurUtilisateur::rediriger("utilisateur", "afficherListe");
+            ControleurUtilisateur::rediriger("utilisateurs");
         }
 
         if ($_REQUEST["mdp"] !== $_REQUEST["mdp2"]) {
@@ -242,19 +242,18 @@ class ControleurUtilisateur extends ControleurGenerique
         }
 
         ConnexionUtilisateur::connecter($utilisateur->getLogin());
-        ControleurUtilisateur::rediriger("/");
-        ControleurUtilisateur::rediriger("utilisateur", "afficherDetail", ["login" => $_REQUEST["login"]]);
+        ControleurUtilisateur::rediriger("detailUtilisateur", ["idUtilisateur" => $utilisateur->getLogin()]);
     }
 
     public static function deconnecter(): void
     {
         if (!ConnexionUtilisateur::estConnecte()) {
             MessageFlash::ajouter("danger", "Utilisateur non connecté.");
-            ControleurUtilisateur::rediriger("utilisateur", "afficherListe");
+            ControleurUtilisateur::rediriger("utilisateurs");
         }
         ConnexionUtilisateur::deconnecter();
         MessageFlash::ajouter("success", "L'utilisateur a bien été déconnecté.");
-        ControleurUtilisateur::rediriger("utilisateur", "afficherListe");
+        ControleurUtilisateur::rediriger("utilisateurs");
     }
 
     public static function validerEmail()

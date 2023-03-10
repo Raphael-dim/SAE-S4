@@ -34,26 +34,26 @@ $assistantUrl = Conteneur::recupererService("assistantUrl");
             if (!ConnexionUtilisateur::estConnecte()) {
                 echo '
                     <li>
-                        <a href="./connexion">
+                        <a href="' . $generateurUrl->generate("connexion") . '">
                             <img alt="login" src="' . $assistantUrl->getAbsoluteUrl("assets/img/enter.png") . '" width="18">
                         </a>
                     </li>';
             } else {
                 $loginHTML = htmlspecialchars(ConnexionUtilisateur::getLoginUtilisateurConnecte());
                 $loginURL = rawurlencode(ConnexionUtilisateur::getLoginUtilisateurConnecte());
-                echo <<<HTML
+                echo '
                     <li>
-                        <a href="detailUtilisateur/$loginURL">
-                            <img alt="user" src="../ressources/img/user.png" width="18">
-                            $loginHTML
+                        <a href="' . $generateurUrl->generate("detailUtilisateur", ["idUtilisateur" => $loginURL]) . '">
+                            <img alt="user" src="' . $assistantUrl->getAbsoluteUrl("assets/img/user.png") . '" width="18">
+                            ' . $loginHTML . '
                         </a>
                     </li>
                     <li>
-                        <a href="./deconnecter">
-                            <img alt="logout" src="../ressources/img/logout.png" width="18">
+                        <a href="' . $generateurUrl->generate("deconnecter") . '">
+                            <img alt="logout" src="' . $assistantUrl->getAbsoluteUrl("assets/img/logout.png") . '" width="18">
                         </a>
                     </li>
-                    HTML;
+                    ';
             }
             ?>
         </ul>
