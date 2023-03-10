@@ -119,6 +119,30 @@ class RouteurURL
         $routes->add("deconnecter", $routeDeconnecter);
 
 
+        // ROUTE POUR afficherFormulaireMiseAJour de ControleurUtilisateur
+        $afficherFormulaireMiseAJour = new Route("/afficherFormulaireMiseAJour/{idUtilisateur}", [
+            "_controller" => [ControleurUtilisateur::class, "afficherFormulaireMiseAJour"],
+        ]);
+        $afficherFormulaireMiseAJour->setMethods(['GET']);
+        $routes->add("afficherFormulaireMiseAJour", $afficherFormulaireMiseAJour);
+
+
+        // ROUTE POUR deconnecter de ControleurUtilisateur
+        $supprimerUtilisateur = new Route("/supprimerUtilisateur/{idUtilisateur}", [
+            "_controller" => [ControleurUtilisateur::class, "supprimer"],
+        ]);
+        $supprimerUtilisateur->setMethods(['GET']);
+        $routes->add("supprimerUtilisateur", $supprimerUtilisateur);
+
+
+        // ROUTE POUR validerEmail de ControleurUtilisateur
+        $validerEmail = new Route("/validerEmail/{idUtilisateur}/{nonce}", [
+            "_controller" => [ControleurUtilisateur::class, "validerEmail"],
+        ]);
+        $validerEmail->setMethods(['GET']);
+        $routes->add("validerEmail", $validerEmail);
+
+
         $contexteRequete = (new RequestContext())->fromRequest($requete);
         $associateurUrl = new UrlMatcher($routes, $contexteRequete);
         $donneesRoute = $associateurUrl->match($requete->getPathInfo());
