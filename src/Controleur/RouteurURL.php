@@ -120,11 +120,19 @@ class RouteurURL
 
 
         // ROUTE POUR afficherFormulaireMiseAJour de ControleurUtilisateur
-        $afficherFormulaireMiseAJour = new Route("/afficherFormulaireMiseAJour/{idUtilisateur}", [
+        $afficherFormulaireMiseAJour = new Route("/mettreAJour/{idUtilisateur}", [
             "_controller" => [ControleurUtilisateur::class, "afficherFormulaireMiseAJour"],
         ]);
         $afficherFormulaireMiseAJour->setMethods(['GET']);
-        $routes->add("afficherFormulaireMiseAJour", $afficherFormulaireMiseAJour);
+        $routes->add("formulaireMiseAJour", $afficherFormulaireMiseAJour);
+
+
+        // ROUTE POUR mettreAJour de ControleurUtilisateur
+        $mettreAJour = new Route("/mettreAJour", [
+            "_controller" => [ControleurUtilisateur::class, "mettreAJour"],
+        ]);
+        $mettreAJour->setMethods(['POST']);
+        $routes->add("mettreAJour", $mettreAJour);
 
 
         // ROUTE POUR deconnecter de ControleurUtilisateur
@@ -141,6 +149,8 @@ class RouteurURL
         ]);
         $validerEmail->setMethods(['GET']);
         $routes->add("validerEmail", $validerEmail);
+
+
 
 
         $contexteRequete = (new RequestContext())->fromRequest($requete);

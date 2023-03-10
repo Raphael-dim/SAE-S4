@@ -14,7 +14,7 @@ $loginURL = rawurlencode($login);
     Utilisateur <?= "$prenomHTML $nomHTML" ?> de login <?= $loginHTML ?>
 
     <?php if (ConnexionUtilisateur::estUtilisateur($login) || ConnexionUtilisateur::estAdministrateur()) { ?>
-        <a href="<?= $generateurUrl->generate('afficherFormulaireMiseAJour', ["idUtilisateur" => $loginURL]) ?>">(mettre
+        <a href="<?= $generateurUrl->generate('formulaireMiseAJour', ["idUtilisateur" => $loginURL]) ?>">(mettre
             à jour)</a>
         <a href="<?= $generateurUrl->generate('supprimerUtilisateur', ["idUtilisateur" => $loginURL]) ?>">(supprimer)</a>
     <?php } ?>
