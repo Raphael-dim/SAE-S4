@@ -32,7 +32,7 @@ class NoeudRoutierRepository extends AbstractRepository
 
     protected function getNomsColonnes(): array
     {
-        return ["gid", "id_rte500","ST_X(geom)","ST_Y(geom)"];
+        return ["gid", "id_rte500", "ST_X(geom)", "ST_Y(geom)"];
     }
 
     // On bloque l'ajout, la màj et la suppression pour ne pas modifier la table
@@ -53,7 +53,6 @@ class NoeudRoutierRepository extends AbstractRepository
     }
 
 
-
     /**
      * Renvoie le tableau des voisins d'un noeud routier
      *
@@ -66,9 +65,13 @@ class NoeudRoutierRepository extends AbstractRepository
     public function getVoisins(int $noeudRoutierGid): array
     {
         $requeteSQL = <<<SQL
-            select noeud_arrivee_gid as noeud_routier_gid,troncon_gid,longueur  from relation where noeud_depart_gid =:gidTag
+            select noeud_arrivee_gid as noeud_routier_gid,troncon_gid,longueur, 
+                   ST_X(noeud_depart_geom) as lat, ST_Y(noeud_depart_geom) as lon 
+            from relation where noeud_depart_gid =:gidTag
             union
-            select noeud_depart_gid as noeud_routier_gid,troncon_gid,longueur from relation where noeud_arrivee_gid =:gidTag
+            select noeud_depart_gid as noeud_routier_gid,troncon_gid,longueur, 
+                   ST_X(noeud_depart_geom) as lat, ST_Y(noeud_depart_geom) as lon 
+            from relation where noeud_arrivee_gid =:gidTag
         SQL;
         $pdoStatement = ConnexionBaseDeDonnees::getPdo()->prepare($requeteSQL);
         $pdoStatement->execute(array(
