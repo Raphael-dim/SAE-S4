@@ -43,7 +43,6 @@ class PlusCourtChemin
                 return $this->chemin;
             }
 
-            /** @var NoeudRoutier $noeudRoutierCourant */
             $noeudRoutierCourant = new NoeudRoutier($noeudRoutierGidCourant);
             $voisins = $noeudRoutierCourant->getVoisins();
             //echo 'latArrivee : ' .$this->latArrivee . 'longArrivee ; ' . $this->lonArrivee;

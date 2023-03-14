@@ -5,6 +5,7 @@ autoCompletionArrivee.style.borderWidth = "0px";
 let villeDepart = document.getElementById("nomCommuneDepart_id");
 let villeArrivee = document.getElementById("nomCommuneArrivee_id");
 
+let indexDefilement = 0;
 
 let autoCompletionTarget; // LA CHAMP D'AUTOCOMPLETION ACTUELLEMENT SELECTIONNEE (soit autoCompletionDepart ou autoCompletionArrivee)
 
@@ -15,6 +16,7 @@ function afficheVilles(tableau) {
     for (const ville of tableau) {
         const p = document.createElement("p");
         p.innerHTML = ville;
+        p.id = ville;
         autoCompletionTarget.appendChild(p);
     }
     autoCompletionTarget.classList.remove("hidden");
@@ -23,6 +25,7 @@ function afficheVilles(tableau) {
 function videVilles() {
     autoCompletionTarget.innerHTML = "";
     autoCompletionTarget.classList.add("hidden");
+    indexDefilement = 0;
 }
 
 function startLoadingAction() {
@@ -56,15 +59,13 @@ function maRequeteAJAX(chaine) {
 
 }
 
-
-function RequeteVille(Ville){
-    if (request !== undefined){
+function RequeteVille(Ville) {
+    if (request !== undefined) {
         request.abort();
     }
-    if (Ville.value.length==0){
+    if (Ville.value.length == 0) {
         videVilles();
-    }
-    else{
+    } else {
         autoCompletionTarget = autoCompletionDepart;
         maRequeteAJAX(Ville.value);
     }
@@ -75,15 +76,7 @@ villeDepart.addEventListener('input', function () {
 });
 
 villeArrivee.addEventListener('input', function () {
-    if (request !== undefined){
-        request.abort();
-    }
-    if (villeArrivee.value.length==0){
-        videVilles();
-    }else{
-        autoCompletionTarget = autoCompletionArrivee;
-        maRequeteAJAX(villeArrivee.value);
-    }
+    RequeteVille(villeArrivee);
 });
 
 autoCompletionDepart.addEventListener('mousedown', function (event) {
@@ -96,15 +89,15 @@ autoCompletionArrivee.addEventListener('mousedown', function (event) {
     autoCompletionArrivee.innerHTML = "";
 })
 
-
 villeDepart.addEventListener("focusout", function (event) {
-        videVilles();
+    videVilles();
+    indexDefilement = 0;
 })
 
 villeArrivee.addEventListener("focusout", function (event) {
-        videVilles();
+    videVilles();
+    indexDefilement = 0;
 })
-
 
 villeDepart.addEventListener("focusin", function (event) {
     RequeteVille(villeDepart);
@@ -114,7 +107,39 @@ villeArrivee.addEventListener("focusin", function (event) {
     RequeteVille(villeArrivee);
 })
 
+villeDepart.addEventListener("keydown", function (e) {
+    flecheDefilement(e, villeDepart);
+})
 
-// villeArrivee.addEventListener("focusout", function (event) {
+villeArrivee.addEventListener("keydown", function (e) {
+    flecheDefilement(e, villeArrivee);
+})
 
-// })
+function flecheDefilement(e, ville) {
+    let oldIndex = indexDefilement;
+    let isArrow = true;
+    if (e.key == "ArrowUp") {
+        if (indexDefilement > 0) {
+            indexDefilement--;
+        }
+    } else if (e.key == "ArrowDown") {
+        if (indexDefilement < 20) {
+            indexDefilement++;
+        }
+    } else {
+        isArrow = false;
+    }
+    if (isArrow) {
+        let nomVille = autoCompletionDepart.childNodes.item(indexDefilement);
+        nomVille.style.backgroundColor = "black";
+        ville.value = nomVille.innerHTML;
+        let oldVille = autoCompletionDepart.childNodes.item(oldIndex);
+        oldVille.style.backgroundColor = "grey";
+        let elementVille = document.getElementById(nomVille.innerHTML);
+
+        elementVille.scrollIntoView({behavior: 'smooth', block: 'center'})
+
+
+    }
+}
+
