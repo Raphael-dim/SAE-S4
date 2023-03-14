@@ -64,7 +64,7 @@ function RequeteVille(Ville) {
         request.abort();
     }
     if (Ville.value.length == 0) {
-        videVilles();
+        // videVilles();
     } else {
         autoCompletionTarget = autoCompletionDepart;
         maRequeteAJAX(Ville.value);
