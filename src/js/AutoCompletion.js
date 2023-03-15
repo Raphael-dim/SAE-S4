@@ -54,6 +54,8 @@ function callback_4(req) {
     afficheVilles(names);
 }
 
+let minuteur;
+
 
 function RequeteVille(ville) {
     if (typeof minuteur == "number") {
