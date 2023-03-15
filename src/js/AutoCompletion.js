@@ -54,21 +54,17 @@ function callback_4(req) {
     afficheVilles(names);
 }
 
-function maRequeteAJAX(chaine) {
-    requeteAJAX(chaine, callback_4, startLoadingAction, endLoadingAction);
 
-}
-
-function RequeteVille(Ville) {
-    if (request !== undefined) {
-        request.abort();
+function RequeteVille(ville) {
+    if (typeof minuteur == "number") {
+        clearTimeout(minuteur);
     }
-    if (Ville.value.length == 0) {
-        // videVilles();
-    } else {
-        autoCompletionTarget = autoCompletionDepart;
-        maRequeteAJAX(Ville.value);
+    if (request != null && request.readyState != 4) {
+        request.abort()
     }
+    minuteur = setTimeout(() => {
+        requeteAJAX(ville.value, callback_4, startLoadingAction, endLoadingAction)
+    }, 200);
 }
 
 villeDepart.addEventListener('input', function () {
@@ -92,19 +88,24 @@ autoCompletionArrivee.addEventListener('mousedown', function (event) {
 villeDepart.addEventListener("focusout", function (event) {
     videVilles();
     indexDefilement = 0;
+    autoCompletionTarget = null;
 })
 
 villeArrivee.addEventListener("focusout", function (event) {
     videVilles();
     indexDefilement = 0;
+    autoCompletionTarget = null;
 })
 
 villeDepart.addEventListener("focusin", function (event) {
+    autoCompletionTarget = autoCompletionDepart;
     RequeteVille(villeDepart);
 })
 
 villeArrivee.addEventListener("focusin", function (event) {
+    autoCompletionTarget = autoCompletionArrivee;
     RequeteVille(villeArrivee);
+
 })
 
 villeDepart.addEventListener("keydown", function (e) {
@@ -130,16 +131,14 @@ function flecheDefilement(e, ville) {
         isArrow = false;
     }
     if (isArrow) {
-        let nomVille = autoCompletionDepart.childNodes.item(indexDefilement);
+        let nomVille = autoCompletionTarget.childNodes.item(indexDefilement);
         nomVille.style.backgroundColor = "black";
         ville.value = nomVille.innerHTML;
-        let oldVille = autoCompletionDepart.childNodes.item(oldIndex);
+        let oldVille = autoCompletionTarget.childNodes.item(oldIndex);
         oldVille.style.backgroundColor = "grey";
         let elementVille = document.getElementById(nomVille.innerHTML);
 
-        elementVille.scrollIntoView({behavior: 'smooth', block: 'center'})
-
-
+        elementVille.scrollIntoView({ behavior: 'smooth', block: 'center' })
     }
 }
 
