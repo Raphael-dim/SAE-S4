@@ -1,5 +1,5 @@
 <div>
-    <form method="<?= $method ?>" action="controleurFrontal.php">
+    <form method="POST" action="../mettreAJour">
         <fieldset>
             <legend>Mon formulaire :</legend>
             <p class="InputAddOn">
@@ -41,8 +41,6 @@
                     <input class="InputAddOn-field" type="checkbox" placeholder="" name="estAdmin" id="estAdmin_id" <?= $estAdmin ? "checked" : "" ?>>
                 </p>
             <?php } ?>
-            <input type='hidden' name='action' value='mettreAJour'>
-            <input type='hidden' name='controleur' value='utilisateur'>
             <p class="InputAddOn">
                 <input class="InputAddOn-field" type="submit" value="Envoyer" />
             </p>

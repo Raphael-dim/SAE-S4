@@ -5,6 +5,7 @@ autoCompletionArrivee.style.borderWidth = "0px";
 let villeDepart = document.getElementById("nomCommuneDepart_id");
 let villeArrivee = document.getElementById("nomCommuneArrivee_id");
 
+let indexDefilement = 0;
 
 let autoCompletionTarget; // LA CHAMP D'AUTOCOMPLETION ACTUELLEMENT SELECTIONNEE (soit autoCompletionDepart ou autoCompletionArrivee)
 
@@ -15,6 +16,7 @@ function afficheVilles(tableau) {
     for (const ville of tableau) {
         const p = document.createElement("p");
         p.innerHTML = ville;
+        p.id = ville;
         autoCompletionTarget.appendChild(p);
     }
     autoCompletionTarget.classList.remove("hidden");
@@ -23,6 +25,7 @@ function afficheVilles(tableau) {
 function videVilles() {
     autoCompletionTarget.innerHTML = "";
     autoCompletionTarget.classList.add("hidden");
+    indexDefilement = 0;
 }
 
 function startLoadingAction() {
@@ -51,23 +54,19 @@ function callback_4(req) {
     afficheVilles(names);
 }
 
-function maRequeteAJAX(chaine) {
-    requeteAJAX(chaine, callback_4, startLoadingAction, endLoadingAction);
-
-}
+let minuteur;
 
 
-function RequeteVille(Ville){
-    if (request !== undefined){
-        request.abort();
+function RequeteVille(ville) {
+    if (typeof minuteur == "number") {
+        clearTimeout(minuteur);
     }
-    if (Ville.value.length==0){
-        videVilles();
+    if (request != null && request.readyState != 4) {
+        request.abort()
     }
-    else{
-        autoCompletionTarget = autoCompletionDepart;
-        maRequeteAJAX(Ville.value);
-    }
+    minuteur = setTimeout(() => {
+        requeteAJAX(ville.value, callback_4, startLoadingAction, endLoadingAction)
+    }, 200);
 }
 
 villeDepart.addEventListener('input', function () {
@@ -75,15 +74,7 @@ villeDepart.addEventListener('input', function () {
 });
 
 villeArrivee.addEventListener('input', function () {
-    if (request !== undefined){
-        request.abort();
-    }
-    if (villeArrivee.value.length==0){
-        videVilles();
-    }else{
-        autoCompletionTarget = autoCompletionArrivee;
-        maRequeteAJAX(villeArrivee.value);
-    }
+    RequeteVille(villeArrivee);
 });
 
 autoCompletionDepart.addEventListener('mousedown', function (event) {
@@ -96,25 +87,60 @@ autoCompletionArrivee.addEventListener('mousedown', function (event) {
     autoCompletionArrivee.innerHTML = "";
 })
 
-
 villeDepart.addEventListener("focusout", function (event) {
-        videVilles();
+    videVilles();
+    indexDefilement = 0;
+    autoCompletionTarget = null;
 })
 
 villeArrivee.addEventListener("focusout", function (event) {
-        videVilles();
+    videVilles();
+    indexDefilement = 0;
+    autoCompletionTarget = null;
 })
 
-
 villeDepart.addEventListener("focusin", function (event) {
+    autoCompletionTarget = autoCompletionDepart;
     RequeteVille(villeDepart);
 })
 
 villeArrivee.addEventListener("focusin", function (event) {
+    autoCompletionTarget = autoCompletionArrivee;
     RequeteVille(villeArrivee);
+
 })
 
+villeDepart.addEventListener("keydown", function (e) {
+    flecheDefilement(e, villeDepart);
+})
 
-// villeArrivee.addEventListener("focusout", function (event) {
+villeArrivee.addEventListener("keydown", function (e) {
+    flecheDefilement(e, villeArrivee);
+})
 
-// })
+function flecheDefilement(e, ville) {
+    let oldIndex = indexDefilement;
+    let isArrow = true;
+    if (e.key == "ArrowUp") {
+        if (indexDefilement > 0) {
+            indexDefilement--;
+        }
+    } else if (e.key == "ArrowDown") {
+        if (indexDefilement < 20) {
+            indexDefilement++;
+        }
+    } else {
+        isArrow = false;
+    }
+    if (isArrow) {
+        let nomVille = autoCompletionTarget.childNodes.item(indexDefilement);
+        nomVille.style.backgroundColor = "black";
+        ville.value = nomVille.innerHTML;
+        let oldVille = autoCompletionTarget.childNodes.item(oldIndex);
+        oldVille.style.backgroundColor = "grey";
+        let elementVille = document.getElementById(nomVille.innerHTML);
+
+        elementVille.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }
+}
+

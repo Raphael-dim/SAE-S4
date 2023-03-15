@@ -86,17 +86,18 @@ class ControleurNoeudCommune extends ControleurGenerique
             $noeudRoutierRepository = new NoeudRoutierRepository();
             echo "<br>";
 
-            $noeudRoutierDepartGid = $noeudRoutierRepository->recupererPar([
+            $noeudRoutierDepart = $noeudRoutierRepository->recupererPar([
                 "id_rte500" => $noeudCommuneDepart->getId_nd_rte()
-            ])[0]->getGid();
+            ])[0];
 
 
-            $noeudRoutierArriveeGid = $noeudRoutierRepository->recupererPar([
+            $noeudRoutierArrivee = $noeudRoutierRepository->recupererPar([
                 "id_rte500" => $noeudCommuneArrivee->getId_nd_rte()
-            ])[0]->getGid();
+            ])[0];
 
-            $pcc = new PlusCourtChemin($noeudRoutierDepartGid, $noeudRoutierArriveeGid);
-
+            $pcc = new PlusCourtChemin($noeudRoutierDepart->getGid(), $noeudRoutierArrivee->getGid());
+            $pcc->setDistanceInitiale($noeudRoutierDepart->getLatNoeud(), $noeudRoutierDepart->getLongNoeud(),
+                $noeudRoutierArrivee->getLatNoeud(), $noeudRoutierArrivee->getLongNoeud());
             $result = $pcc->calculer();
             $distance = 0 ;
 

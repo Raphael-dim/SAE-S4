@@ -10,11 +10,13 @@ class VerificationEmail
 {
     public static function envoiEmailValidation(Utilisateur $utilisateur): void
     {
+        $generateurUrl = Conteneur::recupererService("generateurUrl");
         $loginURL = rawurlencode($utilisateur->getLogin());
         $nonceURL = rawurlencode($utilisateur->getNonce());
-        $absoluteURL = Configuration::getAbsoluteURL();
-        $lienValidationEmail = "$absoluteURL?action=validerEmail&controleur=utilisateur&login=$loginURL&nonce=$nonceURL";
-        $corpsEmail = "<a href=\"$lienValidationEmail\">Validation</a>";
+        //$absoluteURL = Configuration::getAbsoluteURL();
+        $url = $generateurUrl->generate('validerEmail', ["idUtilisateur" => $loginURL, "nonce" => $nonceURL]);
+        //$lienValidationEmail = "validerEmail/$loginURL/$nonceURL";
+        $corpsEmail = "<a href=\"$url\">Validation</a>";
 
         // Temporairement avant d'envoyer un vrai mail
         MessageFlash::ajouter("success", $corpsEmail);

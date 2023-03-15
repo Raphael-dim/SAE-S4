@@ -1,4 +1,5 @@
 <?php
+
 namespace App\PlusCourtChemin\Controleur;
 
 use App\PlusCourtChemin\Lib\Conteneur;
@@ -15,11 +16,17 @@ use Symfony\Component\Routing\RouteCollection;
 
 class RouteurURL
 {
-    public static function traiterRequete() {
+    public static function traiterRequete()
+    {
         $requete = Request::createFromGlobals();
         $routes = new RouteCollection();
 
         // ROUTE POUR AFFICHER TOUTES LES COMMUNES
+        $routeFeed = new Route("/communes", [
+            "_controller" => [ControleurNoeudCommune::class, "afficherListe"],
+        ]);
+        $routes->add("communes", $routeFeed);
+
         $routeFeed = new Route("/", [
             "_controller" => [ControleurNoeudCommune::class, "afficherListe"],
         ]);
@@ -56,7 +63,7 @@ class RouteurURL
         $routeAfficherCreationCompte->setMethods(['GET']);
         $routes->add("afficherFormulaireCreation", $routeAfficherCreationCompte);
 
-        
+
         // ROUTE POUR creerDepuisFormulaire de ControleurUtilisateur
         $routeCreationCompte = new Route("/inscription", [
             "_controller" => [ControleurUtilisateur::class, "creerDepuisFormulaire"],
@@ -69,7 +76,7 @@ class RouteurURL
         $routeDetailCommune = new Route("/detailCommune/{idCommune}", [
             "_controller" => [ControleurNoeudCommune::class, "afficherDetail"],
         ]);
-        $routes->add("afficherDetail", $routeDetailCommune);
+        $routes->add("detailCommune", $routeDetailCommune);
 
 
         // ROUTE POUR plusCourtChemin de ControleurNoeudCommune
@@ -79,19 +86,72 @@ class RouteurURL
         $routePlusCourtChemin->setMethods(['GET']);
         $routes->add("plusCourtChemin", $routePlusCourtChemin);
 
+
         // ROUTE POUR calculer le plusCourtChemin de ControleurNoeudCommune (POST)UR
         $routePlusCourtChemin = new Route("/calculer", [
             "_controller" => [ControleurNoeudCommune::class, "plusCourtChemin"],
         ]);
         $routePlusCourtChemin->setMethods(['POST']);
-        $routes->add("calculer", $routePlusCourtChemin); 
+        $routes->add("calculer", $routePlusCourtChemin);
+
 
         // ROUTE POUR CompletionAuto Villes
-        $routeRequeteVille = new Route("/villes",[
+        $routeRequeteVille = new Route("/villes", [
             "_controller" => [RequeteVilleController::class, "getVille"],
         ]);
         $routeRequeteVille->setMethods(['GET']);
-        $routes->add("test", $routeRequeteVille);
+        $routes->add("autoCompletionVille", $routeRequeteVille);
+
+
+        // ROUTE POUR afficherDetail ControleurUtilisateur
+        $routeDetailUtilisateur = new Route("/detailUtilisateur/{idUtilisateur}", [
+            "_controller" => [ControleurUtilisateur::class, "afficherDetail"],
+        ]);
+        $routeDetailUtilisateur->setMethods(['GET']);
+        $routes->add("detailUtilisateur", $routeDetailUtilisateur);
+
+
+        // ROUTE POUR deconnecter de ControleurUtilisateur
+        $routeDeconnecter = new Route("/deconnecter", [
+            "_controller" => [ControleurUtilisateur::class, "deconnecter"],
+        ]);
+        $routeDeconnecter->setMethods(['GET']);
+        $routes->add("deconnecter", $routeDeconnecter);
+
+
+        // ROUTE POUR afficherFormulaireMiseAJour de ControleurUtilisateur
+        $afficherFormulaireMiseAJour = new Route("/mettreAJour/{idUtilisateur}", [
+            "_controller" => [ControleurUtilisateur::class, "afficherFormulaireMiseAJour"],
+        ]);
+        $afficherFormulaireMiseAJour->setMethods(['GET']);
+        $routes->add("formulaireMiseAJour", $afficherFormulaireMiseAJour);
+
+
+        // ROUTE POUR mettreAJour de ControleurUtilisateur
+        $mettreAJour = new Route("/mettreAJour", [
+            "_controller" => [ControleurUtilisateur::class, "mettreAJour"],
+        ]);
+        $mettreAJour->setMethods(['POST']);
+        $routes->add("mettreAJour", $mettreAJour);
+
+
+        // ROUTE POUR deconnecter de ControleurUtilisateur
+        $supprimerUtilisateur = new Route("/supprimerUtilisateur/{idUtilisateur}", [
+            "_controller" => [ControleurUtilisateur::class, "supprimer"],
+        ]);
+        $supprimerUtilisateur->setMethods(['GET']);
+        $routes->add("supprimerUtilisateur", $supprimerUtilisateur);
+
+
+        // ROUTE POUR validerEmail de ControleurUtilisateur
+        $validerEmail = new Route("/validerEmail/{idUtilisateur}/{nonce}", [
+            "_controller" => [ControleurUtilisateur::class, "validerEmail"],
+        ]);
+        $validerEmail->setMethods(['GET']);
+        $routes->add("validerEmail", $validerEmail);
+
+
+
 
         $contexteRequete = (new RequestContext())->fromRequest($requete);
         $associateurUrl = new UrlMatcher($routes, $contexteRequete);
