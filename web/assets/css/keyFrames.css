@@ -1,0 +1,25 @@
+
+@keyframes fadeinout {
+    from {
+        opacity: 0;
+        transform: translateY(0%);
+        transform: translateX(100%);
+    }
+    15% {
+        opacity: 1;
+        transform: translateY(0%);
+        transform: translateX(0%);
+    }
+
+    90% {
+        opacity: 1;
+        transform: translateY(0%);
+    }
+    99%{
+        transform: translateY(-150%);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-1500%);
+    }
+}

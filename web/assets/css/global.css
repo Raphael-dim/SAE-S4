@@ -40,3 +40,27 @@ li:nth-child(odd){
 .selected{
     background:cornflowerblue;
 }
+
+.autocompletion {
+    border: solid red 2px;
+    margin-left: 10%;
+    width: inherit;
+    color: white;
+    background-color: grey;
+    line-height: 1.5;
+    position: absolute;
+    overflow-y:scroll;
+    height:150px;
+    opacity:0.9;
+}
+
+.autocompletion p {
+    margin: 0 0 0 0;
+    padding: 0 5px 0 5px;
+}
+
+.autocompletion p:hover {
+    /* color: black; */
+    background-color: rgb(43, 43, 43);
+    cursor: default;
+}

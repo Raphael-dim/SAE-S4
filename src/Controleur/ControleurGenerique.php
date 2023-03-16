@@ -5,59 +5,50 @@ namespace App\PlusCourtChemin\Controleur;
 use App\PlusCourtChemin\Lib\Conteneur;
 use App\PlusCourtChemin\Lib\MessageFlash;
 use Psr\Log\NullLogger;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class ControleurGenerique
 {
 
-    protected static function afficherVue(string $cheminVue, array $parametres = []): void
+    protected static function afficherVue(string $cheminVue, array $parametres = []): Response
     {
         extract($parametres);
         $messagesFlash = MessageFlash::lireTousMessages();
+        ob_start();
         require __DIR__ . "/../vue/$cheminVue";
+        $corpsReponse = ob_get_clean();
+        return new Response($corpsReponse);
     }
 
     // https://stackoverflow.com/questions/768431/how-do-i-make-a-redirect-in-php
-    protected static function rediriger(string $nomRoute, $tab = NULL): void
+    protected static function rediriger(string $nomRoute, $tab = NULL): RedirectResponse
     {
-        //$queryString = [];
-        //if ($action != "") {
-        //    $queryString[] = "action=" . rawurlencode($action);
-        //}
-        //if ($controleur != "") {
-        //    $queryString[] = "controleur=" . rawurlencode($controleur);
-        //}
-        //foreach ($query as $name => $value) {
-        //    $name = rawurldecode($name);
-        //    $value = rawurldecode($value);
-        //    $queryString[] = "$name=$value";
-        //}
-        //$url = "Location: ./controleurFrontal.php?" . join("&", $queryString);
-        //header($url);
-        //exit();
-
         if (!is_null($tab)) {
             $url = Conteneur::recupererService('generateurUrl')->generate($nomRoute, $tab);
         } else {
             $url = Conteneur::recupererService('generateurUrl')->generate($nomRoute);
         }
-
-        // $url = "Location: ./controleurFrontal.php?" . join("&", $queryString);
-        header("Location: " . $url);
-        exit();
+        // header("Location: " . $url);
+        // exit();
+        return new RedirectResponse($url);
     }
 
-    public static function afficherErreur($errorMessage = "", $controleur = ""): void
+    public static function afficherErreur($errorMessage = "", $statusCode = 400): Response
     {
-        $errorMessageView = "Problème";
-        if ($controleur !== "")
-            $errorMessageView .= " avec le contrôleur $controleur";
-        if ($errorMessage !== "")
-            $errorMessageView .= " : $errorMessage";
-
-        ControleurGenerique::afficherVue('vueGenerale.php', [
+        $reponse = ControleurGenerique::afficherVue('vueGenerale.php', [
             "pagetitle" => "Problème",
             "cheminVueBody" => "erreur.php",
-            "errorMessage" => $errorMessageView
+            "errorMessage" => $errorMessage
         ]);
+
+        $reponse->setStatusCode($statusCode);
+        return $reponse;
+    }
+    protected static function afficherTwig(string $cheminVue, array $parametres = []): Response
+    {
+        /** @var Environment $twig */
+        $twig = Conteneur::recupererService("twig");
+        return new Response($twig->render($cheminVue, $parametres));
     }
 }

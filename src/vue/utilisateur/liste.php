@@ -8,7 +8,7 @@ foreach ($utilisateurs as $utilisateur) {
     echo <<< HTML
         <li>
             Utilisateur de login $loginHTML
-            <a href="controleurFrontal.php?action=afficherDetail&controleur=utilisateur&login=$loginURL">(+ d'info)</a>
+            <a href="detailUtilisateur/$loginURL">(+ d'info)</a>
         </li>\n
     HTML;
 }
