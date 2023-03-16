@@ -11,7 +11,7 @@
         </div>
         <div id="autocompletionArriveDiv">
             <p class="InputAddOn">
-                <label class="InputAddOn-item" for="nomCommuneArrivee_id">Nom de la commune de départ</label>
+                <label class="InputAddOn-item" for="nomCommuneArrivee_id">Nom de la commune d'arrivée</label>
                 <input class="InputAddOn-field" type="text" value="" placeholder="Ex : Menton" name="nomCommuneArrivee" id="nomCommuneArrivee_id" required>
             </p>
             <!-- <img id="loading" src="img/loading.gif"> -->
