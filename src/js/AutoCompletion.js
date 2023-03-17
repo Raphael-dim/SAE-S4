@@ -142,7 +142,7 @@ function flecheDefilement(e, ville) {
         let villeSelectionnee = autoCompletionTarget.childNodes.item(indexDefilement);
         ville.value = villeSelectionnee.innerHTML;
     }
-    if (isArrow) {
+    if (isArrow && oldIndex !== indexDefilement) {
         let nomVille = autoCompletionTarget.childNodes.item(indexDefilement);
         nomVille.style.backgroundColor = "black";
         ville.value = nomVille.innerHTML;
