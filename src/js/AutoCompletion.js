@@ -37,6 +37,9 @@ function endLoadingAction() {
 }
 
 function requeteAJAX(stringVille, callback, startLoadingAction, endLoadingAction) {
+    /*
+        On utilise les routes établies dans Routeur.php
+    */
     if (stringVille != "") {
         let url = "chercherVille/" + encodeURIComponent(stringVille);
         request = new XMLHttpRequest();
@@ -112,7 +115,6 @@ villeDepart.addEventListener("focusin", function (event) {
 villeArrivee.addEventListener("focusin", function (event) {
     autoCompletionTarget = autoCompletionArrivee;
     RequeteVille(villeArrivee);
-
 })
 
 villeDepart.addEventListener("keydown", function (e) {
@@ -137,13 +139,18 @@ function flecheDefilement(e, ville) {
     } else {
         isArrow = false;
     }
-    if (e.key == "Enter") {
+    if (e.key == "Enter") {     // on valide le choix
         let villeSelectionnee = autoCompletionTarget.childNodes.item(indexDefilement);
-        ville.value = villeSelectionnee.innerHTML;
-        videVilles();
-        e.preventDefault()
+        ville.value = villeSelectionnee.innerHTML;      
+        videVilles();       
+        e.preventDefault()  // on annule le fait que le formulaire s'envoie alors qu'on souhaite simplement valider la ville
     }
     if (isArrow && oldIndex !== indexDefilement) {
+        /*
+            on gère la liste défilante, en mettant à jour le CSS et en ajustant la barre de défilement en fonction 
+            de l'élément courant
+        */
+
         let nomVille = autoCompletionTarget.childNodes.item(indexDefilement);
         nomVille.style.backgroundColor = "black";
         ville.value = nomVille.innerHTML;
