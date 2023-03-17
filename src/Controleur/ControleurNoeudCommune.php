@@ -5,6 +5,7 @@ namespace App\PlusCourtChemin\Controleur;
 use App\PlusCourtChemin\Lib\dijkstra;
 use App\PlusCourtChemin\Lib\MessageFlash;
 use App\PlusCourtChemin\Lib\PlusCourtChemin;
+use App\PlusCourtChemin\Lib\Route;
 use App\PlusCourtChemin\Modele\DataObject\NoeudCommune;
 use App\PlusCourtChemin\Modele\Repository\NoeudCommuneRepository;
 use App\PlusCourtChemin\Modele\Repository\NoeudRoutierRepository;
@@ -71,7 +72,9 @@ class ControleurNoeudCommune extends ControleurGenerique
         ];
 
 
+
         if (!empty($_POST)) {
+            $t1 = time();
             $nomCommuneDepart = $_POST["nomCommuneDepart"];
             $nomCommuneArrivee = $_POST["nomCommuneArrivee"];
 
@@ -99,23 +102,21 @@ class ControleurNoeudCommune extends ControleurGenerique
             $pcc->setDistanceInitiale($noeudRoutierDepart->getLatNoeud(), $noeudRoutierDepart->getLongNoeud(),
                 $noeudRoutierArrivee->getLatNoeud(), $noeudRoutierArrivee->getLongNoeud());
             $result = $pcc->calculer();
-            $distance = 0 ;
-
-            $troncons_route = [];
 
 
-            foreach ($result as $n){
-                $distance += $n['distance'];
-                if (isset($n['troncon_gid'])) {
-                    $troncons_route[] = $n['troncon_gid'];
-                }
-            }
+
+            $plusCourtChemin = Route::getShortestPath($result,$noeudRoutierDepart->getGid(),$noeudRoutierArrivee->getGid());
+
+            $distance = $plusCourtChemin["distance"];
+
 
             $troncons = [];
 
-            foreach ($troncons_route as $troncon) {
+            foreach ($plusCourtChemin["path"] as $troncon) {
+
                 $troncons[] = (new TronconRouteRepository())->recupererParClePrimaire($troncon);
             }
+
 
             $parametres["CommuneDepart"] = $noeudCommuneDepart;
             $parametres["CommuneArrivee"] = $noeudCommuneArrivee;
@@ -127,6 +128,8 @@ class ControleurNoeudCommune extends ControleurGenerique
             ])[0];
             $parametres["distance"] = $distance;
             $parametres["troncons"] = $troncons;
+            $t2 = time();
+            $parametres["temps"]=$t2-$t1;
         }
 
         ControleurNoeudCommune::afficherVue('vueGenerale.php', $parametres);

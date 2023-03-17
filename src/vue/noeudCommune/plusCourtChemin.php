@@ -30,6 +30,9 @@
     <p>
         Le plus court chemin entre <?= $CommuneDepart->getNomCommune() ?> et <?= $CommuneArrivee->getNomCommune() ?> mesure <?= $distance ?>km.
     </p>
+    <p>
+        Temps d'execution : <?= $temps ?>s
+    </p>
     <p id = "loading">
       loading
     </p>
@@ -53,6 +56,7 @@
             plotTroncon(tabTronconJSON);
             document.getElementById("loading").classList.add("hidden")
         }
+
     </script>
     <!-------------------------------------------------------------------------------------------->
 
