@@ -138,9 +138,10 @@ function flecheDefilement(e, ville) {
         isArrow = false;
     }
     if (e.key == "Enter") {
-        videVilles();
         let villeSelectionnee = autoCompletionTarget.childNodes.item(indexDefilement);
         ville.value = villeSelectionnee.innerHTML;
+        videVilles();
+        e.preventDefault()
     }
     if (isArrow && oldIndex !== indexDefilement) {
         let nomVille = autoCompletionTarget.childNodes.item(indexDefilement);
