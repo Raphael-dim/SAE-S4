@@ -37,15 +37,18 @@ function endLoadingAction() {
 }
 
 function requeteAJAX(stringVille, callback, startLoadingAction, endLoadingAction) {
-    let url = "chercherVille/" + encodeURIComponent(stringVille);
-    request = new XMLHttpRequest();
-    startLoadingAction();
-    request.open("GET", url, true);
-    request.addEventListener("load", function () {
-        callback(request);
-        endLoadingAction();
-    });
-    request.send(null);
+    if (stringVille != "") {
+        let url = "chercherVille/" + encodeURIComponent(stringVille);
+        request = new XMLHttpRequest();
+        startLoadingAction();
+        request.open("GET", url, true);
+        request.addEventListener("load", function () {
+            callback(request);
+            endLoadingAction();
+        });
+        request.send(null);
+    }
+    
 }
 
 function callback_4(req) {
@@ -128,11 +131,16 @@ function flecheDefilement(e, ville) {
             indexDefilement--;
         }
     } else if (e.key == "ArrowDown") {
-        if (indexDefilement < 20) {
+        if (indexDefilement + 1 < autoCompletionTarget.childElementCount && indexDefilement < 20) {
             indexDefilement++;
         }
     } else {
         isArrow = false;
+    }
+    if (e.key == "Enter") {
+        videVilles();
+        let villeSelectionnee = autoCompletionTarget.childNodes.item(indexDefilement);
+        ville.value = villeSelectionnee.innerHTML;
     }
     if (isArrow) {
         let nomVille = autoCompletionTarget.childNodes.item(indexDefilement);
