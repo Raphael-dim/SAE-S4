@@ -10,16 +10,12 @@ use App\PlusCourtChemin\Modele\DataObject\NoeudCommune;
 use App\PlusCourtChemin\Modele\Repository\NoeudCommuneRepository;
 use App\PlusCourtChemin\Modele\Repository\NoeudRoutierRepository;
 use App\PlusCourtChemin\Modele\Repository\TronconRouteRepository;
+use Symfony\Component\HttpFoundation\Response;
 
 class ControleurNoeudCommune extends ControleurGenerique
 {
 
-    public static function afficherErreur($errorMessage = "", $controleur = ""): void
-    {
-        parent::afficherErreur($errorMessage, "noeudCommune");
-    }
-
-    public static function afficherListe(): void
+    public static function afficherListe(): Response
     {
 
         if (!isset($_POST["start"]) || $_POST["start"] < 0) {
@@ -34,7 +30,7 @@ class ControleurNoeudCommune extends ControleurGenerique
         } else {
             $noeudsCommunes = (new NoeudCommuneRepository())->recuperer($start, $limit);     //appel au modèle pour gerer la BD
         }
-        ControleurNoeudCommune::afficherVue('vueGenerale.php', [
+        return ControleurNoeudCommune::afficherVue('vueGenerale.php', [
             "noeudsCommunes" => $noeudsCommunes,
             "pagetitle" => "Liste des Noeuds Routiers",
             "cheminVueBody" => "noeudCommune/liste.php",
@@ -43,28 +39,28 @@ class ControleurNoeudCommune extends ControleurGenerique
         ]);
     }
 
-    public static function afficherDetail($idCommune): void
+    public static function afficherDetail($idCommune): Response
     {
         if (!isset($idCommune)) {
             MessageFlash::ajouter("danger", "Immatriculation manquante.");
-            ControleurNoeudCommune::rediriger("/");
+            return ControleurNoeudCommune::rediriger("/");
         }
 
         $noeudCommune = (new NoeudCommuneRepository())->recupererParClePrimaire($idCommune);
 
         if ($noeudCommune === null) {
             MessageFlash::ajouter("warning", "gid inconnue.");
-            ControleurNoeudCommune::rediriger("/");
+            return ControleurNoeudCommune::rediriger("/");
         }
 
-        ControleurNoeudCommune::afficherVue('vueGenerale.php', [
+        return ControleurNoeudCommune::afficherVue('vueGenerale.php', [
             "noeudCommune" => $noeudCommune,
             "pagetitle" => "Détail de la noeudCommune",
             "cheminVueBody" => "noeudCommune/detail.php"
         ]);
     }
 
-    public static function plusCourtChemin(): void
+    public static function plusCourtChemin(): Response
     {
         $parametres = [
             "pagetitle" => "Plus court chemin",
@@ -132,6 +128,6 @@ class ControleurNoeudCommune extends ControleurGenerique
             $parametres["temps"]=$t2-$t1;
         }
 
-        ControleurNoeudCommune::afficherVue('vueGenerale.php', $parametres);
+        return ControleurNoeudCommune::afficherVue('vueGenerale.php', $parametres);
     }
 }

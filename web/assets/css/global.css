@@ -42,11 +42,11 @@ li:nth-child(odd){
 }
 
 .autocompletion {
+    border: solid red 2px;
     margin-left: 10%;
     width: inherit;
     color: white;
     background-color: grey;
-    border: 1px solid black;
     line-height: 1.5;
     position: absolute;
     overflow-y:scroll;
