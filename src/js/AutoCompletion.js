@@ -37,7 +37,7 @@ function endLoadingAction() {
 }
 
 function requeteAJAX(stringVille, callback, startLoadingAction, endLoadingAction) {
-    let url = "../web/villes?ville=" + encodeURIComponent(stringVille);
+    let url = "chercherVille/" + encodeURIComponent(stringVille);
     request = new XMLHttpRequest();
     startLoadingAction();
     request.open("GET", url, true);
@@ -58,12 +58,14 @@ let minuteur;
 
 
 function RequeteVille(ville) {
+
     if (typeof minuteur == "number") {
         clearTimeout(minuteur);
     }
     if (request != null && request.readyState != 4) {
         request.abort()
     }
+
     minuteur = setTimeout(() => {
         requeteAJAX(ville.value, callback_4, startLoadingAction, endLoadingAction)
     }, 200);

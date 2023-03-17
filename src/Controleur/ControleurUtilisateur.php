@@ -197,7 +197,7 @@ class ControleurUtilisateur extends ControleurGenerique
     {
         return ControleurUtilisateur::afficherVue('vueGenerale.php', [
             "pagetitle" => "Formulaire de connexion",
-            "cheminVueBody" => "utilisateur/formulaireConnexion.php",
+            "cheminVueBody" => "utilisateur/connexion.html.twig",
             "method" => Configuration::getDebug() ? "get" : "post",
         ]);
     }
