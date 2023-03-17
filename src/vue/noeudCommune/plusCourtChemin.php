@@ -33,21 +33,24 @@
     <p>
         Temps d'execution : <?= $temps ?>s
     </p>
-    <p id = "loading">
-      loading
+    <p id="loading">
+        loading
     </p>
-    <!-------------------------------------GOOGLE MAPS API---------------------------------------->
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-    <div id="map" style="height:650px;width:620px;margin:auto;"></div>
+<?php } ?>
+<!-------------------------------------GOOGLE MAPS API---------------------------------------->
+<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+<div id="map" style="height:650px;width:620px;margin:auto;"></div>
 
 
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCNgiSeE--QYZtlP4qYMTDatGQrDXgql8M&v=weekly"></script>
-    <!-------------------------------------------------------------------------------------------->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCNgiSeE--QYZtlP4qYMTDatGQrDXgql8M&v=weekly"></script>
+<!-------------------------------------------------------------------------------------------->
 
-    <!---------------------------------------INIT MAP--------------------------------------------->
-    <script defer src="../ressources/js/map.js"></script>
+<!---------------------------------------INIT MAP--------------------------------------------->
+<script defer src="../src/js/map.js"></script>
+<?php if (!empty($_POST)) { ?>
+
     <script>
-        window.onload = function(){
+        window.onload = function() {
             console.log("loaded");
             let CommuneDepartJSON = <?= $CommuneDepart->toJson() ?>;
             let CommuneArriveeJSON = <?= $CommuneArrivee->toJson() ?>;
@@ -56,7 +59,6 @@
             plotTroncon(tabTronconJSON);
             document.getElementById("loading").classList.add("hidden")
         }
-
     </script>
     <!-------------------------------------------------------------------------------------------->
 

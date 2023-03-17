@@ -11,6 +11,15 @@ let autoCompletionTarget; // LA CHAMP D'AUTOCOMPLETION ACTUELLEMENT SELECTIONNEE
 
 let request;
 
+let minuteur;
+
+let villes;
+
+let nomVilleDepart = null;
+
+let nomVilleArrivee = null;
+
+
 function afficheVilles(tableau) {
     videVilles();
     for (const ville of tableau) {
@@ -51,16 +60,16 @@ function requeteAJAX(stringVille, callback, startLoadingAction, endLoadingAction
         });
         request.send(null);
     }
-    
 }
+
 
 function callback_4(req) {
     let data = JSON.parse(req.responseText);
+    villes = data;
     let names = data.map(element => element["nomCommune"]);
     afficheVilles(names);
 }
 
-let minuteur;
 
 
 function RequeteVille(ville) {
@@ -87,12 +96,20 @@ villeArrivee.addEventListener('input', function () {
 
 autoCompletionDepart.addEventListener('mousedown', function (event) {
     villeDepart.value = event.target.innerHTML;
-    autoCompletionDepart.innerHTML = "";
+    nomVilleDepart = villes.filter(function (ville) {
+        return ville.nomCommune = event.target.innerHTML
+    })
+    miseAJourMap(nomVilleDepart, nomVilleArrivee)
+    videVilles();
 })
 
 autoCompletionArrivee.addEventListener('mousedown', function (event) {
     villeArrivee.value = event.target.innerHTML;
-    autoCompletionArrivee.innerHTML = "";
+    nomVilleArrivee = villes.filter(function (ville) {
+        return ville.nomCommune = event.target.innerHTML
+    })
+    miseAJourMap(nomVilleDepart, nomVilleArrivee)
+    videVilles();    
 })
 
 villeDepart.addEventListener("focusout", function (event) {
@@ -160,5 +177,21 @@ function flecheDefilement(e, ville) {
 
         elementVille.scrollIntoView({ behavior: 'smooth', block: 'center' })
     }
+
+}
+function miseAJourMap(villeDepart, villeArrivee) {
+    let coorDepart = null;
+    if (villeDepart !== null) {
+        coorDepart = {};
+        coorDepart['lat'] = villeDepart[0]['lat'];
+        coorDepart['long'] = villeDepart[0]['long'];
+    }
+    let coorArrivee = null;
+    if (villeArrivee !== null) {
+        coorArrivee = {};
+        coorArrivee['lat'] = villeArrivee[0]['lat'];
+        coorArrivee['long'] = villeArrivee[0]['long'];
+    }
+    initMap(coorDepart, coorArrivee);
 }
 
