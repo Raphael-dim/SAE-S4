@@ -1,4 +1,3 @@
-
 const map = new google.maps.Map(document.getElementById("map"), {
     center: { lat: -34.397, lng: 150.644 },
     zoom: 13,
@@ -6,6 +5,21 @@ const map = new google.maps.Map(document.getElementById("map"), {
 
 let markerDepart = null;
 let markerArrivee = null;
+
+
+imageLocaliser = document.getElementsByClassName("localiser");
+
+function localiser(pos) {
+
+    let crd = pos.coords;
+    let latitude = crd.latitude;
+
+    let longitude = crd.longitude;
+}
+
+imageLocaliser[0].addEventListener("mousedown", function (event) {
+    navigator.geolocation.getCurrentPosition(localiser);
+})
 
 function initMap(noeudDepart, noeudArrivee) {
 

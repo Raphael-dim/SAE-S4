@@ -3,6 +3,7 @@
         <p class="InputAddOn">
             <input placeholder="Nom de la commune de départ" class="InputAddOn-field" type="text" value="" placeholder="Ex : Menton" name="nomCommuneDepart" id="nomCommuneDepart_id" required>
             <!-- <img id="loading" src="img/loading.gif"> -->
+            <img class="localiser" src="assets/img/placeholder.png">
         <div class="autocompletion hidden" id="autocompletionDepart"></div>
         </p>
     </div>
