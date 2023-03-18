@@ -76,14 +76,12 @@ li:nth-child(odd) {
 
 .saisieVille {
     border-radius: 6px;
-    background-color: #ffffff;
-    top: 200px;
+    background-color: #ffffffd3;
+    top: 170px;
     left: 50px;
-    max-width: 400px;
-    z-index: 11;
+    /* max-width: 600px; */
+    min-width: 220px;
+    z-index: 2;
     position: absolute;
 }
 
-.saisieVille .InputAddOn-item {
-    max-width: 150px;
-}
