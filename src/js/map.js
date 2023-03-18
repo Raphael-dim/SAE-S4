@@ -4,19 +4,20 @@ const map = new google.maps.Map(document.getElementById("map"), {
     zoom: 13,
 });
 
-let markerDepart;
-let markerArrivee;
+let markerDepart = null;
+let markerArrivee = null;
 
 function initMap(noeudDepart, noeudArrivee) {
 
     let LatLngDepart;
     let LatLngArrivee;
 
-    console.log(markerDepart);
-
     if (noeudDepart !== null) {
         LatLngDepart = { lat: parseFloat(noeudDepart["lat"]), lng: parseFloat(noeudDepart["long"]) };
         map.setCenter(LatLngDepart);
+        if (markerDepart !== null) {
+            markerDepart.setMap(null);
+        }
         markerDepart = new google.maps.Marker({
             position: LatLngDepart,
             map,
@@ -26,7 +27,10 @@ function initMap(noeudDepart, noeudArrivee) {
     if (noeudArrivee !== null) {
         LatLngArrivee = { lat: parseFloat(noeudArrivee["lat"]), lng: parseFloat(noeudArrivee["long"]) };
         map.setCenter(LatLngArrivee);
-        markerDepart = new google.maps.Marker({
+        if (markerArrivee !== null) {
+            markerArrivee.setMap(null);
+        }
+        markerArrivee = new google.maps.Marker({
             position: LatLngArrivee,
             map,
             title: noeudArrivee["nomCommune"],
@@ -38,7 +42,40 @@ function initMap(noeudDepart, noeudArrivee) {
             lng: parseFloat((Number(noeudDepart['long']) + Number(noeudArrivee['long'])) / 2)
         }
         map.setCenter(Latlng);
-        map.setZoom(7);
+
+
+        let distance = distanceEntreDeuxPoints([parseFloat(Number(noeudDepart['lat'])), parseFloat(Number(noeudDepart['long']))],
+            [parseFloat(Number(noeudArrivee['lat'])), parseFloat(Number(noeudArrivee['long']))]);
+
+
+        if (distance < 1) {
+            map.setZoom(24);
+        }
+        else if (distance < 5) {
+            map.setZoom(13);
+        }
+        else if (distance < 20) {
+            map.setZoom(12);
+        }
+        else if (distance < 50) {
+            map.setZoom(10);
+        }
+        else if (distance < 100) {
+            map.setZoom(9);
+        }
+        else if (distance < 200) {
+            map.setZoom(7);
+        }
+        else if (distance < 300) {
+            map.setZoom(7);
+        } 
+        else if (distance < 400) {
+            map.setZoom(7);
+        }
+        else {
+            map.setZoom(6);
+        }
+        console.log(map.zoom + " " + distance);
     }
 }
 
@@ -64,5 +101,25 @@ function plotTroncon(tabTroncon) {
             })
         }
     });
+}
 
+function distanceEntreDeuxPoints(latlng1, latlng2) {
+    const [lat1, lon1] = latlng1;
+    const [lat2, lon2] = latlng2;
+    const R = 6371; // Rayon de la Terre en km
+    const dLat = deg2rad(lat2 - lat1);
+    const dLon = deg2rad(lon2 - lon1);
+    const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(deg2rad(lat1)) *
+        Math.cos(deg2rad(lat2)) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const d = R * c; // Distance en km
+    return d;
+}
+
+function deg2rad(deg) {
+    return deg * (Math.PI / 180);
 }

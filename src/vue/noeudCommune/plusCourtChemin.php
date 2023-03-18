@@ -1,6 +1,4 @@
-<form action="calculer" method="post">
-    <fieldset>
-        <legend>Plus court chemin </legend>
+<form class="saisieVille" action="calculer" method="post">
         <div id="autocompletionDepartDiv">
             <p class="InputAddOn">
                 <label class="InputAddOn-item" for="nomCommuneDepart_id">Nom de la commune de départ</label>
@@ -23,7 +21,6 @@
                 <input class="InputAddOn-field" type="submit" value="Calculer" />
             </p>
         </div>
-    </fieldset>
 </form>
 
 <?php if (!empty($_POST)) { ?>
@@ -38,11 +35,11 @@
     </p>
 <?php } ?>
 <!-------------------------------------GOOGLE MAPS API---------------------------------------->
-<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-<div id="map" style="height:650px;width:620px;margin:auto;"></div>
+<script defer src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+<div id="map" class="map"></div>
 
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCNgiSeE--QYZtlP4qYMTDatGQrDXgql8M&v=weekly"></script>
+<script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCNgiSeE--QYZtlP4qYMTDatGQrDXgql8M&v=weekly"></script>
 <!-------------------------------------------------------------------------------------------->
 
 <!---------------------------------------INIT MAP--------------------------------------------->

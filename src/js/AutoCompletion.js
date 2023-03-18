@@ -97,7 +97,7 @@ villeArrivee.addEventListener('input', function () {
 autoCompletionDepart.addEventListener('mousedown', function (event) {
     villeDepart.value = event.target.innerHTML;
     nomVilleDepart = villes.filter(function (ville) {
-        return ville.nomCommune = event.target.innerHTML
+        return ville.nomCommune === event.target.innerHTML
     })
     miseAJourMap(nomVilleDepart, nomVilleArrivee)
     videVilles();
@@ -106,10 +106,10 @@ autoCompletionDepart.addEventListener('mousedown', function (event) {
 autoCompletionArrivee.addEventListener('mousedown', function (event) {
     villeArrivee.value = event.target.innerHTML;
     nomVilleArrivee = villes.filter(function (ville) {
-        return ville.nomCommune = event.target.innerHTML
+        return ville.nomCommune === event.target.innerHTML
     })
     miseAJourMap(nomVilleDepart, nomVilleArrivee)
-    videVilles();    
+    videVilles();
 })
 
 villeDepart.addEventListener("focusout", function (event) {
@@ -158,9 +158,19 @@ function flecheDefilement(e, ville) {
     }
     if (e.key == "Enter") {     // on valide le choix
         let villeSelectionnee = autoCompletionTarget.childNodes.item(indexDefilement);
-        ville.value = villeSelectionnee.innerHTML;      
-        videVilles();       
+        if (autoCompletionTarget == autoCompletionArrivee) {
+            nomVilleArrivee = villes.filter(function (v) {
+                return v.nomCommune === villeSelectionnee.innerHTML;
+            })
+        } else {
+            nomVilleDepart = villes.filter(function (v) {
+                return v.nomCommune === villeSelectionnee.innerHTML;
+            })
+        }
         e.preventDefault()  // on annule le fait que le formulaire s'envoie alors qu'on souhaite simplement valider la ville
+        ville.value = villeSelectionnee.innerHTML;
+        miseAJourMap(nomVilleDepart, nomVilleArrivee)
+        videVilles();
     }
     if (isArrow && oldIndex !== indexDefilement) {
         /*
