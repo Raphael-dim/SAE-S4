@@ -156,12 +156,17 @@ class RouteurURL
         $routes->add("validerEmail", $validerEmail);
 
 
-        // ROUTE POUR 
+        // ROUTE POUR chercherVille de ControleurRequeteVille
         $chercherVille = new Route("/chercherVille/{ville}", [
             "_controller" => [ControleurRequeteVille::class, "getVille"],
         ]);
         $routes->add("chercherVille", $chercherVille);
 
+
+        $mesTrajets = new Route("/mesTrajets", [
+            "controller" => [ControleurTrajet::class, "afficherListe"],
+        ]);
+        $routes->add("mesTrajets", $mesTrajets);
 
 
         $contexteRequete = (new RequestContext())->fromRequest($requete);

@@ -3,6 +3,7 @@
 namespace App\PlusCourtChemin\Modele\DataObject;
 
 use App\PlusCourtChemin\Lib\MotDePasse;
+use App\PlusCourtChemin\Modele\Repository\TrajetRepository;
 
 class Utilisateur extends AbstractDataObject
 {
@@ -15,17 +16,19 @@ class Utilisateur extends AbstractDataObject
     private string $email;
     private string $emailAValider;
     private string $nonce;
+    private array $trajets;
 
     public function __construct(
         string $login,
         string $nom,
         string $prenom,
         string $mdpHache,
-        bool $estAdmin,
+        bool   $estAdmin,
         string $email,
         string $emailAValider,
         string $nonce,
-    ) {
+    )
+    {
         $this->login = $login;
         $this->nom = $nom;
         $this->prenom = $prenom;
@@ -34,9 +37,10 @@ class Utilisateur extends AbstractDataObject
         $this->email = $email;
         $this->emailAValider = $emailAValider;
         $this->nonce = $nonce;
+        $this->trajets = (new TrajetRepository())->recupererPar(["loginutilisateur" => $login]);
     }
 
-    public static function construireDepuisFormulaire (array $tableauFormulaire) : Utilisateur
+    public static function construireDepuisFormulaire(array $tableauFormulaire): Utilisateur
     {
         return new Utilisateur(
             $tableauFormulaire["login"],
@@ -85,7 +89,8 @@ class Utilisateur extends AbstractDataObject
         return $this->mdpHache;
     }
 
-    public function setMdpHache(string $mdpClair) {
+    public function setMdpHache(string $mdpClair)
+    {
         $this->mdpHache = MotDePasse::hacher($mdpClair);
     }
 
@@ -127,6 +132,11 @@ class Utilisateur extends AbstractDataObject
     public function setNonce(string $nonce): void
     {
         $this->nonce = $nonce;
+    }
+
+    public function getTrajets() : array
+    {
+        return $this->trajets;
     }
 
     public function exporterEnFormatRequetePreparee(): array

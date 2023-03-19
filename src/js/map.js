@@ -1,5 +1,5 @@
 const map = new google.maps.Map(document.getElementById("map"), {
-    center: { lat: -34.397, lng: 150.644 },
+    center: {lat: -34.397, lng: 150.644},
     zoom: 13,
 });
 
@@ -27,7 +27,7 @@ function initMap(noeudDepart, noeudArrivee) {
     let LatLngArrivee;
 
     if (noeudDepart !== null) {
-        LatLngDepart = { lat: parseFloat(noeudDepart["lat"]), lng: parseFloat(noeudDepart["long"]) };
+        LatLngDepart = {lat: parseFloat(noeudDepart["lat"]), lng: parseFloat(noeudDepart["long"])};
         map.setCenter(LatLngDepart);
         if (markerDepart !== null) {
             markerDepart.setMap(null);
@@ -39,7 +39,7 @@ function initMap(noeudDepart, noeudArrivee) {
         });
     }
     if (noeudArrivee !== null) {
-        LatLngArrivee = { lat: parseFloat(noeudArrivee["lat"]), lng: parseFloat(noeudArrivee["long"]) };
+        LatLngArrivee = {lat: parseFloat(noeudArrivee["lat"]), lng: parseFloat(noeudArrivee["long"])};
         map.setCenter(LatLngArrivee);
         if (markerArrivee !== null) {
             markerArrivee.setMap(null);
@@ -62,31 +62,25 @@ function initMap(noeudDepart, noeudArrivee) {
             [parseFloat(Number(noeudArrivee['lat'])), parseFloat(Number(noeudArrivee['long']))]);
 
 
-        if (distance < 1) {
-            map.setZoom(24);
-        }
-        else if (distance < 5) {
+        if (distance < 0.5) {
+            map.setZoom(20);
+        } else if (distance < 1) {
+            map.setZoom(17);
+        } else if (distance < 5) {
             map.setZoom(13);
-        }
-        else if (distance < 20) {
+        } else if (distance < 20) {
             map.setZoom(12);
-        }
-        else if (distance < 50) {
+        } else if (distance < 50) {
             map.setZoom(10);
-        }
-        else if (distance < 100) {
+        } else if (distance < 100) {
             map.setZoom(9);
-        }
-        else if (distance < 200) {
+        } else if (distance < 200) {
             map.setZoom(7);
-        }
-        else if (distance < 300) {
+        } else if (distance < 300) {
             map.setZoom(7);
-        } 
-        else if (distance < 400) {
+        } else if (distance < 400) {
             map.setZoom(7);
-        }
-        else {
+        } else {
             map.setZoom(6);
         }
         console.log(map.zoom + " " + distance);
@@ -101,8 +95,8 @@ function plotTroncon(tabTroncon) {
         for (let i = 0; i < troncon["geom"]["coordinates"].length - 1; i++) {
 
             let geom = troncon["geom"]["coordinates"];
-            var LatLgnStart = { lat: geom[i][1], lng: geom[i][0] };
-            var LatLgnEnd = { lat: geom[i + 1][1], lng: geom[i + 1][0] };
+            var LatLgnStart = {lat: geom[i][1], lng: geom[i][0]};
+            var LatLgnEnd = {lat: geom[i + 1][1], lng: geom[i + 1][0]};
 
             console.log(LatLgnStart);
             var line = new google.maps.Polyline({

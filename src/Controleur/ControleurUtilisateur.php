@@ -32,8 +32,11 @@ class ControleurUtilisateur extends ControleurGenerique
             MessageFlash::ajouter("warning", "Login inconnu.");
             return ControleurUtilisateur::rediriger("utilisateur", "afficherListe");
         } else {
+            $trajets = $utilisateur->getTrajets();
+
             return ControleurUtilisateur::afficherVue('vueGenerale.php', [
                 "utilisateur" => $utilisateur,
+                "trajets" => $trajets,
                 "pagetitle" => "Détail de l'utilisateur",
                 "cheminVueBody" => "utilisateur/detail.php"
             ]);
@@ -197,7 +200,7 @@ class ControleurUtilisateur extends ControleurGenerique
     {
         return ControleurUtilisateur::afficherVue('vueGenerale.php', [
             "pagetitle" => "Formulaire de connexion",
-            "cheminVueBody" => "utilisateur/connexion.html.twig",
+            "cheminVueBody" => "utilisateur/formulaireConnexion.php",
             "method" => Configuration::getDebug() ? "get" : "post",
         ]);
     }
@@ -224,6 +227,7 @@ class ControleurUtilisateur extends ControleurGenerique
 
         if (!VerificationEmail::aValideEmail($utilisateur)) {
             MessageFlash::ajouter("warning", "Adresse email non validée.");
+            VerificationEmail::traiterEmailValidation($utilisateur->getLogin(), $utilisateur->getNonce());
             return ControleurUtilisateur::rediriger("connexion");
         }
 
