@@ -92,4 +92,26 @@ class NoeudRoutierRepository extends AbstractRepository
         ));
         return $pdoStatement->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public static function getLine(float $noeudRoutierDepartLon,float $noeudRoutierDepartLat,float $noeudRoutierArriveeLon, float $noeudRoutierArriveeLat): array
+    {
+        $requeteSQL = <<<SQL
+            select noeud_arrivee_gid as noeud_routier_gid,troncon_gid,r.longueur, ST_X(noeud_depart_geom) as lat, ST_Y(noeud_depart_geom) as lon, noeud_depart_gid
+            from relation r 
+            join troncon_route tr on tr.gid = r.troncon_gid 
+            where ST_DWithin(tr.geom,ST_SetSRID(St_AsText(ST_MakeLine( ST_Point(:lat1Tag ,:lon1Tag),ST_Point(:lat2Tag ,:lon2Tag))),4326),0.04);
+        SQL;
+        $pdoStatement = ConnexionBaseDeDonnees::getPdo()->prepare($requeteSQL);
+        $pdoStatement->execute(array(
+            "lon1Tag" => $noeudRoutierDepartLon,
+            "lat1Tag" => $noeudRoutierDepartLat,
+            "lon2Tag" => $noeudRoutierArriveeLon,
+            "lat2Tag" => $noeudRoutierArriveeLat
+        ));
+        var_dump($noeudRoutierDepartLon);
+        var_dump($noeudRoutierDepartLat);
+        var_dump($noeudRoutierArriveeLon);
+        var_dump($noeudRoutierArriveeLat);
+        return $pdoStatement->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
