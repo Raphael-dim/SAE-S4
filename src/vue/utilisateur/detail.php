@@ -19,3 +19,16 @@ $loginURL = rawurlencode($login);
         <a href="<?= $generateurUrl->generate('supprimerUtilisateur', ["idUtilisateur" => $loginURL]) ?>">(supprimer)</a>
     <?php } ?>
 </p>
+<p>
+<h2>Mes trajets : </h2>
+<ul>
+
+    <?php
+    foreach ($trajets as $trajet) {
+        echo '<li> de ' . $trajet->getCommuneDepart()->getNomCommune() . 'vers' .
+            $trajet->getCommuneArrivee()->getNomCommune() . '</li >';
+    }
+    ?>
+</ul>
+
+</p>

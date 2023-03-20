@@ -2,12 +2,16 @@
 
 namespace App\PlusCourtChemin\Controleur;
 
+use App\PlusCourtChemin\Lib\ConnexionUtilisateur;
 use App\PlusCourtChemin\Lib\dijkstra;
 use App\PlusCourtChemin\Lib\MessageFlash;
 use App\PlusCourtChemin\Lib\PlusCourtChemin;
+use App\PlusCourtChemin\Lib\Route;
 use App\PlusCourtChemin\Modele\DataObject\NoeudCommune;
+use App\PlusCourtChemin\Modele\DataObject\Trajet;
 use App\PlusCourtChemin\Modele\Repository\NoeudCommuneRepository;
 use App\PlusCourtChemin\Modele\Repository\NoeudRoutierRepository;
+use App\PlusCourtChemin\Modele\Repository\TrajetRepository;
 use App\PlusCourtChemin\Modele\Repository\TronconRouteRepository;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -68,6 +72,7 @@ class ControleurNoeudCommune extends ControleurGenerique
 
 
         if (!empty($_POST)) {
+            $t1 = time();
             $nomCommuneDepart = $_POST["nomCommuneDepart"];
             $nomCommuneArrivee = $_POST["nomCommuneArrivee"];
 
@@ -76,7 +81,6 @@ class ControleurNoeudCommune extends ControleurGenerique
             //
             //
             $noeudCommuneDepart = $noeudCommuneRepository->recupererPar(["nom_comm" => $nomCommuneDepart])[0];
-            //            /** @var NoeudCommune $noeudCommuneArrivee */
             $noeudCommuneArrivee = $noeudCommuneRepository->recupererPar(["nom_comm" => $nomCommuneArrivee])[0];
             //
             $noeudRoutierRepository = new NoeudRoutierRepository();
@@ -91,27 +95,31 @@ class ControleurNoeudCommune extends ControleurGenerique
                 "id_rte500" => $noeudCommuneArrivee->getId_nd_rte()
             ])[0];
 
+            if (ConnexionUtilisateur::estConnecte()) {
+                $trajet = new Trajet(ConnexionUtilisateur::getLoginUtilisateurConnecte(), $noeudCommuneDepart->getGid(),
+                    $noeudCommuneArrivee->getGid(), date('Y-m-d : H:i:s'));
+                (new TrajetRepository())->ajouter($trajet);
+            }
+
+
             $pcc = new PlusCourtChemin($noeudRoutierDepart->getGid(), $noeudRoutierArrivee->getGid());
             $pcc->setDistanceInitiale($noeudRoutierDepart->getLatNoeud(), $noeudRoutierDepart->getLongNoeud(),
                 $noeudRoutierArrivee->getLatNoeud(), $noeudRoutierArrivee->getLongNoeud());
             $result = $pcc->calculer();
-            $distance = 0 ;
-
-            $troncons_route = [];
 
 
-            foreach ($result as $n){
-                $distance += $n['distance'];
-                if (isset($n['troncon_gid'])) {
-                    $troncons_route[] = $n['troncon_gid'];
-                }
-            }
+            $plusCourtChemin = Route::getShortestPath($result, $noeudRoutierDepart->getGid(), $noeudRoutierArrivee->getGid());
+
+            $distance = $plusCourtChemin["distance"];
+
 
             $troncons = [];
 
-            foreach ($troncons_route as $troncon) {
+            foreach ($plusCourtChemin["path"] as $troncon) {
+
                 $troncons[] = (new TronconRouteRepository())->recupererParClePrimaire($troncon);
             }
+
 
             $parametres["CommuneDepart"] = $noeudCommuneDepart;
             $parametres["CommuneArrivee"] = $noeudCommuneArrivee;
@@ -123,6 +131,10 @@ class ControleurNoeudCommune extends ControleurGenerique
             ])[0];
             $parametres["distance"] = $distance;
             $parametres["troncons"] = $troncons;
+            $t2 = time();
+            $parametres["temps"] = $t2 - $t1;
+
+
         }
 
         return ControleurNoeudCommune::afficherVue('vueGenerale.php', $parametres);

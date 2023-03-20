@@ -156,6 +156,19 @@ class RouteurURL
         $routes->add("validerEmail", $validerEmail);
 
 
+        // ROUTE POUR chercherVille de ControleurRequeteVille
+        $chercherVille = new Route("/chercherVille/{ville}", [
+            "_controller" => [ControleurRequeteVille::class, "getVille"],
+        ]);
+        $routes->add("chercherVille", $chercherVille);
+
+
+        $mesTrajets = new Route("/mesTrajets", [
+            "controller" => [ControleurTrajet::class, "afficherListe"],
+        ]);
+        $routes->add("mesTrajets", $mesTrajets);
+
+
         $contexteRequete = (new RequestContext())->fromRequest($requete);
         $associateurUrl = new UrlMatcher($routes, $contexteRequete);
 
@@ -185,17 +198,16 @@ class RouteurURL
             $arguments = $resolveurDArguments->getArguments($requete, $controleur);
         } catch (ResourceNotFoundException $exception) {
             $reponse = ControleurGenerique::afficherErreur($exception->getMessage(), 404);
+            $reponse->send();
         } catch (MethodNotAllowedException $exception) {
             $reponse = ControleurGenerique::afficherErreur($exception->getMessage(), 405);
+            $reponse->send();
         } catch (Exception $exception) {
             $reponse = ControleurGenerique::afficherErreur($exception->getMessage());
+            $reponse->send();
         }
 
-        if (!isset($reponse)) {
-
-            $reponse = call_user_func_array($controleur, $arguments);
-        }
-
+        $reponse = call_user_func_array($controleur, $arguments);
         $reponse->send();
     }
 }
