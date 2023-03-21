@@ -83,7 +83,7 @@ function RequeteVille(ville) {
 
     minuteur = setTimeout(() => {
         requeteAJAX(ville.value, callback_4, startLoadingAction, endLoadingAction)
-    }, 200);
+    }, 50);
 }
 
 villeDepart.addEventListener('input', function () {
