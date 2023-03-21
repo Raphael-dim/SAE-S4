@@ -80,7 +80,6 @@ class NoeudRoutierRepository extends AbstractRepository
         return $pdoStatement->fetchAll(PDO::FETCH_ASSOC);
     }
 
-
     public static function getVoisins2(int $noeudRoutierGid): array
     {
         $requeteSQL = <<<SQL
@@ -93,24 +92,22 @@ class NoeudRoutierRepository extends AbstractRepository
         return $pdoStatement->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public static function getLine(float $noeudRoutierDepartLon,float $noeudRoutierDepartLat,float $noeudRoutierArriveeLon, float $noeudRoutierArriveeLat): array
+    public static function getShortestPath(int $noeudRoutierDepartGid,int $noeudRoutierArriveeGid): array
     {
-        $requeteSQL = <<<SQL
-            select noeud_arrivee_gid as noeud_routier_gid,troncon_gid,r.longueur, ST_X(noeud_depart_geom) as lat, ST_Y(noeud_depart_geom) as lon, noeud_depart_gid
-            from relation r 
-            where ST_DWithin(r.troncon_geom,ST_SetSRID(St_AsText(ST_MakeLine( ST_Point(:lat1Tag ,:lon1Tag),ST_Point(:lat2Tag ,:lon2Tag))),4326),0.05);
-        SQL;
+        $requeteSQL =
+            "SELECT noeud_arrivee_gid as noeud_routier_gid,troncon_gid,r.longueur, ST_X(noeud_depart_geom) as lat, ST_Y(noeud_depart_geom) as lon, noeud_depart_gid, agg_cost as distance
+            FROM pgr_dijkstra(
+              'SELECT troncon_gid AS id,
+                  noeud_arrivee_gid AS source, 
+                  noeud_depart_gid AS target,
+                  longueur AS cost
+                FROM relation',
+              ".$noeudRoutierDepartGid .", " . $noeudRoutierArriveeGid . ",
+              directed => false
+            ) AS a
+            JOIN relation AS r ON (a.edge = r.troncon_gid)";
         $pdoStatement = ConnexionBaseDeDonnees::getPdo()->prepare($requeteSQL);
-        $pdoStatement->execute(array(
-            "lon1Tag" => $noeudRoutierDepartLon,
-            "lat1Tag" => $noeudRoutierDepartLat,
-            "lon2Tag" => $noeudRoutierArriveeLon,
-            "lat2Tag" => $noeudRoutierArriveeLat
-        ));
-        var_dump($noeudRoutierDepartLon);
-        var_dump($noeudRoutierDepartLat);
-        var_dump($noeudRoutierArriveeLon);
-        var_dump($noeudRoutierArriveeLat);
+        $pdoStatement->execute();
         return $pdoStatement->fetchAll(PDO::FETCH_ASSOC);
     }
 }
