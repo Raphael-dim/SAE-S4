@@ -98,8 +98,7 @@ class NoeudRoutierRepository extends AbstractRepository
         $requeteSQL = <<<SQL
             select noeud_arrivee_gid as noeud_routier_gid,troncon_gid,r.longueur, ST_X(noeud_depart_geom) as lat, ST_Y(noeud_depart_geom) as lon, noeud_depart_gid
             from relation r 
-            join troncon_route tr on tr.gid = r.troncon_gid 
-            where ST_DWithin(tr.geom,ST_SetSRID(St_AsText(ST_MakeLine( ST_Point(:lat1Tag ,:lon1Tag),ST_Point(:lat2Tag ,:lon2Tag))),4326),0.04);
+            where ST_DWithin(r.troncon_geom,ST_SetSRID(St_AsText(ST_MakeLine( ST_Point(:lat1Tag ,:lon1Tag),ST_Point(:lat2Tag ,:lon2Tag))),4326),0.05);
         SQL;
         $pdoStatement = ConnexionBaseDeDonnees::getPdo()->prepare($requeteSQL);
         $pdoStatement->execute(array(
