@@ -21,6 +21,7 @@ class ConnexionBaseDeDonnees
     {
         $configuration = new Configuration(new ConfigurationBDDPostgreSQL());
         $configurationBDD = $configuration->getConfigurationBDD();
+        ini_set('max_execution_time', 0);
 
         // Connexion à la base de données
         $this->pdo = new PDO(
