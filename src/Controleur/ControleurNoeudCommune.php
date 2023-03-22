@@ -9,8 +9,6 @@ use App\PlusCourtChemin\Lib\PlusCourtChemin;
 use App\PlusCourtChemin\Lib\Route;
 use App\PlusCourtChemin\Modele\DataObject\NoeudCommune;
 use App\PlusCourtChemin\Modele\DataObject\Trajet;
-use App\PlusCourtChemin\Modele\DataObject\Voisin;
-use App\PlusCourtChemin\Modele\Repository\ConnexionBaseDeDonnees;
 use App\PlusCourtChemin\Modele\Repository\NoeudCommuneRepository;
 use App\PlusCourtChemin\Modele\Repository\NoeudRoutierRepository;
 use App\PlusCourtChemin\Modele\Repository\TrajetRepository;
@@ -102,37 +100,20 @@ class ControleurNoeudCommune extends ControleurGenerique
                     $noeudCommuneArrivee->getGid(), date('Y-m-d : H:i:s'));
                 (new TrajetRepository())->ajouter($trajet);
             }
+            /*$pcc = new PlusCourtChemin($noeudRoutierDepart->getGid(), $noeudRoutierArrivee->getGid());
+            $pcc->setDistanceInitiale($noeudRoutierDepart->getLatNoeud(), $noeudRoutierDepart->getLongNoeud(),
+                $noeudRoutierArrivee->getLatNoeud(), $noeudRoutierArrivee->getLongNoeud());
+            $result = $pcc->calculer();*/
+            $result = (new NoeudRoutierRepository())->getShortestPathAstar($noeudRoutierDepart->getGid(), $noeudRoutierArrivee->getGid());
 
-            $latDepart = $noeudCommuneDepart->getLatCommune();
-            $longDepart = $noeudCommuneDepart->getLongCommune();
-            $latArrivee = $noeudCommuneArrivee->getLatCommune();
-            $longArrivee = $noeudCommuneArrivee->getLongCommune();
+            //$plusCourtChemin = Route::getShortestPath($result, $noeudRoutierDepart->getGid(), $noeudRoutierArrivee->getGid());
 
-            $sql = "SELECT *
-            FROM relation r
-                WHERE ST_Contains(
-                ST_MakeEnvelope($latDepart, $longDepart, $latArrivee, $longArrivee, 4326),
-                noeud_depart_geom);
-             ";
-            $pdoStatement = ConnexionBaseDeDonnees::getPdo()->query($sql);
-            $voisins = [];
-            foreach ($pdoStatement as $objetFormatTableau) {
-                $troncon_gid = $objetFormatTableau['troncon_gid'];
-                $noeud_depart_gid = $objetFormatTableau['noeud_depart_gid'];
-                $noeud_depart_geom = $objetFormatTableau['noeud_depart_geom'];
-                $noeud_arrivee_gid = $objetFormatTableau['noeud_arrivee_gid'];
-                $noeud_arrivee_geom = $objetFormatTableau['noeud_arrivee_geom'];
-                $longueur = $objetFormatTableau['longueur'];
-                $voisins[$noeud_depart_gid][$noeud_arrivee_gid] = new Voisin($troncon_gid, $noeud_depart_gid,
-                            $noeud_depart_geom, $noeud_arrivee_gid, $noeud_arrivee_geom, $longueur);
-            }
-
-            $plusCourtChemin = new PlusCourtChemin($noeudRoutierDepart->getGid(), $noeudCommuneArrivee->getGid(), $voisins);
-            $plusCourtChemin->calculer();
-
+            //$distance = $plusCourtChemin["distance"];
+            $distance = number_format(end($result)["distance"],2);
 
             $troncons = [];
 
+            //foreach($plusCourtChemin["path"] as $troncon){
             foreach (array_column($result, 'troncon_gid') as $troncon) {
                 $troncons[] = (new TronconRouteRepository())->recupererParClePrimaire($troncon);
             }
