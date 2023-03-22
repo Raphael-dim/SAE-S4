@@ -17,7 +17,7 @@ class NoeudRoutier extends AbstractDataObject
         private ?string $lat = null,
         private ?string $long = null,
     ) {
-        $this->voisins = (new NoeudRoutierRepository())->getVoisins($this->getGid());
+        //$this->voisins = (new NoeudRoutierRepository())->getVoisins($this->getGid());
     }
 
 
@@ -34,6 +34,9 @@ class NoeudRoutier extends AbstractDataObject
 
     public function getVoisins(): array
     {
+        if(!isset($this->voisins)){
+            $this->voisins = (new NoeudRoutierRepository())->getVoisins($this->getGid());
+        }
         return $this->voisins;
     }
 

@@ -98,28 +98,25 @@ class ControleurNoeudCommune extends ControleurGenerique
             if (ConnexionUtilisateur::estConnecte()) {
                 $trajet = new Trajet(ConnexionUtilisateur::getLoginUtilisateurConnecte(), $noeudCommuneDepart->getGid(),
                     $noeudCommuneArrivee->getGid(), date('Y-m-d : H:i:s'));
-                (new TrajetRepository())->ajouter($trajet);
+                //(new TrajetRepository())->ajouter($trajet);
             }
+            //$pcc = new PlusCourtChemin($noeudRoutierDepart->getGid(), $noeudRoutierArrivee->getGid());
+            //$pcc->setDistanceInitiale($noeudRoutierDepart->getLatNoeud(), $noeudRoutierDepart->getLongNoeud(),
+            //    $noeudRoutierArrivee->getLatNoeud(), $noeudRoutierArrivee->getLongNoeud());
+            //$result = $pcc->calculer();
+            $result = (new NoeudRoutierRepository())->getShortestPathAstar($noeudRoutierDepart->getGid(), $noeudRoutierArrivee->getGid());
 
+            //$plusCourtChemin = Route::getShortestPath($result, $noeudRoutierDepart->getGid(), $noeudRoutierArrivee->getGid());
 
-            $pcc = new PlusCourtChemin($noeudRoutierDepart->getGid(), $noeudRoutierArrivee->getGid());
-            $pcc->setDistanceInitiale($noeudRoutierDepart->getLatNoeud(), $noeudRoutierDepart->getLongNoeud(),
-                $noeudRoutierArrivee->getLatNoeud(), $noeudRoutierArrivee->getLongNoeud());
-            $result = $pcc->calculer();
-
-
-            $plusCourtChemin = Route::getShortestPath($result, $noeudRoutierDepart->getGid(), $noeudRoutierArrivee->getGid());
-
-            $distance = $plusCourtChemin["distance"];
-
+            //$distance = $plusCourtChemin["distance"];
+            $distance = number_format(end($result)["distance"],2);
 
             $troncons = [];
 
-            foreach ($plusCourtChemin["path"] as $troncon) {
-
+            //foreach($plusCourtChemin["path"] as $troncon){
+            foreach (array_column($result, 'troncon_gid') as $troncon) {
                 $troncons[] = (new TronconRouteRepository())->recupererParClePrimaire($troncon);
             }
-
 
             $parametres["CommuneDepart"] = $noeudCommuneDepart;
             $parametres["CommuneArrivee"] = $noeudCommuneArrivee;
@@ -133,7 +130,6 @@ class ControleurNoeudCommune extends ControleurGenerique
             $parametres["troncons"] = $troncons;
             $t2 = time();
             $parametres["temps"] = $t2 - $t1;
-
 
         }
 
