@@ -5,9 +5,9 @@
     }
   },
   "require": {
-    "symfony/http-foundation": "^6.2",
-    "symfony/routing": "^6.2",
-    "symfony/http-kernel": "^6.2",
+    "symfony/http-foundation": "^6.0",
+    "symfony/routing": "^6.0",
+    "symfony/http-kernel": "^6.0",
     "twig/twig": "^3.5"
   }
 }
