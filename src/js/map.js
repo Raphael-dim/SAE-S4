@@ -53,8 +53,8 @@ function initMap(noeudDepart, noeudArrivee) {
     }
     if (noeudArrivee !== null && noeudDepart !== null) {
         Latlng = {
-            lat: parseFloat((Number(noeudDepart['lat']) + Number(noeudArrivee['lat'])) / 2),
-            lng: parseFloat((Number(noeudDepart['long']) + Number(noeudArrivee['long'])) / 2)
+            lat: parseFloat((Number(noeudDepart['long']) + Number(noeudArrivee['long'])) / 2),
+            lng: parseFloat((Number(noeudDepart['lat']) + Number(noeudArrivee['lat'])) / 2)
         }
         map.setCenter(Latlng);
 
