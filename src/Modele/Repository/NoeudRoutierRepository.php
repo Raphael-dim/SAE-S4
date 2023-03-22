@@ -92,7 +92,7 @@ class NoeudRoutierRepository extends AbstractRepository
         return $pdoStatement->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public static function getShortestPath(int $noeudRoutierDepartGid,int $noeudRoutierArriveeGid): array
+    public static function getShortestPathDijkstra(int $noeudRoutierDepartGid,int $noeudRoutierArriveeGid): array
     {
         $requeteSQL =
             "SELECT noeud_arrivee_gid as noeud_routier_gid,troncon_gid,r.longueur, ST_X(noeud_depart_geom) as lat, ST_Y(noeud_depart_geom) as lon, noeud_depart_gid, agg_cost as distance
@@ -103,6 +103,29 @@ class NoeudRoutierRepository extends AbstractRepository
                   longueur AS cost
                 FROM relation',
               ".$noeudRoutierDepartGid .", " . $noeudRoutierArriveeGid . ",
+              directed => false
+            ) AS a
+            JOIN relation AS r ON (a.edge = r.troncon_gid)";
+        $pdoStatement = ConnexionBaseDeDonnees::getPdo()->prepare($requeteSQL);
+        $pdoStatement->execute();
+        return $pdoStatement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public static function getShortestPathAstar(int $noeudRoutierDepartGid,int $noeudRoutierArriveeGid): array
+    {
+        $requeteSQL =
+            "SELECT noeud_arrivee_gid as noeud_routier_gid,troncon_gid,r.longueur, ST_X(noeud_depart_geom) as lat, ST_Y(noeud_depart_geom) as lon, noeud_depart_gid, agg_cost as distance
+            FROM pgr_astar(
+              'SELECT troncon_gid AS id,
+                  noeud_depart_gid AS source, 
+                  noeud_arrivee_gid AS target,
+                  longueur AS cost,
+                  ST_X(noeud_arrivee_geom) AS x1,
+                  ST_Y(noeud_arrivee_geom) AS y1,
+                  ST_X(noeud_depart_geom) AS x2,
+                  ST_Y(noeud_depart_geom) AS y2
+                FROM relation'," .
+              $noeudRoutierDepartGid . ", " . $noeudRoutierArriveeGid . ",
               directed => false
             ) AS a
             JOIN relation AS r ON (a.edge = r.troncon_gid)";

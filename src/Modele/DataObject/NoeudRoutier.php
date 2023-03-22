@@ -34,6 +34,9 @@ class NoeudRoutier extends AbstractDataObject
 
     public function getVoisins(): array
     {
+        if(!isset($this->voisins)){
+            $this->voisins = (new NoeudRoutierRepository())->getVoisins($this->getGid());
+        }
         return $this->voisins;
     }
 

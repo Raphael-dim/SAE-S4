@@ -25,8 +25,6 @@ class PlusCourtChemin
     public function calculer(bool $affichageDebug = false): array
     {
 
-        $noeudRoutierRepository = new NoeudRoutierRepository();
-
         // Distance en km, table indexï¿½ par NoeudRoutier::gid
         $this->chemin = [$this->noeudRoutierDepartGid => ["distance" => 0, "pred" => -1]];
         $priorityQdist = new PriorityQ();
@@ -64,6 +62,7 @@ class PlusCourtChemin
                 }
             }
         }
+        return array();
     }
 
     private function noeudALaFrontiereDeDistanceMinimale()
