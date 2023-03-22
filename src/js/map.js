@@ -83,7 +83,6 @@ function initMap(noeudDepart, noeudArrivee) {
         } else {
             map.setZoom(6);
         }
-        console.log(map.zoom + " " + distance);
     }
 }
 
