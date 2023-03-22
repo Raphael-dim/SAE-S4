@@ -98,12 +98,12 @@ class ControleurNoeudCommune extends ControleurGenerique
             if (ConnexionUtilisateur::estConnecte()) {
                 $trajet = new Trajet(ConnexionUtilisateur::getLoginUtilisateurConnecte(), $noeudCommuneDepart->getGid(),
                     $noeudCommuneArrivee->getGid(), date('Y-m-d : H:i:s'));
-                //(new TrajetRepository())->ajouter($trajet);
+                (new TrajetRepository())->ajouter($trajet);
             }
-            //$pcc = new PlusCourtChemin($noeudRoutierDepart->getGid(), $noeudRoutierArrivee->getGid());
-            //$pcc->setDistanceInitiale($noeudRoutierDepart->getLatNoeud(), $noeudRoutierDepart->getLongNoeud(),
-            //    $noeudRoutierArrivee->getLatNoeud(), $noeudRoutierArrivee->getLongNoeud());
-            //$result = $pcc->calculer();
+            /*$pcc = new PlusCourtChemin($noeudRoutierDepart->getGid(), $noeudRoutierArrivee->getGid());
+            $pcc->setDistanceInitiale($noeudRoutierDepart->getLatNoeud(), $noeudRoutierDepart->getLongNoeud(),
+                $noeudRoutierArrivee->getLatNoeud(), $noeudRoutierArrivee->getLongNoeud());
+            $result = $pcc->calculer();*/
             $result = (new NoeudRoutierRepository())->getShortestPathAstar($noeudRoutierDepart->getGid(), $noeudRoutierArrivee->getGid());
 
             //$plusCourtChemin = Route::getShortestPath($result, $noeudRoutierDepart->getGid(), $noeudRoutierArrivee->getGid());
