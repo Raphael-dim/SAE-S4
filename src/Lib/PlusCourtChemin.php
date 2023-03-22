@@ -10,22 +10,25 @@ class PlusCourtChemin
 {
     private array $chemin;
     private array $noeudsALaFrontiere;
-    private float $latArrivee;
-    private float $lonArrivee;
     private float $distanceInitiale;
+    private int $noeudRoutierDepartGid;
+    private int $noeudRoutierArriveeGid;
+    private Array $voisins;
 
-    public function __construct(
-        private int $noeudRoutierDepartGid,
-        private int $noeudRoutierArriveeGid
-    )
+    /**
+     * @param int $noeudRoutierDepartGid
+     * @param int $noeudRoutierArriveeGid
+     * @param Array $voisins
+     */
+    public function __construct(int $noeudRoutierDepartGid, int $noeudRoutierArriveeGid, array $voisins)
     {
-
+        $this->noeudRoutierDepartGid = $noeudRoutierDepartGid;
+        $this->noeudRoutierArriveeGid = $noeudRoutierArriveeGid;
+        $this->voisins = $voisins;
     }
 
     public function calculer(bool $affichageDebug = false): array
     {
-
-        $noeudRoutierRepository = new NoeudRoutierRepository();
 
         // Distance en km, table indexï¿½ par NoeudRoutier::gid
         $this->chemin = [$this->noeudRoutierDepartGid => ["distance" => 0, "pred" => -1]];
@@ -43,15 +46,9 @@ class PlusCourtChemin
                 return $this->chemin;
             }
 
-            $noeudRoutierCourant = new NoeudRoutier($noeudRoutierGidCourant);
-            $voisins = $noeudRoutierCourant->getVoisins();
-            //echo 'latArrivee : ' .$this->latArrivee . 'longArrivee ; ' . $this->lonArrivee;
 
             $i = 1;
             foreach ($voisins as $voisin) {
-                //echo ' lat : ' . $voisin['lat'] . ' lon : ' . $voisin['lon'];
-                //echo 'distanceIni : ' . $this->distanceInitiale;
-                //echo(' distance : ' . $this->distance($voisin['lat'], $voisin['lon'], $this->latArrivee, $this->lonArrivee));
                 $noeudVoisinGid = $voisin["noeud_routier_gid"];
                 $distanceTroncon = $voisin["longueur"];
                 $distanceProposee = $courant["priority"] + $distanceTroncon;
@@ -89,10 +86,4 @@ class PlusCourtChemin
         return $km * 1000;
     }
 
-    public function setDistanceInitiale($lat1, $lon1, $lat2, $lon2)
-    {
-        $this->distanceInitiale = $this->distance($lat1, $lon1, $lat2, $lon2);
-        $this->latArrivee = $lat2;
-        $this->lonArrivee = $lon2;
-    }
 }

@@ -9,6 +9,7 @@ use App\PlusCourtChemin\Lib\PlusCourtChemin;
 use App\PlusCourtChemin\Lib\Route;
 use App\PlusCourtChemin\Modele\DataObject\NoeudCommune;
 use App\PlusCourtChemin\Modele\DataObject\Trajet;
+use App\PlusCourtChemin\Modele\Repository\ConnexionBaseDeDonnees;
 use App\PlusCourtChemin\Modele\Repository\NoeudCommuneRepository;
 use App\PlusCourtChemin\Modele\Repository\NoeudRoutierRepository;
 use App\PlusCourtChemin\Modele\Repository\TrajetRepository;
@@ -101,9 +102,22 @@ class ControleurNoeudCommune extends ControleurGenerique
                 (new TrajetRepository())->ajouter($trajet);
             }
 
-            $result = (new NoeudRoutierRepository())->getShortestPath($noeudRoutierDepart->getGid(), $noeudRoutierArrivee->getGid());
+            $latDepart = $noeudCommuneDepart->getLatCommune();
+            $longDepart = $noeudCommuneDepart->getLongCommune();
+            $latArrivee = $noeudCommuneArrivee->getLatCommune();
+            $longArrivee = $noeudCommuneArrivee->getLongCommune();
 
-            $distance = end($result)["distance"];
+            $sql = "SELECT *
+            FROM relation r
+                WHERE ST_Contains(
+                ST_MakeEnvelope($latDepart, $longDepart, $latArrivee, $longArrivee, 4326),
+                noeud_depart_geom);
+             ";
+            $voisins = ConnexionBaseDeDonnees::getPdo()->query($sql);
+
+            $plusCourtChemin = new PlusCourtChemin($noeudRoutierDepart->getGid(), $noeudCommuneArrivee->getGid(), $voisins);
+            $plusCourtChemin->calculer();
+
 
             $troncons = [];
 
