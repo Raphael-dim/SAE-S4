@@ -46,6 +46,8 @@ class PlusCourtChemin
                 return $this->chemin;
             }
 
+            $voisins = $this->voisins[$noeudRoutierGidCourant];
+
 
             $i = 1;
             foreach ($voisins as $voisin) {

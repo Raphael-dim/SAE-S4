@@ -9,6 +9,7 @@ use App\PlusCourtChemin\Lib\PlusCourtChemin;
 use App\PlusCourtChemin\Lib\Route;
 use App\PlusCourtChemin\Modele\DataObject\NoeudCommune;
 use App\PlusCourtChemin\Modele\DataObject\Trajet;
+use App\PlusCourtChemin\Modele\DataObject\Voisin;
 use App\PlusCourtChemin\Modele\Repository\ConnexionBaseDeDonnees;
 use App\PlusCourtChemin\Modele\Repository\NoeudCommuneRepository;
 use App\PlusCourtChemin\Modele\Repository\NoeudRoutierRepository;
@@ -113,7 +114,18 @@ class ControleurNoeudCommune extends ControleurGenerique
                 ST_MakeEnvelope($latDepart, $longDepart, $latArrivee, $longArrivee, 4326),
                 noeud_depart_geom);
              ";
-            $voisins = ConnexionBaseDeDonnees::getPdo()->query($sql);
+            $pdoStatement = ConnexionBaseDeDonnees::getPdo()->query($sql);
+            $voisins = [];
+            foreach ($pdoStatement as $objetFormatTableau) {
+                $troncon_gid = $objetFormatTableau['troncon_gid'];
+                $noeud_depart_gid = $objetFormatTableau['noeud_depart_gid'];
+                $noeud_depart_geom = $objetFormatTableau['noeud_depart_geom'];
+                $noeud_arrivee_gid = $objetFormatTableau['noeud_arrivee_gid'];
+                $noeud_arrivee_geom = $objetFormatTableau['noeud_arrivee_geom'];
+                $longueur = $objetFormatTableau['longueur'];
+                $voisins[$noeud_depart_gid][$noeud_arrivee_gid] = new Voisin($troncon_gid, $noeud_depart_gid,
+                            $noeud_depart_geom, $noeud_arrivee_gid, $noeud_arrivee_geom, $longueur);
+            }
 
             $plusCourtChemin = new PlusCourtChemin($noeudRoutierDepart->getGid(), $noeudCommuneArrivee->getGid(), $voisins);
             $plusCourtChemin->calculer();
