@@ -1,6 +1,6 @@
 const map = new google.maps.Map(document.getElementById("map"), {
     center: {lat: -34.397, lng: 150.644},
-    zoom: 13,
+    zoom: 8,
 });
 
 let markerDepart = null;
@@ -28,11 +28,11 @@ function initMap(noeudDepart, noeudArrivee) {
 
     if (noeudDepart !== null) {
         LatLngDepart = {lat: parseFloat(noeudDepart["long"]), lng: parseFloat(noeudDepart["lat"])};
-        console.log(noeudDepart);
         map.setCenter(LatLngDepart);
         if (markerDepart !== null) {
             markerDepart.setMap(null);
         }
+
         markerDepart = new google.maps.Marker({
             position: LatLngDepart,
             map,
