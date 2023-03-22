@@ -5,13 +5,14 @@ namespace App\PlusCourtChemin\Modele\DataObject;
 class NoeudCommune extends AbstractDataObject
 {
     public function __construct(
-        private int $gid,
+        private int    $gid,
         private string $id_rte500,
         private string $nomCommune,
         private string $id_nd_rte,
-        private string $long,
         private string $lat,
-    ) {
+        private string $long
+    )
+    {
     }
 
     public function getGid(): int
@@ -34,11 +35,13 @@ class NoeudCommune extends AbstractDataObject
         return $this->nomCommune;
     }
 
-    public function getLongCommune():string{
+    public function getLongCommune(): string
+    {
         return $this->long;
     }
 
-    public function  getLatCommune():string{
+    public function getLatCommune(): string
+    {
         return $this->lat;
     }
 
@@ -50,16 +53,16 @@ class NoeudCommune extends AbstractDataObject
 
     public function trie($other): int
     {
-        return $this.$this->nomCommune < $other.$this->nomCommune;
+        return $this . $this->nomCommune < $other . $this->nomCommune;
     }
 
-    public function jsonSerialize() : array
+    public function jsonSerialize(): array
     {
         return [
             "gid" => $this->gid,
             "id_rte500" => $this->id_rte500,
             "nomCommune" => $this->nomCommune,
-            "id_nd_rte" =>  $this->id_nd_rte,
+            "id_nd_rte" => $this->id_nd_rte,
             "long" => $this->long,
             "lat" => $this->lat,
         ];
