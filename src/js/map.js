@@ -27,7 +27,8 @@ function initMap(noeudDepart, noeudArrivee) {
     let LatLngArrivee;
 
     if (noeudDepart !== null) {
-        LatLngDepart = {lat: parseFloat(noeudDepart["lat"]), lng: parseFloat(noeudDepart["long"])};
+        LatLngDepart = {lat: parseFloat(noeudDepart["long"]), lng: parseFloat(noeudDepart["lat"])};
+        console.log(noeudDepart);
         map.setCenter(LatLngDepart);
         if (markerDepart !== null) {
             markerDepart.setMap(null);
@@ -39,7 +40,7 @@ function initMap(noeudDepart, noeudArrivee) {
         });
     }
     if (noeudArrivee !== null) {
-        LatLngArrivee = {lat: parseFloat(noeudArrivee["lat"]), lng: parseFloat(noeudArrivee["long"])};
+        LatLngArrivee = {lat: parseFloat(noeudArrivee["long"]), lng: parseFloat(noeudArrivee["lat"])};
         map.setCenter(LatLngArrivee);
         if (markerArrivee !== null) {
             markerArrivee.setMap(null);
