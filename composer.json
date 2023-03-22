@@ -1,13 +1,13 @@
 {
-  "autoload": {
-    "psr-4": {
-      "App\\PlusCourtChemin\\": "src"
+    "autoload": {
+        "psr-4": {
+            "App\\PlusCourtChemin\\": "src"
+        }
+    },
+    "require": {
+        "symfony/http-foundation": "^6.0",
+        "symfony/routing": "^6.0",
+        "symfony/http-kernel": "^6.0",
+        "twig/twig": "*"
     }
-  },
-  "require": {
-    "symfony/http-foundation": "^6.2",
-    "symfony/routing": "^6.2",
-    "symfony/http-kernel": "^6.2",
-    "twig/twig": "^3.5"
-  }
 }
