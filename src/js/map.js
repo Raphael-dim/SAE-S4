@@ -5,6 +5,7 @@ const map = new google.maps.Map(document.getElementById("map"), {
 
 let markerDepart = null;
 let markerArrivee = null;
+let markers = [];
 
 
 imageLocaliser = document.getElementsByClassName("localiser");
@@ -21,76 +22,42 @@ imageLocaliser[0].addEventListener("mousedown", function (event) {
     navigator.geolocation.getCurrentPosition(localiser);
 })
 
-function initMap(noeudDepart, noeudArrivee) {
+function initMap(noeuds, i) {
 
-    let LatLngDepart;
-    let LatLngArrivee;
+    let LatLngNoeuds = [];
 
-    if (noeudDepart !== null) {
-        LatLngDepart = {lat: parseFloat(noeudDepart["long"]), lng: parseFloat(noeudDepart["lat"])};
-        console.log(noeudDepart);
-        map.setCenter(LatLngDepart);
-        if (markerDepart !== null) {
-            markerDepart.setMap(null);
+    noeuds.forEach(function (n) {
+        if (n !== 0) {
+            LatLngNoeuds.push({lat: parseFloat(n["long"]), lng: parseFloat(n["lat"])});
+            map.setCenter(LatLngNoeuds[LatLngNoeuds.length-1]);
+            if (markers[noeuds.indexOf(n)] !== undefined) {
+                markers[noeuds.indexOf(n)].setMap(null);
+                markers.pop();
+            }
+            markers.push(new google.maps.Marker({
+                position: LatLngNoeuds[LatLngNoeuds.length-1],
+                map,
+                title: n["nomCommune"],
+            }));
         }
-        markerDepart = new google.maps.Marker({
-            position: LatLngDepart,
-            map,
-            title: noeudDepart["nomCommune"],
-        });
-    }
-    if (noeudArrivee !== null) {
-        LatLngArrivee = {lat: parseFloat(noeudArrivee["long"]), lng: parseFloat(noeudArrivee["lat"])};
-        map.setCenter(LatLngArrivee);
-        if (markerArrivee !== null) {
-            markerArrivee.setMap(null);
-        }
-        markerArrivee = new google.maps.Marker({
-            position: LatLngArrivee,
-            map,
-            title: noeudArrivee["nomCommune"],
-        });
-    }
-    if (noeudArrivee !== null && noeudDepart !== null) {
+    });
+    if (markers.length === i) {
         Latlng = {
-            lat: parseFloat((Number(noeudDepart['long']) + Number(noeudArrivee['long'])) / 2),
-            lng: parseFloat((Number(noeudDepart['lat']) + Number(noeudArrivee['lat'])) / 2)
+            lat: parseFloat((Number(noeuds[0]['long']) + Number(noeuds[noeuds.length-1]['long'])) / 2),
+            lng: parseFloat((Number(noeuds[0]['lat']) + Number(noeuds[noeuds.length-1]['lat'])) / 2)
         }
         map.setCenter(Latlng);
 
 
-        let distance = distanceEntreDeuxPoints([parseFloat(Number(noeudDepart['lat'])), parseFloat(Number(noeudDepart['long']))],
-            [parseFloat(Number(noeudArrivee['lat'])), parseFloat(Number(noeudArrivee['long']))]);
+        let distance = distanceEntreDeuxPoints([parseFloat(Number(noeuds[0]['lat'])), parseFloat(Number(noeuds[0]['long']))],
+            [parseFloat(Number(noeuds[noeuds.length-1]['lat'])), parseFloat(Number(noeuds[noeuds.length-1]['long']))]);
 
-
-        if (distance < 0.5) {
-            map.setZoom(20);
-        } else if (distance < 1) {
-            map.setZoom(17);
-        } else if (distance < 5) {
-            map.setZoom(13);
-        } else if (distance < 20) {
-            map.setZoom(12);
-        } else if (distance < 50) {
-            map.setZoom(10);
-        } else if (distance < 100) {
-            map.setZoom(9);
-        } else if (distance < 200) {
-            map.setZoom(7);
-        } else if (distance < 300) {
-            map.setZoom(7);
-        } else if (distance < 400) {
-            map.setZoom(7);
-        } else {
-            map.setZoom(6);
-        }
-        console.log(map.zoom + " " + distance);
+        map.setZoom(Math.max(0.5,Math.min(20,140/distance)));
     }
 }
 
 
 function plotTroncon(tabTroncon) {
-    console.log(tabTroncon);
 
     tabTroncon.forEach(troncon => {
         for (let i = 0; i < troncon["geom"]["coordinates"].length - 1; i++) {
@@ -99,7 +66,6 @@ function plotTroncon(tabTroncon) {
             var LatLgnStart = {lat: geom[i][1], lng: geom[i][0]};
             var LatLgnEnd = {lat: geom[i + 1][1], lng: geom[i + 1][0]};
 
-            console.log(LatLgnStart);
             var line = new google.maps.Polyline({
                 path: [LatLgnStart, LatLgnEnd],
                 strokeColor: "#00c4ff",

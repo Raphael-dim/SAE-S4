@@ -1,23 +1,19 @@
 <form class="saisieVille" action="calculer" method="post">
-    <div id="autocompletionDepartDiv">
         <p class="InputAddOn">
-            <input placeholder="Nom de la commune de départ" class="InputAddOn-field" type="text" value=""
+            <input placeholder="Nom de la commune de départ" class="InputAddOn-field nomCommune" type="text" value=""
                    autocomplete="off" name="nomCommuneDepart" id="nomCommuneDepart_id" required>
             <!-- <img id="loading" src="img/loading.gif"> -->
             <img class="localiser" src="assets/img/placeholder.png">
-        <div class="autocompletion hidden" id="autocompletionDepart"></div>
         </p>
-    </div>
-    <div id="autocompletionArriveDiv">
         <p class="InputAddOn">
-            <input placeholder="Nom de la commune d'arrivée" class="InputAddOn-field" type="text" value=""
+            <input placeholder="Nom de la commune d'arrivée" class="InputAddOn-field nomCommune" type="text" value=""
                    autocomplete="off" name="nomCommuneArrivee" id="nomCommuneArrivee_id" required>
         </p>
         <!-- <img id="loading" src="img/loading.gif"> -->
-        <div class="autocompletion hidden" id="autocompletionArrivee"></div>
-    </div>
+        <div class="autocompletion hidden" id="autocompletion"></div>
     <div>
         <input type="hidden" name="XDEBUG_TRIGGER">
+        <input class="InputAddOn-field" type="button" value="Ajouter une escale" onclick="addEscale()"/>
         <p>
             <input class="InputAddOn-field" type="submit" value="Calculer"/>
         </p>
@@ -53,8 +49,8 @@
 
     <script>
         window.onload = function () {
-            console.log("loaded");
             let CommuneDepartJSON = <?= $CommuneDepart->toJson() ?>;
+            console.log("maj");
             let CommuneArriveeJSON = <?= $CommuneArrivee->toJson() ?>;
             initMap(CommuneDepartJSON, CommuneArriveeJSON);
             let tabTronconJSON = <?= json_encode($troncons) ?>;
@@ -65,4 +61,5 @@
     <!-------------------------------------------------------------------------------------------->
 
 <?php } ?>
-<script src="../src/js/AutoCompletion.js" defer></script>
+<script src="../src/js/AutoCompletion.js"></script>
+<script src="../src/js/Escale.js"></script>

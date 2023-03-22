@@ -114,7 +114,7 @@ class NoeudRoutierRepository extends AbstractRepository
     public static function getShortestPathAstar(int $noeudRoutierDepartGid,int $noeudRoutierArriveeGid): array
     {
         $requeteSQL =
-            "SELECT noeud_arrivee_gid as noeud_routier_gid,troncon_gid,r.longueur, ST_X(noeud_depart_geom) as lat, ST_Y(noeud_depart_geom) as lon, noeud_depart_gid, agg_cost as distance
+            "SELECT noeud_arrivee_gid as noeud_routier_gid,edge as troncon_gid,cost as longueur, ST_X(noeud_depart_geom) as lat, ST_Y(noeud_depart_geom) as lon, node as noeud_depart_gid, agg_cost as distance
             FROM pgr_astar(
               'SELECT troncon_gid AS id,
                   noeud_depart_gid AS source, 

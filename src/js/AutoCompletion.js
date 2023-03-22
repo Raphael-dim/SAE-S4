@@ -1,39 +1,60 @@
-let autoCompletionDepart = document.getElementById("autocompletionDepart");
-autoCompletionDepart.style.borderWidth = "0px";
-let autoCompletionArrivee = document.getElementById("autocompletionArrivee");
-autoCompletionArrivee.style.borderWidth = "0px";
-let villeDepart = document.getElementById("nomCommuneDepart_id");
-let villeArrivee = document.getElementById("nomCommuneArrivee_id");
+let villesNodes = [...document.getElementsByClassName('nomCommune')];
+let currentVilleNode = villesNodes[0];
 
 let indexDefilement = 0;
 
-let autoCompletionTarget; // LA CHAMP D'AUTOCOMPLETION ACTUELLEMENT SELECTIONNEE (soit autoCompletionDepart ou autoCompletionArrivee)
+let autoCompletion = document.getElementById("autocompletion");
 
 let request;
 
 let minuteur;
 
-let villes;
+let villesSuggests;
+let currentVilles = new Array();
 
-let nomVilleDepart = null;
+init();
 
-let nomVilleArrivee = null;
+function init(){
+    villesNodes = [...document.getElementsByClassName('nomCommune')];
+
+    villesNodes.forEach((villeNode) => {
+        villeNode.addEventListener('input', function (event) {
+            RequeteVille(event.target);
+        });
+
+        villeNode.addEventListener("focusout", function () {
+            videVilles();
+            indexDefilement = 0;
+        });
+
+        villeNode.addEventListener("focusin", function (event) {
+            currentVilleNode = event.target;
+            villeNode.insertAdjacentElement('afterend',autoCompletion);
+            RequeteVille(currentVilleNode);
+        });
+
+        villeNode.addEventListener("keydown", function (e) {
+            flecheDefilement(e, currentVilleNode);
+        });
+    });
+}
 
 
 function afficheVilles(tableau) {
     videVilles();
+
     for (const ville of tableau) {
         const p = document.createElement("p");
         p.innerHTML = ville;
         p.id = ville;
-        autoCompletionTarget.appendChild(p);
+        autoCompletion.appendChild(p);
     }
-    autoCompletionTarget.classList.remove("hidden");
+    autoCompletion.classList.remove("hidden");
 }
 
 function videVilles() {
-    autoCompletionTarget.innerHTML = "";
-    autoCompletionTarget.classList.add("hidden");
+    autoCompletion.innerHTML = "";
+    autoCompletion.classList.add("hidden");
     indexDefilement = 0;
 }
 
@@ -62,15 +83,12 @@ function requeteAJAX(stringVille, callback, startLoadingAction, endLoadingAction
     }
 }
 
-
-function callback_4(req) {
+function callback(req) {
     let data = JSON.parse(req.responseText);
-    villes = data;
+    villesSuggests = data;
     let names = data.map(element => element["nomCommune"]);
     afficheVilles(names);
 }
-
-
 
 function RequeteVille(ville) {
 
@@ -82,64 +100,17 @@ function RequeteVille(ville) {
     }
 
     minuteur = setTimeout(() => {
-        requeteAJAX(ville.value, callback_4, startLoadingAction, endLoadingAction)
+        requeteAJAX(ville.value, callback, startLoadingAction, endLoadingAction)
     }, 200);
 }
 
-villeDepart.addEventListener('input', function () {
-    RequeteVille(villeDepart);
-});
-
-villeArrivee.addEventListener('input', function () {
-    RequeteVille(villeArrivee);
-});
-
-autoCompletionDepart.addEventListener('mousedown', function (event) {
-    villeDepart.value = event.target.innerHTML;
-    nomVilleDepart = villes.filter(function (ville) {
-        return ville.nomCommune === event.target.innerHTML
-    })
-    miseAJourMap(nomVilleDepart, nomVilleArrivee)
+autoCompletion.addEventListener('mousedown', function (event) {
+    currentVilleNode.value = event.target.innerHTML;
+    currentVilles.splice(0, 1, villesSuggests.filter(function (v) {
+        return v.nomCommune === event.target.innerHTML
+    }));
+    miseAJourMap(currentVilles)
     videVilles();
-})
-
-autoCompletionArrivee.addEventListener('mousedown', function (event) {
-    villeArrivee.value = event.target.innerHTML;
-    nomVilleArrivee = villes.filter(function (ville) {
-        return ville.nomCommune === event.target.innerHTML
-    })
-    miseAJourMap(nomVilleDepart, nomVilleArrivee)
-    videVilles();
-})
-
-villeDepart.addEventListener("focusout", function (event) {
-    videVilles();
-    indexDefilement = 0;
-    autoCompletionTarget = null;
-})
-
-villeArrivee.addEventListener("focusout", function (event) {
-    videVilles();
-    indexDefilement = 0;
-    autoCompletionTarget = null;
-})
-
-villeDepart.addEventListener("focusin", function (event) {
-    autoCompletionTarget = autoCompletionDepart;
-    RequeteVille(villeDepart);
-})
-
-villeArrivee.addEventListener("focusin", function (event) {
-    autoCompletionTarget = autoCompletionArrivee;
-    RequeteVille(villeArrivee);
-})
-
-villeDepart.addEventListener("keydown", function (e) {
-    flecheDefilement(e, villeDepart);
-})
-
-villeArrivee.addEventListener("keydown", function (e) {
-    flecheDefilement(e, villeArrivee);
 })
 
 function flecheDefilement(e, ville) {
@@ -150,26 +121,20 @@ function flecheDefilement(e, ville) {
             indexDefilement--;
         }
     } else if (e.key == "ArrowDown") {
-        if (indexDefilement + 1 < autoCompletionTarget.childElementCount && indexDefilement < 20) {
+        if (indexDefilement + 1 < autoCompletion.childElementCount && indexDefilement < 20) {
             indexDefilement++;
         }
     } else {
         isArrow = false;
     }
     if (e.key == "Enter") {     // on valide le choix
-        let villeSelectionnee = autoCompletionTarget.childNodes.item(indexDefilement);
-        if (autoCompletionTarget == autoCompletionArrivee) {
-            nomVilleArrivee = villes.filter(function (v) {
-                return v.nomCommune === villeSelectionnee.innerHTML;
-            })
-        } else {
-            nomVilleDepart = villes.filter(function (v) {
-                return v.nomCommune === villeSelectionnee.innerHTML;
-            })
-        }
+        let villeSelectionnee = autoCompletion.childNodes.item(indexDefilement);
         e.preventDefault()  // on annule le fait que le formulaire s'envoie alors qu'on souhaite simplement valider la ville
         ville.value = villeSelectionnee.innerHTML;
-        miseAJourMap(nomVilleDepart, nomVilleArrivee)
+        currentVilles.splice(villesNodes.indexOf(villesNodes.filter(v => v.value === villeSelectionnee.innerHTML)[0]), 1, villesSuggests.filter(function (v) {
+            return v.nomCommune === villeSelectionnee.innerHTML;
+        }));
+        miseAJourMap(currentVilles)
         videVilles();
     }
     if (isArrow && oldIndex !== indexDefilement) {
@@ -178,10 +143,10 @@ function flecheDefilement(e, ville) {
             de l'élément courant
         */
 
-        let nomVille = autoCompletionTarget.childNodes.item(indexDefilement);
+        let nomVille = autoCompletion.childNodes.item(indexDefilement);
         nomVille.style.backgroundColor = "black";
         ville.value = nomVille.innerHTML;
-        let oldVille = autoCompletionTarget.childNodes.item(oldIndex);
+        let oldVille = autoCompletion.childNodes.item(oldIndex);
         oldVille.style.backgroundColor = "grey";
         let elementVille = document.getElementById(nomVille.innerHTML);
 
@@ -189,19 +154,21 @@ function flecheDefilement(e, ville) {
     }
 
 }
-function miseAJourMap(villeDepart, villeArrivee) {
-    let coorDepart = null;
-    if (villeDepart !== null) {
-        coorDepart = {};
-        coorDepart['lat'] = villeDepart[0]['lat'];
-        coorDepart['long'] = villeDepart[0]['long'];
-    }
-    let coorArrivee = null;
-    if (villeArrivee !== null) {
-        coorArrivee = {};
-        coorArrivee['lat'] = villeArrivee[0]['lat'];
-        coorArrivee['long'] = villeArrivee[0]['long'];
-    }
-    initMap(coorDepart, coorArrivee);
-}
 
+function miseAJourMap(villes) {
+    let i = 0;
+    let coords = [[]];
+    console.log(villes.map(v => ({lat: v[0]['lat'], long: v[0]['long']})));
+
+    /*villes.forEach(function (ville) {
+        //coords.push(i);
+        if (ville !== null) {
+            coords[i]['lat'] = ville[0]['lat'];
+            coords[i]['long'] = ville[0]['long'];
+        }
+        i++;
+    });
+    console.log(coords);*/
+
+    initMap(villes.map(v => ({lat: v[0]['lat'], long: v[0]['long']})),2);
+}
