@@ -16,7 +16,6 @@ class NoeudRoutierRepository extends AbstractRepository
             $noeudRoutierTableau["id_rte500"],
             $noeudRoutierTableau["st_x"],
             $noeudRoutierTableau["st_y"],
-            null
         );
     }
 
@@ -59,15 +58,17 @@ class NoeudRoutierRepository extends AbstractRepository
      * Chaque voisin est un tableau avec les 3 champs
      * `noeud_routier_gid`, `troncon_gid`, `longueur`
      *
-     * @param int $noeudRoutierGid
+     * @param int $noeudRoutierDepartGid
+     * @param int $noeudRoutierArriveeGid
      * @return String[][]
-     **/
+     */
 
 
-    public static function getShortestPathAstar(int $noeudRoutierDepartGid,int $noeudRoutierArriveeGid): array
+    public static function getShortestPathAstar(int $noeudRoutierDepartGid, int $noeudRoutierArriveeGid): array
     {
         $requeteSQL =
-            "SELECT noeud_arrivee_gid as noeud_routier_gid,troncon_gid,r.longueur, ST_X(noeud_depart_geom) as lat, ST_Y(noeud_depart_geom) as lon, noeud_depart_gid, agg_cost as distance
+            "SELECT noeud_arrivee_gid as noeud_routier_gid,troncon_gid,r.longueur, ST_X(noeud_depart_geom) as lat,
+                ST_Y(noeud_depart_geom) as lon, noeud_depart_gid, agg_cost as distance
             FROM pgr_astar(
               'SELECT troncon_gid AS id,
                   noeud_depart_gid AS source, 
@@ -78,7 +79,7 @@ class NoeudRoutierRepository extends AbstractRepository
                   ST_X(noeud_depart_geom) AS x2,
                   ST_Y(noeud_depart_geom) AS y2
                 FROM relation'," .
-              $noeudRoutierDepartGid . ", " . $noeudRoutierArriveeGid . ",
+            $noeudRoutierDepartGid . ", " . $noeudRoutierArriveeGid . ",
               directed => false
             ) AS a
             JOIN relation AS r ON (a.edge = r.troncon_gid)";
