@@ -62,54 +62,7 @@ class NoeudRoutierRepository extends AbstractRepository
      * @param int $noeudRoutierGid
      * @return String[][]
      **/
-    public function getVoisins(int $noeudRoutierGid): array
-    {
-        $requeteSQL = <<<SQL
-            select noeud_arrivee_gid as noeud_routier_gid,troncon_gid,longueur, 
-                   ST_X(noeud_depart_geom) as lat, ST_Y(noeud_depart_geom) as lon 
-            from relation where noeud_depart_gid =:gidTag
-            union
-            select noeud_depart_gid as noeud_routier_gid,troncon_gid,longueur, 
-                   ST_X(noeud_depart_geom) as lat, ST_Y(noeud_depart_geom) as lon 
-            from relation where noeud_arrivee_gid =:gidTag
-        SQL;
-        $pdoStatement = ConnexionBaseDeDonnees::getPdo()->prepare($requeteSQL);
-        $pdoStatement->execute(array(
-            "gidTag" => $noeudRoutierGid
-        ));
-        return $pdoStatement->fetchAll(PDO::FETCH_ASSOC);
-    }
 
-    public static function getVoisins2(int $noeudRoutierGid): array
-    {
-        $requeteSQL = <<<SQL
-            (select * from relation r where noeud_depart_gid = :gidTag or noeud_arrivee_gid = :gidTag);
-        SQL;
-        $pdoStatement = ConnexionBaseDeDonnees::getPdo()->prepare($requeteSQL);
-        $pdoStatement->execute(array(
-            "gidTag" => $noeudRoutierGid
-        ));
-        return $pdoStatement->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-    public static function getShortestPathDijkstra(int $noeudRoutierDepartGid,int $noeudRoutierArriveeGid): array
-    {
-        $requeteSQL =
-            "SELECT noeud_arrivee_gid as noeud_routier_gid,troncon_gid,r.longueur, ST_X(noeud_depart_geom) as lat, ST_Y(noeud_depart_geom) as lon, noeud_depart_gid, agg_cost as distance
-            FROM pgr_dijkstra(
-              'SELECT troncon_gid AS id,
-                  noeud_arrivee_gid AS source, 
-                  noeud_depart_gid AS target,
-                  longueur AS cost
-                FROM relation',
-              ".$noeudRoutierDepartGid .", " . $noeudRoutierArriveeGid . ",
-              directed => false
-            ) AS a
-            JOIN relation AS r ON (a.edge = r.troncon_gid)";
-        $pdoStatement = ConnexionBaseDeDonnees::getPdo()->prepare($requeteSQL);
-        $pdoStatement->execute();
-        return $pdoStatement->fetchAll(PDO::FETCH_ASSOC);
-    }
 
     public static function getShortestPathAstar(int $noeudRoutierDepartGid,int $noeudRoutierArriveeGid): array
     {
