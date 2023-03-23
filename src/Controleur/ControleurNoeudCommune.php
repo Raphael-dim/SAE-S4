@@ -70,27 +70,18 @@ class ControleurNoeudCommune extends ControleurGenerique
             "cheminVueBody" => "noeudCommune/plusCourtChemin.php",
         ];
 
-
         if (!empty($_POST)) {
             $t1 = time();
             $nomCommuneDepart = $_POST["nomCommuneDepart"];
             $nomCommuneArrivee = $_POST["nomCommuneArrivee"];
 
             $noeudCommuneRepository = new NoeudCommuneRepository();
-            //            /** @var NoeudCommune $noeudCommuneDepart */
-            //
-            //
             $noeudCommuneDepart = $noeudCommuneRepository->recupererPar(["nom_comm" => $nomCommuneDepart])[0];
             $noeudCommuneArrivee = $noeudCommuneRepository->recupererPar(["nom_comm" => $nomCommuneArrivee])[0];
-            //
             $noeudRoutierRepository = new NoeudRoutierRepository();
-            echo "<br>";
-
             $noeudRoutierDepart = $noeudRoutierRepository->recupererPar([
                 "id_rte500" => $noeudCommuneDepart->getId_nd_rte()
             ])[0];
-
-
             $noeudRoutierArrivee = $noeudRoutierRepository->recupererPar([
                 "id_rte500" => $noeudCommuneArrivee->getId_nd_rte()
             ])[0];
@@ -103,12 +94,10 @@ class ControleurNoeudCommune extends ControleurGenerique
             $result = (new NoeudRoutierRepository())->getShortestPathAstar($noeudRoutierDepart->getGid(), $noeudRoutierArrivee->getGid());
 
 
-            //$distance = $plusCourtChemin["distance"];
             $distance = number_format(end($result)["distance"],2);
 
             $troncons = [];
 
-            //foreach($plusCourtChemin["path"] as $troncon){
             foreach (array_column($result, 'troncon_gid') as $troncon) {
                 $troncons[] = (new TronconRouteRepository())->recupererParClePrimaire($troncon);
             }
