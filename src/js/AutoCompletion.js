@@ -14,32 +14,44 @@ let currentVilles = new Array();
 
 init();
 
+/**
+ * Initialise l'écoute de chaque ville.
+ */
 function init(){
+    //Récupère toutes les villes
     villesNodes = [...document.getElementsByClassName('nomCommune')];
 
     villesNodes.forEach((villeNode) => {
+        //Quand le contenu change
         villeNode.addEventListener('input', function (event) {
             RequeteVille(event.target);
         });
 
+        //Quand la ville n'est plus selectionné
         villeNode.addEventListener("focusout", function () {
             videVilles();
             indexDefilement = 0;
         });
 
+        //Quand la ville est selectionné
         villeNode.addEventListener("focusin", function (event) {
             currentVilleNode = event.target;
             villeNode.insertAdjacentElement('afterend',autoCompletion);
             RequeteVille(currentVilleNode);
         });
 
+        //Quand une touche du clavier est appuyé
         villeNode.addEventListener("keydown", function (e) {
             flecheDefilement(e, currentVilleNode);
         });
     });
 }
 
-
+/**
+ * Affiche les villes dans la barre d'auto complétion
+ *
+ * @param tableau
+ */
 function afficheVilles(tableau) {
     videVilles();
 
@@ -139,7 +151,7 @@ function flecheDefilement(e, ville) {
     }
     if (isArrow && oldIndex !== indexDefilement) {
         /*
-            on gère la liste défilante, en mettant à jour le CSS et en ajustant la barre de défilement en fonction 
+            on gère la liste défilante, en mettant à jour le CSS et en ajustant la barre de défilement en fonction
             de l'élément courant
         */
 
@@ -156,19 +168,6 @@ function flecheDefilement(e, ville) {
 }
 
 function miseAJourMap(villes) {
-    let i = 0;
-    let coords = [[]];
-    console.log(villes.map(v => ({lat: v[0]['lat'], long: v[0]['long']})));
-
-    /*villes.forEach(function (ville) {
-        //coords.push(i);
-        if (ville !== null) {
-            coords[i]['lat'] = ville[0]['lat'];
-            coords[i]['long'] = ville[0]['long'];
-        }
-        i++;
-    });
-    console.log(coords);*/
-
-    initMap(villes.map(v => ({lat: v[0]['lat'], long: v[0]['long']})),2);
+    console.log(villesNodes.length);
+    initMap(villes.map(v => ({lat: v[0]['lat'], long: v[0]['long']})),villesNodes.length);
 }

@@ -1,13 +1,13 @@
 <form class="saisieVille" action="calculer" method="post">
         <p class="InputAddOn">
             <input placeholder="Nom de la commune de départ" class="InputAddOn-field nomCommune" type="text" value=""
-                   autocomplete="off" name="nomCommuneDepart" id="nomCommuneDepart_id" required>
+                   autocomplete="off" name="nomCommuneDepart" required>
             <!-- <img id="loading" src="img/loading.gif"> -->
             <img class="localiser" src="assets/img/placeholder.png">
         </p>
         <p class="InputAddOn">
             <input placeholder="Nom de la commune d'arrivée" class="InputAddOn-field nomCommune" type="text" value=""
-                   autocomplete="off" name="nomCommuneArrivee" id="nomCommuneArrivee_id" required>
+                   autocomplete="off" name="nomCommuneArrivee" required>
         </p>
         <!-- <img id="loading" src="img/loading.gif"> -->
         <div class="autocompletion hidden" id="autocompletion"></div>
