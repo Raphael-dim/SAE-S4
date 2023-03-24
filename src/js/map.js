@@ -3,10 +3,7 @@ const map = new google.maps.Map(document.getElementById("map"), {
     zoom: 13,
 });
 
-let markerDepart = null;
-let markerArrivee = null;
 let markers = [];
-
 
 imageLocaliser = document.getElementsByClassName("localiser");
 
@@ -23,6 +20,8 @@ imageLocaliser[0].addEventListener("mousedown", function (event) {
 })
 
 function initMap(noeuds, i) {
+    markers.map(m => m.setMap(null));
+    markers = [];
 
     let LatLngNoeuds = [];
 
@@ -30,10 +29,7 @@ function initMap(noeuds, i) {
         if (n !== 0) {
             LatLngNoeuds.push({lat: parseFloat(n["long"]), lng: parseFloat(n["lat"])});
             map.setCenter(LatLngNoeuds[LatLngNoeuds.length-1]);
-            if (markers[noeuds.indexOf(n)] !== undefined) {
-                markers[noeuds.indexOf(n)].setMap(null);
-                markers.pop();
-            }
+
             markers.push(new google.maps.Marker({
                 position: LatLngNoeuds[LatLngNoeuds.length-1],
                 map,
@@ -41,18 +37,23 @@ function initMap(noeuds, i) {
             }));
         }
     });
+    console.log(markers);
     if (markers.length === i) {
+
         Latlng = {
-            lat: parseFloat((Number(noeuds[0]['long']) + Number(noeuds[noeuds.length-1]['long'])) / 2),
-            lng: parseFloat((Number(noeuds[0]['lat']) + Number(noeuds[noeuds.length-1]['lat'])) / 2)
+            lat: noeuds.map(n => n['long']).reduce((a, b)=> Number(a)+Number(b), 0)/markers.length,
+            lng: noeuds.map(n => n['lat']).reduce((a, b)=> Number(a)+Number(b), 0)/markers.length
         }
+
         map.setCenter(Latlng);
 
+        console.log(noeuds.map(n => n).reduce((a, b)=> distanceDeuxPoints(parseFloat(a['lat']),parseFloat(a['long']))+distanceDeuxPoints(parseFloat(b['lat']),parseFloat(b['long'])), 0));
+        let distance = noeuds.map(n => n).reduce((a, b)=> distanceDeuxPoints(parseFloat(a['lat']),parseFloat(a['long']))+distanceDeuxPoints(parseFloat(b['lat']),parseFloat(b['long'])), 0);
 
-        let distance = distanceEntreDeuxPoints([parseFloat(Number(noeuds[0]['lat'])), parseFloat(Number(noeuds[0]['long']))],
-            [parseFloat(Number(noeuds[noeuds.length-1]['lat'])), parseFloat(Number(noeuds[noeuds.length-1]['long']))]);
+        /*let distance = distanceDeuxPoints([parseFloat(Number(noeuds[0]['lat'])), parseFloat(Number(noeuds[0]['long']))],
+            [parseFloat(Number(noeuds[noeuds.length-1]['lat'])), parseFloat(Number(noeuds[noeuds.length-1]['long']))]);*/
 
-        map.setZoom(Math.max(0.5,Math.min(20,140/distance)));
+        map.setZoom(Math.max(1,Math.min(20,140/distance)));
     }
 }
 
@@ -78,7 +79,7 @@ function plotTroncon(tabTroncon) {
     });
 }
 
-function distanceEntreDeuxPoints(latlng1, latlng2) {
+function distanceDeuxPoints(latlng1, latlng2) {
     const [lat1, lon1] = latlng1;
     const [lat2, lon2] = latlng2;
     const R = 6371; // Rayon de la Terre en km

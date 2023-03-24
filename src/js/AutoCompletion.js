@@ -118,7 +118,7 @@ function RequeteVille(ville) {
 
 autoCompletion.addEventListener('mousedown', function (event) {
     currentVilleNode.value = event.target.innerHTML;
-    currentVilles.splice(0, 1, villesSuggests.filter(function (v) {
+    currentVilles.splice(villesNodes.indexOf(currentVilleNode), 1, villesSuggests.filter(function (v) {
         return v.nomCommune === event.target.innerHTML
     }));
     miseAJourMap(currentVilles)
@@ -143,7 +143,7 @@ function flecheDefilement(e, ville) {
         let villeSelectionnee = autoCompletion.childNodes.item(indexDefilement);
         e.preventDefault()  // on annule le fait que le formulaire s'envoie alors qu'on souhaite simplement valider la ville
         ville.value = villeSelectionnee.innerHTML;
-        currentVilles.splice(villesNodes.indexOf(villesNodes.filter(v => v.value === villeSelectionnee.innerHTML)[0]), 1, villesSuggests.filter(function (v) {
+        currentVilles.splice(villesNodes.indexOf(currentVilleNode), 1, villesSuggests.filter(function (v) {
             return v.nomCommune === villeSelectionnee.innerHTML;
         }));
         miseAJourMap(currentVilles)
