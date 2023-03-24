@@ -44,6 +44,10 @@ function init(){
         villeNode.addEventListener("keydown", function (e) {
             flecheDefilement(e, currentVilleNode);
         });
+
+        for(let i = currentVilles.length; i<villesNodes.length;i++){
+            currentVilles.splice(currentVilles.length-1, 0,0);
+        }
     });
 }
 
@@ -83,15 +87,15 @@ function requeteAJAX(stringVille, callback, startLoadingAction, endLoadingAction
         On utilise les routes établies dans Routeur.php
     */
     if (stringVille != "") {
-        let url = "chercherVille/" + encodeURIComponent(stringVille);
+        let url = "chercherVille/" + encodeURI(stringVille);
         request = new XMLHttpRequest();
         startLoadingAction();
-        request.open("GET", url, true);
+        request.open("GET", decodeURI(url), true);
         request.addEventListener("load", function () {
             callback(request);
             endLoadingAction();
         });
-        request.send(null);
+        request.send();
     }
 }
 
@@ -168,6 +172,5 @@ function flecheDefilement(e, ville) {
 }
 
 function miseAJourMap(villes) {
-    console.log(villesNodes.length);
-    initMap(villes.map(v => ({lat: v[0]['lat'], long: v[0]['long']})),villesNodes.length);
+    initMap(villes.map(v => (v[0] == undefined? 0:{lat: v[0]['lat'], long: v[0]['long']})));
 }

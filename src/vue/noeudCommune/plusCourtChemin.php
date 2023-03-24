@@ -1,13 +1,13 @@
 <form class="saisieVille" action="calculer" method="post">
         <p class="InputAddOn">
             <input placeholder="Nom de la commune de départ" class="InputAddOn-field nomCommune" type="text" value=""
-                   autocomplete="off" name="nomCommuneDepart" required>
+                   autocomplete="off" name="nomsCommune[]" required>
             <!-- <img id="loading" src="img/loading.gif"> -->
             <img class="localiser" src="assets/img/placeholder.png">
         </p>
         <p class="InputAddOn">
             <input placeholder="Nom de la commune d'arrivée" class="InputAddOn-field nomCommune" type="text" value=""
-                   autocomplete="off" name="nomCommuneArrivee" required>
+                   autocomplete="off" name="nomsCommune[]" required>
         </p>
         <!-- <img id="loading" src="img/loading.gif"> -->
         <div class="autocompletion hidden" id="autocompletion"></div>
@@ -21,7 +21,7 @@
 
     <?php if (!empty($_POST)) { ?>
         <p>
-            Le plus court chemin entre <?= $CommuneDepart->getNomCommune() ?> et <?= $CommuneArrivee->getNomCommune() ?>
+            Le plus court chemin entre <?= $Communes[0]->getNomCommune() ?> et <?= $Communes[count($Communes)-1]->getNomCommune() ?>
             mesure <?= $distance ?>km.
         </p>
         <p>
@@ -45,14 +45,12 @@
 
 <!---------------------------------------INIT MAP--------------------------------------------->
 <script defer src="../src/js/map.js"></script>
-<?php if (!empty($_POST)) { ?>
+<?php if (!empty($_POST)) {?>
 
     <script>
         window.onload = function () {
-            let CommuneDepartJSON = <?= $CommuneDepart->toJson() ?>;
-            console.log("maj");
-            let CommuneArriveeJSON = <?= $CommuneArrivee->toJson() ?>;
-            initMap(CommuneDepartJSON, CommuneArriveeJSON);
+            let CommunesJSON = <?= json_encode($Communes) ?>;
+            initMap(CommunesJSON);
             let tabTronconJSON = <?= json_encode($troncons) ?>;
             plotTroncon(tabTronconJSON);
             document.getElementById("loading").classList.add("hidden")

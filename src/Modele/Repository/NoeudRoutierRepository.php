@@ -102,7 +102,7 @@ class NoeudRoutierRepository extends AbstractRepository
                   noeud_depart_gid AS target,
                   longueur AS cost
                 FROM relation',
-              ".$noeudRoutierDepartGid .", " . $noeudRoutierArriveeGid . ",
+              ".$noeudRoutierDepartGid .", " . $noeudRoutierArriveeGid . ", 
               directed => false
             ) AS a
             JOIN relation AS r ON (a.edge = r.troncon_gid)";
@@ -128,7 +128,7 @@ class NoeudRoutierRepository extends AbstractRepository
               $noeudRoutierDepartGid . ", " . $noeudRoutierArriveeGid . ",
               directed => false
             ) AS a
-            JOIN relation AS r ON (a.edge = r.troncon_gid)";
+            JOIN relation AS r ON (a.edge = r.troncon_gid) ORDER BY seq";
         $pdoStatement = ConnexionBaseDeDonnees::getPdo()->prepare($requeteSQL);
         $pdoStatement->execute();
         return $pdoStatement->fetchAll(PDO::FETCH_ASSOC);

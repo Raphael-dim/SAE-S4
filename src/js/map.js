@@ -19,12 +19,11 @@ imageLocaliser[0].addEventListener("mousedown", function (event) {
     navigator.geolocation.getCurrentPosition(localiser);
 })
 
-function initMap(noeuds, i) {
+function initMap(noeuds) {
     markers.map(m => m.setMap(null));
     markers = [];
 
     let LatLngNoeuds = [];
-
     noeuds.forEach(function (n) {
         if (n !== 0) {
             LatLngNoeuds.push({lat: parseFloat(n["long"]), lng: parseFloat(n["lat"])});
@@ -37,8 +36,7 @@ function initMap(noeuds, i) {
             }));
         }
     });
-    console.log(markers);
-    if (markers.length === i) {
+    if (markers.length === noeuds.length) {
 
         Latlng = {
             lat: noeuds.map(n => n['long']).reduce((a, b)=> Number(a)+Number(b), 0)/markers.length,
@@ -47,13 +45,20 @@ function initMap(noeuds, i) {
 
         map.setCenter(Latlng);
 
-        console.log(noeuds.map(n => n).reduce((a, b)=> distanceDeuxPoints(parseFloat(a['lat']),parseFloat(a['long']))+distanceDeuxPoints(parseFloat(b['lat']),parseFloat(b['long'])), 0));
-        let distance = noeuds.map(n => n).reduce((a, b)=> distanceDeuxPoints(parseFloat(a['lat']),parseFloat(a['long']))+distanceDeuxPoints(parseFloat(b['lat']),parseFloat(b['long'])), 0);
+        let distance = distanceDeuxPoints([Math.max.apply(Math, noeuds.map(function(n) { return n['lat']; })), Math.max.apply(Math, noeuds.map(function(n) { return n['long']; }))],
+            [Math.min.apply(Math, noeuds.map(function(n) { return n['lat']; })), Math.min.apply(Math, noeuds.map(function(n) { return n['long']; }))]);
 
-        /*let distance = distanceDeuxPoints([parseFloat(Number(noeuds[0]['lat'])), parseFloat(Number(noeuds[0]['long']))],
-            [parseFloat(Number(noeuds[noeuds.length-1]['lat'])), parseFloat(Number(noeuds[noeuds.length-1]['long']))]);*/
-
-        map.setZoom(Math.max(1,Math.min(20,140/distance)));
+        if (distance < 0.5) {
+            map.setZoom(20);
+        } else if (distance < 1) {
+            map.setZoom(17);
+        } else if (distance < 5) {
+            map.setZoom(14);
+        } else if (distance < 20) {
+            map.setZoom(13);
+        } else {
+            map.setZoom(Math.max(6.5,Math.min(20,135/distance)));
+        }
     }
 }
 
@@ -80,6 +85,7 @@ function plotTroncon(tabTroncon) {
 }
 
 function distanceDeuxPoints(latlng1, latlng2) {
+
     const [lat1, lon1] = latlng1;
     const [lat2, lon2] = latlng2;
     const R = 6371; // Rayon de la Terre en km

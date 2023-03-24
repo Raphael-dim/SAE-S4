@@ -73,64 +73,45 @@ class ControleurNoeudCommune extends ControleurGenerique
 
         if (!empty($_POST)) {
             $t1 = time();
-            $nomCommuneDepart = $_POST["nomCommuneDepart"];
-            $nomCommuneArrivee = $_POST["nomCommuneArrivee"];
+            $nomsCommune = $_POST["nomsCommune"];
 
             $noeudCommuneRepository = new NoeudCommuneRepository();
             //            /** @var NoeudCommune $noeudCommuneDepart */
             //
             //
-            $noeudCommuneDepart = $noeudCommuneRepository->recupererPar(["nom_comm" => $nomCommuneDepart])[0];
-            $noeudCommuneArrivee = $noeudCommuneRepository->recupererPar(["nom_comm" => $nomCommuneArrivee])[0];
-            //
+            foreach($nomsCommune as $nom){
+                $noeudsCommune[] = $noeudCommuneRepository->recupererPar(["nom_comm" => $nom])[0];
+            }
             $noeudRoutierRepository = new NoeudRoutierRepository();
+            foreach($noeudsCommune as $noeud){
+                $noeudsRoutier[] = $noeudRoutierRepository->recupererPar(["id_rte500" => $noeud->getId_nd_rte()])[0];
+            }
+
             echo "<br>";
 
-            $noeudRoutierDepart = $noeudRoutierRepository->recupererPar([
-                "id_rte500" => $noeudCommuneDepart->getId_nd_rte()
-            ])[0];
-
-
-            $noeudRoutierArrivee = $noeudRoutierRepository->recupererPar([
-                "id_rte500" => $noeudCommuneArrivee->getId_nd_rte()
-            ])[0];
-
-            if (ConnexionUtilisateur::estConnecte()) {
-                $trajet = new Trajet(ConnexionUtilisateur::getLoginUtilisateurConnecte(), $noeudCommuneDepart->getGid(),
-                    $noeudCommuneArrivee->getGid(), date('Y-m-d : H:i:s'));
-                (new TrajetRepository())->ajouter($trajet);
+            for($i = 0;$i<count($noeudsRoutier)-1;$i++){
+                $results[] = (new NoeudRoutierRepository())->getShortestPathAstar($noeudsRoutier[$i]->getGid(), $noeudsRoutier[$i+1]->getGid());
             }
-            /*$pcc = new PlusCourtChemin($noeudRoutierDepart->getGid(), $noeudRoutierArrivee->getGid());
-            $pcc->setDistanceInitiale($noeudRoutierDepart->getLatNoeud(), $noeudRoutierDepart->getLongNoeud(),
-                $noeudRoutierArrivee->getLatNoeud(), $noeudRoutierArrivee->getLongNoeud());
-            $result = $pcc->calculer();*/
-            $result = (new NoeudRoutierRepository())->getShortestPathAstar($noeudRoutierDepart->getGid(), $noeudRoutierArrivee->getGid());
 
-            //$plusCourtChemin = Route::getShortestPath($result, $noeudRoutierDepart->getGid(), $noeudRoutierArrivee->getGid());
-
-            //$distance = $plusCourtChemin["distance"];
-            $distance = number_format(end($result)["distance"],2);
-
+            $distance = 0;
+            foreach($results as $result){
+                $distance = $distance + end($result)["distance"];
+            }
+            $distance = number_format($distance,3);
             $troncons = [];
 
-            //foreach($plusCourtChemin["path"] as $troncon){
-            foreach (array_column($result, 'troncon_gid') as $troncon) {
-                $troncons[] = (new TronconRouteRepository())->recupererParClePrimaire($troncon);
+            foreach($results as $result){
+                foreach (array_column($result, 'troncon_gid') as $troncon) {
+                    $troncons[] = (new TronconRouteRepository())->recupererParClePrimaire($troncon);
+                }
             }
 
-            $parametres["CommuneDepart"] = $noeudCommuneDepart;
-            $parametres["CommuneArrivee"] = $noeudCommuneArrivee;
-            $parametres["noeudDepart"] = $noeudRoutierRepository->recupererPar([
-                "id_rte500" => $noeudCommuneDepart->getId_nd_rte()
-            ])[0];
-            $parametres["noeudArrivee"] = $noeudRoutierArriveeGid = $noeudRoutierRepository->recupererPar([
-                "id_rte500" => $noeudCommuneArrivee->getId_nd_rte()
-            ])[0];
+            $parametres["Communes"] = $noeudsCommune;
+            $parametres["noeuds"] = $noeudsRoutier;
             $parametres["distance"] = $distance;
             $parametres["troncons"] = $troncons;
             $t2 = time();
             $parametres["temps"] = $t2 - $t1;
-
         }
 
         return ControleurNoeudCommune::afficherVue('vueGenerale.php', $parametres);
