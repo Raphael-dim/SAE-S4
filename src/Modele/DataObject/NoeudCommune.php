@@ -9,8 +9,8 @@ class NoeudCommune extends AbstractDataObject
         private string $id_rte500,
         private string $nomCommune,
         private string $id_nd_rte,
-        private string $lat,
-        private string $long
+        private string $long,
+        private string $lat
     )
     {
     }

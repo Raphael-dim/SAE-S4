@@ -102,7 +102,7 @@ class NoeudRoutierRepository extends AbstractRepository
                   noeud_depart_gid AS target,
                   longueur AS cost
                 FROM relation',
-              ".$noeudRoutierDepartGid .", " . $noeudRoutierArriveeGid . ", 
+              ".$noeudRoutierDepartGid .", " . $noeudRoutierArriveeGid . ",
               directed => false
             ) AS a
             JOIN relation AS r ON (a.edge = r.troncon_gid)";
@@ -111,7 +111,7 @@ class NoeudRoutierRepository extends AbstractRepository
         return $pdoStatement->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public static function getShortestPathAstar(int $noeudRoutierDepartGid,int $noeudRoutierArriveeGid): array
+    public static function getShortestPathAstar(int $noeudRoutierDepartGid, int $noeudRoutierArriveeGid): array
     {
         $requeteSQL =
             "SELECT noeud_arrivee_gid as noeud_routier_gid,edge as troncon_gid,cost as longueur, ST_X(noeud_depart_geom) as lat, ST_Y(noeud_depart_geom) as lon, node as noeud_depart_gid, agg_cost as distance
@@ -125,7 +125,7 @@ class NoeudRoutierRepository extends AbstractRepository
                   ST_X(noeud_depart_geom) AS x2,
                   ST_Y(noeud_depart_geom) AS y2
                 FROM relation'," .
-              $noeudRoutierDepartGid . ", " . $noeudRoutierArriveeGid . ",
+            $noeudRoutierDepartGid . ", " . $noeudRoutierArriveeGid . ",
               directed => false
             ) AS a
             JOIN relation AS r ON (a.edge = r.troncon_gid) ORDER BY seq";

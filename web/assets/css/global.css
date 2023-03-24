@@ -75,6 +75,7 @@ li:nth-child(odd) {
 }
 
 .saisieVille {
+    max-width: 300px;
     border-radius: 6px;
     background-color: #ffffffd3;
     top: 170px;
