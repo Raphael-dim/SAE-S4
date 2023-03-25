@@ -1,12 +1,12 @@
 <form class="saisieVille" action="calculer" method="post">
         <p class="InputAddOn">
-            <input placeholder="Nom de la commune de départ" class="InputAddOn-field nomCommune" type="text" value=""
+            <input placeholder="Nom de la commune de départ" class="InputAddOn-field nomCommune" type="text" value="<?php echo (!empty($_POST))? $Communes[0]->getNomCommune():''?>"
                    autocomplete="off" name="nomsCommune[]" required>
             <!-- <img id="loading" src="img/loading.gif"> -->
             <img class="localiser" src="assets/img/placeholder.png">
         </p>
         <p class="InputAddOn">
-            <input placeholder="Nom de la commune d'arrivée" class="InputAddOn-field nomCommune" type="text" value=""
+            <input placeholder="Nom de la commune d'arrivée" class="InputAddOn-field nomCommune" type="text" value="<?php echo (!empty($_POST))? end($Communes)->getNomCommune():''?>"
                    autocomplete="off" name="nomsCommune[]" required>
         </p>
         <!-- <img id="loading" src="img/loading.gif"> -->
@@ -20,8 +20,19 @@
     </div>
 
     <?php if (!empty($_POST)) { ?>
+
         <p>
-            Le plus court chemin entre <?= $Communes[0]->getNomCommune() ?> et <?= $Communes[count($Communes)-1]->getNomCommune() ?>
+            Le plus court chemin entre : <br>
+            <?php
+            echo $Communes[0]->getNomCommune();
+            for($i = 1;$i<=count($Communes)-1;$i++){
+                if($i == count($Communes)-1){
+                    echo ' et ' . $Communes[$i]->getNomCommune();
+                }else{
+                    echo ', ' . $Communes[$i]->getNomCommune() ;
+                }
+            }
+            ?><br>
             mesure <?= $distance ?>km.
         </p>
         <p>
@@ -60,4 +71,4 @@
 
 <?php } ?>
 <script src="../src/js/AutoCompletion.js"></script>
-<script src="../src/js/Escale.js"></script>
+<script src="../src/js/Escale.js" data-communes='<?php echo json_encode($_POST['nomsCommune']); ?>'></script>

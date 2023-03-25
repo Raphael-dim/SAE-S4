@@ -93,6 +93,12 @@ class ControleurNoeudCommune extends ControleurGenerique
                 $results[] = (new NoeudRoutierRepository())->getShortestPathAstar($noeudsRoutier[$i]->getGid(), $noeudsRoutier[$i+1]->getGid());
             }
 
+            if (ConnexionUtilisateur::estConnecte()) {
+                $trajet = new Trajet(ConnexionUtilisateur::getLoginUtilisateurConnecte(), $noeudsCommune[0]->getGid(),
+                    end($noeudsCommune)->getGid(), date('Y-m-d : H:i:s'));
+                (new TrajetRepository())->ajouter($trajet);
+            }
+
             $distance = 0;
             foreach($results as $result){
                 $distance = $distance + end($result)["distance"];

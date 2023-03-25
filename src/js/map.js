@@ -26,7 +26,7 @@ function initMap(noeuds) {
     let LatLngNoeuds = [];
     noeuds.forEach(function (n) {
         if (n !== 0) {
-            LatLngNoeuds.push({lat: parseFloat(n["long"]), lng: parseFloat(n["lat"])});
+            LatLngNoeuds.push({lat: parseFloat(n["lat"]), lng: parseFloat(n["long"])});
             map.setCenter(LatLngNoeuds[LatLngNoeuds.length-1]);
 
             markers.push(new google.maps.Marker({
@@ -39,8 +39,8 @@ function initMap(noeuds) {
     if (markers.length === noeuds.length) {
 
         Latlng = {
-            lat: noeuds.map(n => n['long']).reduce((a, b)=> Number(a)+Number(b), 0)/markers.length,
-            lng: noeuds.map(n => n['lat']).reduce((a, b)=> Number(a)+Number(b), 0)/markers.length
+            lat: noeuds.map(n => n['lat']).reduce((a, b)=> Number(a)+Number(b), 0)/markers.length,
+            lng: noeuds.map(n => n['long']).reduce((a, b)=> Number(a)+Number(b), 0)/markers.length
         }
 
         map.setCenter(Latlng);
