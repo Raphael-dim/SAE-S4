@@ -19,6 +19,13 @@ let nomVilleDepart = null;
 
 let nomVilleArrivee = null;
 
+function setVilleDepart(villeDepart) {
+    villeDepart.value = villeDepart;
+}
+
+function setVilleArrivee(villeArrivee) {
+    villeArrivee.value = villeArrivee;
+}
 
 function afficheVilles(tableau) {
     videVilles();
@@ -95,7 +102,7 @@ villeArrivee.addEventListener('input', function () {
 });
 
 autoCompletionDepart.addEventListener('mousedown', function (event) {
-    villeDepart.value = event.target.innerHTML;
+    setVilleDepart(event.target.innerHTML);
     nomVilleDepart = villes.filter(function (ville) {
         return ville.nomCommune === event.target.innerHTML
     })
@@ -104,7 +111,7 @@ autoCompletionDepart.addEventListener('mousedown', function (event) {
 })
 
 autoCompletionArrivee.addEventListener('mousedown', function (event) {
-    villeArrivee.value = event.target.innerHTML;
+    setVilleArrivee(event.target.innerHTML);
     nomVilleArrivee = villes.filter(function (ville) {
         return ville.nomCommune === event.target.innerHTML
     })
