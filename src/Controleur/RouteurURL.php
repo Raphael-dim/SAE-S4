@@ -101,11 +101,11 @@ class RouteurURL
 
 
         // ROUTE POUR CompletionAuto Villes
-        $routeRequeteVille = new Route("/villes", [
-            "_controller" => [RequeteVilleController::class, "getVille"],
-        ]);
-        $routeRequeteVille->setMethods(['GET']);
-        $routes->add("autoCompletionVille", $routeRequeteVille);
+        //$routeRequeteVille = new Route("/villes", [
+        //    "_controller" => [ControleurRequete::class, "getVille"],
+        //]);
+        //$routeRequeteVille->setMethods(['GET']);
+        //$routes->add("autoCompletionVille", $routeRequeteVille);
 
 
         // ROUTE POUR afficherDetail ControleurUtilisateur
@@ -158,15 +158,15 @@ class RouteurURL
 
         // ROUTE POUR chercherVille de ControleurRequeteVille
         $chercherVille = new Route("/chercherVille/{ville}", [
-            "_controller" => [ControleurRequeteVille::class, "getVille"],
+            "_controller" => [ControleurRequete::class, "getVille"],
         ]);
         $routes->add("chercherVille", $chercherVille);
 
 
-        $mesTrajets = new Route("/mesTrajets", [
-            "controller" => [ControleurTrajet::class, "afficherListe"],
+        $requeteVilleCoordonnees = new Route("/chercherVilleCoor/{lat}/{lng}", [
+            "_controller" => [ControleurRequete::class, "getVilleAvecLatlng"],
         ]);
-        $routes->add("mesTrajets", $mesTrajets);
+        $routes->add("chercherVilleCoor", $requeteVilleCoordonnees);
 
 
         $contexteRequete = (new RequestContext())->fromRequest($requete);

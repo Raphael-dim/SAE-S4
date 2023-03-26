@@ -8,6 +8,7 @@ use App\PlusCourtChemin\Lib\MessageFlash;
 use App\PlusCourtChemin\Lib\MotDePasse;
 use App\PlusCourtChemin\Lib\VerificationEmail;
 use App\PlusCourtChemin\Modele\DataObject\Utilisateur;
+use App\PlusCourtChemin\Modele\Repository\TrajetRepository;
 use App\PlusCourtChemin\Modele\Repository\UtilisateurRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;

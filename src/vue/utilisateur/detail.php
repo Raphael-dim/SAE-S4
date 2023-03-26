@@ -22,11 +22,10 @@ $loginURL = rawurlencode($login);
 <p>
 <h2>Mes trajets : </h2>
 <ul>
-
     <?php
     foreach ($trajets as $trajet) {
-        echo '<li> de ' . $trajet->getCommuneDepart()->getNomCommune() . 'vers' .
-            $trajet->getCommuneArrivee()->getNomCommune() . '</li >';
+        echo '<li> de ' . $trajet->getCommuneDepart()->getNomCommune() . ' vers ' .
+            $trajet->getCommuneArrivee()->getNomCommune() . '</li>';
     }
     ?>
 </ul>

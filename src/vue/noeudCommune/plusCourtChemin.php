@@ -3,6 +3,7 @@
             <input placeholder="Nom de la commune de départ" class="InputAddOn-field nomCommune" type="text" value="<?php echo (!empty($_POST))? $Communes[0]->getNomCommune():''?>"
                    autocomplete="off" name="nomsCommune[]" required>
             <!-- <img id="loading" src="img/loading.gif"> -->
+<!--            <img class="localiser" src ="assets/img/marker.png">-->
             <img class="localiser" src="assets/img/placeholder.png">
         </p>
         <p class="InputAddOn">

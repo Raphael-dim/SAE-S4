@@ -9,8 +9,8 @@ class Trajet extends AbstractDataObject
 {
 
     private string $loginUtilisateur;
-    private string $gid_commune_depart;
-    private string $gid_commune_arrivee;
+    private NoeudCommune $commune_depart;
+    private NoeudCommune $commune_arrivee;
     private int $id;
     private string $date;
 
@@ -19,8 +19,8 @@ class Trajet extends AbstractDataObject
                                 string $date)
     {
         $this->loginUtilisateur = $loginUtilisateur;
-        $this->gid_commune_depart = $gid_commune_depart;
-        $this->gid_commune_arrivee = $gid_commune_arrivee;
+        $this->commune_depart = (new NoeudCommuneRepository())->recupererParClePrimaire($gid_commune_depart);
+        $this->commune_arrivee = (new NoeudCommuneRepository())->recupererParClePrimaire($gid_commune_arrivee);
         $this->date = $date;
     }
 
@@ -74,20 +74,37 @@ class Trajet extends AbstractDataObject
     }
 
     /**
-     * @return int
+     * @return Commune
      */
-    public function getGidCommuneArrivee(): int
+    public function getCommuneDepart(): NoeudCommune
     {
-        return $this->gid_commune_arrivee;
+        return $this->commune_depart;
     }
 
     /**
-     * @param int $gid_commune_arrivee
+     * @param Commune $commune_depart
      */
-    public function setGidCommuneArrivee(int $gid_commune_arrivee): void
+    public function setCommuneDepart(Commune $commune_depart): void
     {
-        $this->gid_commune_arrivee = $gid_commune_arrivee;
+        $this->commune_depart = $commune_depart;
     }
+
+    /**
+     * @return Commune
+     */
+    public function getCommuneArrivee(): NoeudCommune
+    {
+        return $this->commune_arrivee;
+    }
+
+    /**
+     * @param Commune $commune_arrivee
+     */
+    public function setCommuneArrivee(Commune $commune_arrivee): void
+    {
+        $this->commune_arrivee = $commune_arrivee;
+    }
+
 
     /**
      * @return int
@@ -105,22 +122,12 @@ class Trajet extends AbstractDataObject
         $this->id = $id;
     }
 
-    public function getCommuneDepart(): NoeudCommune
-    {
-        return (new NoeudCommuneRepository())->recupererParClePrimaire($this->gid_commune_depart);
-    }
-
-    public function getCommuneArrivee(): NoeudCommune
-    {
-        return (new NoeudCommuneRepository())->recupererParClePrimaire($this->gid_commune_arrivee);
-    }
-
 
     public function exporterEnFormatRequetePreparee(): array
     {
         return array(
-            "gid_commune_depart_tag" => $this->gid_commune_depart,
-            "gid_commune_arrivee_tag" => $this->gid_commune_arrivee,
+            "gid_commune_depart_tag" => $this->commune_depart->getGid(),
+            "gid_commune_arrivee_tag" => $this->commune_arrivee->getGid(),
             "loginutilisateur_tag" => $this->loginUtilisateur,
             "date_tag" => $this->date
         );

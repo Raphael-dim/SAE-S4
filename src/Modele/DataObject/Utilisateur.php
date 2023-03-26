@@ -16,7 +16,6 @@ class Utilisateur extends AbstractDataObject
     private string $email;
     private string $emailAValider;
     private string $nonce;
-    private array $trajets;
 
     public function __construct(
         string $login,
@@ -37,7 +36,6 @@ class Utilisateur extends AbstractDataObject
         $this->email = $email;
         $this->emailAValider = $emailAValider;
         $this->nonce = $nonce;
-        $this->trajets = (new TrajetRepository())->recupererPar(["loginutilisateur" => $login]);
     }
 
     public static function construireDepuisFormulaire(array $tableauFormulaire): Utilisateur
@@ -136,7 +134,7 @@ class Utilisateur extends AbstractDataObject
 
     public function getTrajets() : array
     {
-        return $this->trajets;
+        return (new TrajetRepository())->recupererWhere(["loginutilisateur" => "LIKE LOWER('" . $this->login . "%')"]);
     }
 
     public function exporterEnFormatRequetePreparee(): array

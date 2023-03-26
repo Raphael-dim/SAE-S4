@@ -25,7 +25,7 @@ class TrajetRepository extends AbstractRepository
 
     protected function construireDepuisTableau(array $objetFormatTableau): Trajet
     {
-        return new Trajet($objetFormatTableau['gid_commune_depart'], $objetFormatTableau['gid_commune_arrivee'],
-            $objetFormatTableau['loginutilisateur'], $objetFormatTableau['date']);
+        return new Trajet($objetFormatTableau['loginutilisateur'], $objetFormatTableau['gid_commune_depart'],
+            $objetFormatTableau['gid_commune_arrivee'], $objetFormatTableau['date']);
     }
 }
