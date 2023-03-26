@@ -36,7 +36,7 @@ class ControleurRequete extends ControleurGenerique
         }
     }
 
-    public static function getRoute($lat, $lng): Response
+    public static function getVilleAvecLatlng($lat, $lng): Response
     {
         $sql = "SELECT *
         FROM noeud_commune

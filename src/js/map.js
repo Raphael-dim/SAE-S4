@@ -30,7 +30,7 @@ function localiser(pos) {
 }
 
 function requete(latitude, longitude) {
-    let url = "chercherRoute/" + encodeURIComponent(latitude) + "/" + encodeURIComponent(longitude);
+    let url = "chercherVilleCoor/" + encodeURIComponent(latitude) + "/" + encodeURIComponent(longitude);
     let request = new XMLHttpRequest();
     request.open("GET", url, true);
     request.addEventListener("load", function () {

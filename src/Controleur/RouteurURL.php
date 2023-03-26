@@ -163,10 +163,10 @@ class RouteurURL
         $routes->add("chercherVille", $chercherVille);
 
 
-        $requeteRoute = new Route("/chercherRoute/{lat}/{lng}", [
-            "_controller" => [ControleurRequete::class, "getRoute"],
+        $requeteVilleCoordonnees = new Route("/chercherVilleCoor/{lat}/{lng}", [
+            "_controller" => [ControleurRequete::class, "getVilleAvecLatlng"],
         ]);
-        $routes->add("chercherRoute", $requeteRoute);
+        $routes->add("chercherVilleCoor", $requeteVilleCoordonnees);
 
 
         $contexteRequete = (new RequestContext())->fromRequest($requete);
