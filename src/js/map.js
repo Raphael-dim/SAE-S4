@@ -13,6 +13,7 @@ function initMap(noeuds) {
         if (n !== 0) {
             LatLngNoeuds.push({lat: parseFloat(n["lat"]), lng: parseFloat(n["long"])});
             map.setCenter(LatLngNoeuds[LatLngNoeuds.length-1]);
+            map.setZoom(14);
             markers.push(new google.maps.Marker({
                 position: LatLngNoeuds[LatLngNoeuds.length-1],
                 map,
@@ -32,6 +33,8 @@ function initMap(noeuds) {
         let distance = distanceDeuxPoints([Math.max.apply(Math, noeuds.map(function(n) { return n['lat']; })), Math.max.apply(Math, noeuds.map(function(n) { return n['long']; }))],
             [Math.min.apply(Math, noeuds.map(function(n) { return n['lat']; })), Math.min.apply(Math, noeuds.map(function(n) { return n['long']; }))]);
 
+        console.log(distance);
+
         if (distance < 0.5) {
             map.setZoom(20);
         } else if (distance < 1) {
@@ -41,7 +44,7 @@ function initMap(noeuds) {
         } else if (distance < 20) {
             map.setZoom(13);
         } else {
-            map.setZoom(Math.max(6.5,Math.min(20,135/distance)));
+            map.setZoom(Math.max(6.5,Math.min(20,200/distance)));
         }
     }
 }
