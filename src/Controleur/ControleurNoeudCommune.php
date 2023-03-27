@@ -6,8 +6,6 @@ use App\PlusCourtChemin\Lib\ConnexionUtilisateur;
 use App\PlusCourtChemin\Lib\dijkstra;
 use App\PlusCourtChemin\Lib\MessageFlash;
 use App\PlusCourtChemin\Lib\PlusCourtChemin;
-use App\PlusCourtChemin\Lib\Route;
-use App\PlusCourtChemin\Modele\DataObject\NoeudCommune;
 use App\PlusCourtChemin\Modele\DataObject\Trajet;
 use App\PlusCourtChemin\Modele\Repository\NoeudCommuneRepository;
 use App\PlusCourtChemin\Modele\Repository\NoeudRoutierRepository;
@@ -118,6 +116,8 @@ class ControleurNoeudCommune extends ControleurGenerique
             $parametres["troncons"] = $troncons;
             $t2 = time();
             $parametres["temps"] = $t2 - $t1;
+            MessageFlash::ajouter('success', 'Temps d\'execution: '.$parametres["temps"]." s");
+
         }
 
         return ControleurNoeudCommune::afficherVue('vueGenerale.php', $parametres);

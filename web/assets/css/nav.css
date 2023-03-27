@@ -1,0 +1,168 @@
+nav {
+    margin-left: 30px;
+    display: block;
+    color: white;
+    top: 0px;
+    left: 0px;
+    width: 96%;
+    transition: ease-in-out 0.5s;
+    height: 48px;
+    z-index: 1000;
+    position: fixed;
+}
+
+
+nav:hover {
+    height: 55px;
+    opacity: 0.95;
+}
+
+
+#Menu {
+    justify-content: space-between;
+    padding: 0;
+    display: flex;
+    margin-top: -1%;
+    height: 50px;
+    padding-bottom: 10px;
+    transition: ease-in-out 0.5s;
+}
+
+.petitmenu a {
+    color: white;
+}
+
+nav:hover > #Menu {
+    margin-top: -0.5%;
+}
+
+nav:hover .profil {
+    top: 15px;
+}
+
+ul[id="Menu"] li.grosmenu {
+    margin-right: 5px;
+    background-color: white;
+    border: solid 1px black;
+    /*margin: 0;*/
+}
+
+ul[id="Menu"] li.grosmenu > a {
+    text-decoration: none;
+    margin: 0;
+    margin-top: 10px;
+    display: inline-block;
+    width: 200px;
+    position: relative;
+    color: #000000;
+    text-align: center;
+    padding: 10px;
+    font-size: 19px;
+    line-height: 24px;
+}
+
+ul[id="Menu"] li a:hover {
+    color: white;
+    background: grey;
+}
+
+
+ul[id="Menu"] li {
+    display: inline;
+}
+
+.profil {
+    filter: invert(0.9);
+    position: absolute !important;
+    top: 15px;
+    right: 100px;
+    width: auto !important;
+    transition: ease-in-out 0.5s;
+}
+
+.profil > img {
+    min-width: 34px;
+}
+
+nav img {
+    max-width: 25px;
+}
+
+.profil > p {
+    max-height: 2ch;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 8ch;
+    display: block;
+    overflow: hidden
+}
+
+@media screen and (max-width: 1000px) {
+
+    nav {
+        opacity: 1;
+    }
+
+    #Menu {
+        width: 75px;
+        padding: 0;
+        margin: 0;
+        display: inline-block;
+        height: 60px;
+        padding-top: 40px;
+        background-image: url("../../assets/img/Menu_icon.png");
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: 80%;
+    }
+
+    #Menu:hover {
+        background-color: var(--background2);
+    }
+
+    #Menu > li {
+        display: none;
+        position: absolute;
+    }
+
+    #Menu:hover > li {
+        display: block;
+        position: relative;
+    }
+
+    #Menu:hover > li > a {
+        height: auto;
+    }
+
+    #Menu > li:hover > a {
+        color: white;
+        background-color: grey;
+        opacity: 0.9;
+    }
+
+    ul[id="Menu"] li.grosmenu {
+        padding: 0;
+        margin: 0;
+    }
+
+    ul[id="Menu"] li.grosmenu > a {
+        margin-top: 60px;
+        position: relative;
+        margin: 0;
+        padding: 10px;
+        background-color: #ffffff;
+        height: 0;
+        width: 150px;
+        font-size: 17px;
+        line-height: 22px;
+    }
+
+    nav:hover .profil {
+        top: 10px;
+    }
+}
+
+.user {
+    margin-left: auto;
+    margin-right: 0px;
+}

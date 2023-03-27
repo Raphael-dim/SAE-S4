@@ -1,3 +1,5 @@
+
+
 <form class="saisieVille" action="calculer" method="post">
         <p class="InputAddOn">
             <input placeholder="Nom de la commune de départ" class="InputAddOn-field nomCommune" type="text" value="<?php echo (!empty($_POST))? $Communes[0]->getNomCommune():''?>"
