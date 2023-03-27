@@ -19,12 +19,12 @@ let nomVilleDepart = null;
 
 let nomVilleArrivee = null;
 
-function setVilleDepart(villeDepart) {
-    villeDepart.value = villeDepart;
+function setVilleDepart(ville) {
+    villeDepart.value = ville;
 }
 
-function setVilleArrivee(villeArrivee) {
-    villeArrivee.value = villeArrivee;
+function setVilleArrivee(ville) {
+    villeArrivee.value = ville;
 }
 
 function afficheVilles(tableau) {

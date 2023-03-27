@@ -14,6 +14,14 @@ function addMarker(latLng) {
         // draggable: true
     });
     markersArray.push(marker);
+    return marker;
+}
+
+function setMarkerDepart(marker) {
+    if (markerDepart !== null) {
+        markerDepart.setMap(null);
+    }
+    markerDepart = marker;
 }
 
 imageLocaliser = document.getElementsByClassName("localiser");
@@ -22,10 +30,14 @@ function localiser(pos) {
     let crd = pos.coords;
     let latitude = crd.latitude;
     let longitude = crd.longitude;
-    let Latlng = {lat: latitude, lng: longitude};
-    addMarker(Latlng);
-    map.setCenter(Latlng);
-    // setVilleDepart()
+    let latLng = {lat: latitude, lng: longitude};
+    let marker = new google.maps.Marker({
+        map: map,
+        position: latLng,
+        // draggable: true
+    });
+    setMarkerDepart(marker)
+    map.setCenter(latLng);
     requete(latitude, longitude);
 }
 
@@ -36,7 +48,7 @@ function requete(latitude, longitude) {
     request.addEventListener("load", function () {
         let data = JSON.parse(request.responseText);
         let name = data.map(element => element["nom_comm"]);
-        document.getElementById("nomCommuneDepart_id").value = name[0];
+        setVilleDepart(name[0]);
     });
     request.send(null);
 }
@@ -58,15 +70,11 @@ function initMap(noeudDepart, noeudArrivee) {
     if (noeudDepart !== null) {
         LatLngDepart = {lat: parseFloat(noeudDepart["lat"]), lng: parseFloat(noeudDepart["long"])};
         map.setCenter(LatLngDepart);
-        if (markerDepart !== null) {
-            markerDepart.setMap(null);
-        }
-
-        markerDepart = new google.maps.Marker({
+        setMarkerDepart(new google.maps.Marker({
             position: LatLngDepart,
             map,
             title: noeudDepart["nomCommune"],
-        });
+        }));
     }
     if (noeudArrivee !== null) {
         LatLngArrivee = {lat: parseFloat(noeudArrivee["lat"]), lng: parseFloat(noeudArrivee["long"])};
