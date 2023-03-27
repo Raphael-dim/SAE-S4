@@ -83,14 +83,14 @@ li:nth-child(odd) {
     top: 170px;
     left: 11px;
     /* max-width: 600px; */
-    opacity:0.8;
+    opacity:0.85;
     min-width: 220px;
     z-index: 2;
     position: absolute;
 }
 
 .saisieVille:hover{
-    opacity:0.9;
+    opacity:0.95;
 }
 
 .localiser {

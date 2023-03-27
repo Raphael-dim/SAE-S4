@@ -1,3 +1,5 @@
+
+
 <form class="saisieVille" action="calculer" method="post">
     <div id="autocompletionDepartDiv">
         <p class="InputAddOn">

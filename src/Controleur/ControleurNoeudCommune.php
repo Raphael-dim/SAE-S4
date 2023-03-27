@@ -67,7 +67,6 @@ class ControleurNoeudCommune extends ControleurGenerique
             "pagetitle" => "Plus court chemin",
             "cheminVueBody" => "noeudCommune/plusCourtChemin.php",
         ];
-
         if (!empty($_POST)) {
             $t1 = time();
             $nomCommuneDepart = $_POST["nomCommuneDepart"];
@@ -112,6 +111,7 @@ class ControleurNoeudCommune extends ControleurGenerique
             $parametres["troncons"] = $troncons;
             $t2 = time();
             $parametres["temps"] = $t2 - $t1;
+            MessageFlash::ajouter('success', 'Temps d\'execution: '.$parametres["temps"]." s");
 
         }
 
