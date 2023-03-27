@@ -14,6 +14,36 @@ let currentVilles = new Array();
 
 init();
 
+imageLocaliser = document.getElementById("localiser");
+
+console.log(document.currentScript.dataset);
+
+imageLocaliser.addEventListener("mousedown", function (event) {
+    navigator.geolocation.getCurrentPosition(localiser);
+})
+
+function localiser(pos) {
+    let latitude = pos.coords.latitude;
+    let longitude = pos.coords.longitude;
+    let Latlng = [{ "lat": latitude, "long": longitude}];
+    currentVilles.splice(0, 1, Latlng);
+    requete(latitude, longitude);
+}
+
+function requete(latitude, longitude) {
+    let url = "chercherVilleCoor/" + encodeURIComponent(latitude) + "/" + encodeURIComponent(longitude);
+    let request = new XMLHttpRequest();
+    request.open("GET", url, true);
+    request.addEventListener("load", function () {
+        let data = JSON.parse(request.responseText);
+        let ville = data[0];
+        villesNodes[0].value = ville["nom_comm"];
+        miseAJourMap(currentVilles);
+    });
+    request.send(null);
+}
+
+
 /**
  * Initialise l'écoute de chaque ville.
  */
@@ -44,9 +74,10 @@ function init(){
         villeNode.addEventListener("keydown", function (e) {
             flecheDefilement(e, currentVilleNode);
         });
+        console.log(currentVilles);
 
         for(let i = currentVilles.length; i<villesNodes.length;i++){
-            currentVilles.splice(currentVilles.length-1, 0,0);
+            currentVilles.splice(currentVilles.length-1, 0,villesNodes[i].value);
         }
     });
 }

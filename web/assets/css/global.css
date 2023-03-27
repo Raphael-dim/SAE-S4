@@ -86,7 +86,7 @@ li:nth-child(odd) {
     position: absolute;
 }
 
-.localiser {
+#localiser {
     max-width: 30px;
 }
 

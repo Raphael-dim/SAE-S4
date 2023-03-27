@@ -4,7 +4,7 @@
                    autocomplete="off" name="nomsCommune[]" required>
             <!-- <img id="loading" src="img/loading.gif"> -->
 <!--            <img class="localiser" src ="assets/img/marker.png">-->
-            <img class="localiser" src="assets/img/placeholder.png">
+            <img id="localiser" src="assets/img/placeholder.png">
         </p>
         <p class="InputAddOn">
             <input placeholder="Nom de la commune d'arrivée" class="InputAddOn-field nomCommune" type="text" value="<?php echo (!empty($_POST))? end($Communes)->getNomCommune():''?>"
@@ -71,5 +71,5 @@
     <!-------------------------------------------------------------------------------------------->
 
 <?php } ?>
-<script src="../src/js/AutoCompletion.js"></script>
-<script src="../src/js/Escale.js" data-communes='<?php echo json_encode($_POST['nomsCommune']); ?>'></script>
+<script defer src="../src/js/AutoCompletion.js" data-communes='<?php echo (!empty($_POST))? json_encode(array_map(function($n) { return ['lat' => floatval($n->getLongNoeud()),'long' => floatval($n->getLatNoeud())];}, $noeuds)):'[]' ?>'></script>
+<script defer src="../src/js/Escale.js" data-communes='<?php echo (!empty($_POST))? json_encode($_POST['nomsCommune']):'[]' ?>'></script>

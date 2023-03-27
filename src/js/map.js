@@ -5,54 +5,14 @@ const map = new google.maps.Map(document.getElementById("map"), {
 
 let markers = [];
 
-function addMarker(latLng) {
-    let marker = new google.maps.Marker({
-        map: map,
-        position: latLng,
-        // draggable: true
-    });
-    markersArray.push(marker);
-}
-
-imageLocaliser = document.getElementsByClassName("localiser");
-
-function localiser(pos) {
-    let crd = pos.coords;
-    let latitude = crd.latitude;
-    let longitude = crd.longitude;
-    let Latlng = {lat: latitude, lng: longitude};
-    addMarker(Latlng);
-    map.setCenter(Latlng);
-    // setVilleDepart()
-    requete(latitude, longitude);
-}
-
-function requete(latitude, longitude) {
-    let url = "chercherVilleCoor/" + encodeURIComponent(latitude) + "/" + encodeURIComponent(longitude);
-    let request = new XMLHttpRequest();
-    request.open("GET", url, true);
-    request.addEventListener("load", function () {
-        let data = JSON.parse(request.responseText);
-        let name = data.map(element => element["nom_comm"]);
-        document.getElementById("nomCommuneDepart_id").value = name[0];
-    });
-    request.send(null);
-}
-
-imageLocaliser[0].addEventListener("mousedown", function (event) {
-    navigator.geolocation.getCurrentPosition(localiser);
-})
-
 function initMap(noeuds) {
     markers.map(m => m.setMap(null));
     markers = [];
-
     let LatLngNoeuds = [];
     noeuds.forEach(function (n) {
         if (n !== 0) {
             LatLngNoeuds.push({lat: parseFloat(n["lat"]), lng: parseFloat(n["long"])});
             map.setCenter(LatLngNoeuds[LatLngNoeuds.length-1]);
-
             markers.push(new google.maps.Marker({
                 position: LatLngNoeuds[LatLngNoeuds.length-1],
                 map,
