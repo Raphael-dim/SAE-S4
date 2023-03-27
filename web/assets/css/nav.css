@@ -1,9 +1,10 @@
 nav {
+    margin-left: 30px;
     display: block;
     color: white;
     top: 0px;
     left: 0px;
-    width: 100%;
+    width: 96%;
     transition: ease-in-out 0.5s;
     height: 48px;
     z-index: 1000;
