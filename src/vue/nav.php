@@ -15,7 +15,7 @@ use App\PlusCourtChemin\Lib\ConnexionUtilisateur;
 
         if (!ConnexionUtilisateur::estConnecte()) {
             echo '
-                    <li class="grosmenu">
+                    <li class="grosmenu user">
                         <a href="' . $generateurUrl->generate("connexion") . '">
                             <img alt="login" src="' . $assistantUrl->getAbsoluteUrl("assets/img/enter.png") . '" width="18">
                         </a>
@@ -24,7 +24,7 @@ use App\PlusCourtChemin\Lib\ConnexionUtilisateur;
             $loginHTML = htmlspecialchars(ConnexionUtilisateur::getLoginUtilisateurConnecte());
             $loginURL = rawurlencode(ConnexionUtilisateur::getLoginUtilisateurConnecte());
             echo '
-                    <li class="grosmenu">
+                    <li class="grosmenu user">
                         <a  href="' . $generateurUrl->generate("detailUtilisateur", ["idUtilisateur" => $loginURL]) . '">
                             <img alt="user" src="' . $assistantUrl->getAbsoluteUrl("assets/img/user.png") . '" width="18">
                             ' . $loginHTML . '

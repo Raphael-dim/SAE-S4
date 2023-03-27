@@ -5,23 +5,24 @@ nav {
     left: 0px;
     width: 100%;
     transition: ease-in-out 0.5s;
-    height: 50px;
+    height: 48px;
     z-index: 1000;
     position: fixed;
 }
 
 
 nav:hover {
-    height: 68px;
+    height: 55px;
     opacity: 0.95;
 }
 
 
 #Menu {
+    justify-content: space-between;
     padding: 0;
     display: flex;
     margin-top: -1%;
-    height: 60px;
+    height: 50px;
     padding-bottom: 10px;
     transition: ease-in-out 0.5s;
 }
@@ -39,9 +40,10 @@ nav:hover .profil {
 }
 
 ul[id="Menu"] li.grosmenu {
+    margin-right: 5px;
     background-color: white;
     border: solid 1px black;
-    margin: 0;
+    /*margin: 0;*/
 }
 
 ul[id="Menu"] li.grosmenu > a {
@@ -59,8 +61,8 @@ ul[id="Menu"] li.grosmenu > a {
 }
 
 ul[id="Menu"] li a:hover {
-    color: #012e49;
-    background: #c1d9d7;
+    color: white;
+    background: grey;
 }
 
 
@@ -133,7 +135,7 @@ nav img {
 
     #Menu > li:hover > a {
         color: white;
-        background-color: grey  ;
+        background-color: grey;
         opacity: 0.9;
     }
 
@@ -154,9 +156,12 @@ nav img {
         line-height: 22px;
     }
 
-
     nav:hover .profil {
         top: 10px;
     }
+}
 
+.user {
+    margin-left: auto;
+    margin-right: 0px;
 }
