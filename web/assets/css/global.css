@@ -69,26 +69,47 @@ li:nth-child(odd) {
 
 .map {
     position: absolute;
-    left: 50px;
-    height: 90%;
-    width: 90%;
+    left: 0px;
+    top:0px;
+    height: 100%;
+    width: 100%;
 }
 
 .saisieVille {
     max-width: 300px;
-    border-radius: 6px;
-    background-color: #ffffffd3;
+    border-radius: 3px;
+    padding:2px;
+    background-color: #ffffff;
     top: 170px;
-    left: 50px;
+    left: 11px;
     /* max-width: 600px; */
+    opacity:0.85;
     min-width: 220px;
     z-index: 2;
     position: absolute;
+}
+
+.saisieVille:hover{
+    opacity:0.95;
 }
 
 .localiser {
     max-width: 30px;
 }
 
-.resultat
+footer{
+    opacity: 0.7;
+    position:fixed;
+    bottom:0;
+    width:100%;
+    background:white;
 
+}
+
+footer:hover{
+    opacity:0.9;
+}
+
+footer >p{
+    margin:0;
+}
