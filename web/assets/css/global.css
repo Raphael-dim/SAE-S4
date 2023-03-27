@@ -44,16 +44,16 @@ li:nth-child(odd) {
 }
 
 .autocompletion {
-    border: solid black 2px;
-    width: 90%;
+    border: solid red 2px;
+    margin-left: 10%;
+    width: inherit;
     color: white;
-    margin-top:35px;
     background-color: grey;
     line-height: 1.5;
     position: absolute;
-    overflow-y: auto;
-    max-height: 150px;
-    opacity: 0.85;
+    overflow-y: scroll;
+    height: 150px;
+    opacity: 0.9;
 }
 
 .autocompletion p {
@@ -93,7 +93,7 @@ li:nth-child(odd) {
     opacity: 0.95;
 }
 
-#localiser {
+.localiser {
     max-width: 30px;
 }
 
