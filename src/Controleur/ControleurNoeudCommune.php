@@ -75,6 +75,7 @@ class ControleurNoeudCommune extends ControleurGenerique
             $noeudCommuneRepository = new NoeudCommuneRepository();
             $noeudCommuneDepart = $noeudCommuneRepository->recupererPar(["nom_comm" => $nomCommuneDepart])[0];
             $noeudCommuneArrivee = $noeudCommuneRepository->recupererPar(["nom_comm" => $nomCommuneArrivee])[0];
+            var_dump($nomCommuneArrivee);
             $noeudRoutierRepository = new NoeudRoutierRepository();
             $noeudRoutierDepart = $noeudRoutierRepository->recupererPar([
                 "id_rte500" => $noeudCommuneDepart->getId_nd_rte()

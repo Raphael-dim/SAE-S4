@@ -19,12 +19,12 @@ let nomVilleDepart = null;
 
 let nomVilleArrivee = null;
 
-function setVilleDepart(villeDepart) {
-    villeDepart.value = villeDepart;
+function setVilleDepart(nomvilleDepart) {
+    villeDepart.value = nomvilleDepart;
 }
 
-function setVilleArrivee(villeArrivee) {
-    villeArrivee.value = villeArrivee;
+function setVilleArrivee(nomvilleArrivee) {
+    villeArrivee.value = nomvilleArrivee;
 }
 
 function afficheVilles(tableau) {
@@ -39,9 +39,11 @@ function afficheVilles(tableau) {
 }
 
 function videVilles() {
-    autoCompletionTarget.innerHTML = "";
-    autoCompletionTarget.classList.add("hidden");
-    indexDefilement = 0;
+    if (autoCompletionTarget!=null){
+        autoCompletionTarget.innerHTML = "";
+        autoCompletionTarget.classList.add("hidden");
+        indexDefilement = 0;
+    }
 }
 
 function startLoadingAction() {
