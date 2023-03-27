@@ -38,6 +38,7 @@ function localiser(pos) {
     });
     setMarkerDepart(marker)
     map.setCenter(latLng);
+    map.setZoom(14);
     requete(latitude, longitude);
 }
 
