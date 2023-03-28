@@ -10,7 +10,6 @@ function initMap(noeuds) {
     markers = [];
     let LatLngNoeuds = [];
     noeuds.forEach(function (n) {
-        console.log(n);
         if (n !== 0) {
             LatLngNoeuds.push({lat: parseFloat(n["lat"]), lng: parseFloat(n["long"])});
             map.setCenter(LatLngNoeuds[LatLngNoeuds.length-1]);

@@ -30,7 +30,9 @@ function localiser(pos) {
     requete(latitude, longitude);
 }
 
-function requete(latitude, longitude) {
+/*function requete(latitude, longitude) {
+    currentVilles.splice(0, 1, [{ "lat": latitude, "long": longitude}]);
+    console.log(currentVilles);
     let url = "chercherVilleCoor/" + encodeURIComponent(latitude) + "/" + encodeURIComponent(longitude);
     let request = new XMLHttpRequest();
     request.open("GET", url, true);
@@ -38,6 +40,28 @@ function requete(latitude, longitude) {
         let data = JSON.parse(request.responseText);
         let ville = data[0];
         villesNodes[0].value = ville["nom_comm"];
+        miseAJourMap(currentVilles);
+    });
+    request.send(null);
+}*/
+
+map.addListener('click', function(e) {
+    requete(e.latLng.lat(), e.latLng.lng(), true);
+});
+
+function requete(latitude, longitude, afficherDetailVille = false) {
+    currentVilles.splice(0, 1, [{ "lat": latitude, "long": longitude}]);
+    let url = "chercherVilleCoor/" + encodeURIComponent(latitude) + "/" + encodeURIComponent(longitude);
+    let request = new XMLHttpRequest();
+    let data;
+    request.open("GET", url, true);
+    request.addEventListener("load", function () {
+        data = JSON.parse(request.responseText);
+        let name = data.map(element => element["nom_comm"]);
+        villesNodes[0].value = (name[0]);
+        if (afficherDetailVille) {
+            afficherDetail(data)
+        }
         miseAJourMap(currentVilles);
     });
     request.send(null);
@@ -74,8 +98,6 @@ function init(){
         villeNode.addEventListener("keydown", function (e) {
             flecheDefilement(e, currentVilleNode);
         });
-
-        console.log(communes[1]);
 
         for(let i = currentVilles.length; i<villesNodes.length;i++){
             currentVilles.splice(currentVilles.length-1, 0,[communes[i]]);

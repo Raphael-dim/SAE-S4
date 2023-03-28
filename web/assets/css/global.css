@@ -203,7 +203,7 @@ footer > p {
     border-radius: 3px;
     padding: 2px;
     background-color: #ffffff;
-    top: 400px;
+    bottom: 50px;
     left: 11px;
     /* max-width: 600px; */
     opacity: 0.85;
