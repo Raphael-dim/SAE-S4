@@ -44,16 +44,16 @@ li:nth-child(odd) {
 }
 
 .autocompletion {
-    border: solid red 2px;
-    margin-left: 10%;
-    width: inherit;
+    border: solid black 2px;
+    width: 90%;
     color: white;
+    margin-top:35px;
     background-color: grey;
     line-height: 1.5;
     position: absolute;
-    overflow-y: scroll;
-    height: 150px;
-    opacity: 0.9;
+    overflow-y: auto;
+    max-height: 150px;
+    opacity: 0.85;
 }
 
 .autocompletion p {
@@ -93,7 +93,7 @@ li:nth-child(odd) {
     opacity: 0.95;
 }
 
-.localiser {
+#localiser {
     max-width: 30px;
 }
 
@@ -203,7 +203,7 @@ footer > p {
     border-radius: 3px;
     padding: 2px;
     background-color: #ffffff;
-    top: 400px;
+    bottom: 50px;
     left: 11px;
     /* max-width: 600px; */
     opacity: 0.85;

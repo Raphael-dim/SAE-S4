@@ -3,146 +3,52 @@ const map = new google.maps.Map(document.getElementById("map"), {
     zoom: 6,
 });
 
-let markersArray = [];
-let markerDepart = null;
-let markerArrivee = null;
+let markers = [];
 
-map.addListener('click', function(e) {
-    requete(e.latLng.lat(), e.latLng.lng(), true);
-});
-
-function addMarker(latLng) {
-    let marker = new google.maps.Marker({
-        map: map,
-        position: latLng,
-        // draggable: true
-    });
-    markersArray.push(marker);
-    return marker;
-}
-
-function setMarkerDepart(marker) {
-    if (markerDepart !== null) {
-        markerDepart.setMap(null);
-    }
-    markerDepart = marker;
-}
-
-imageLocaliser = document.getElementsByClassName("localiser");
-
-function localiser(pos) {
-    let crd = pos.coords;
-    let latitude = crd.latitude;
-    let longitude = crd.longitude;
-    let latLng = {lat: latitude, lng: longitude};
-    let marker = new google.maps.Marker({
-        map: map,
-        position: latLng,
-        // draggable: true
-    });
-    setMarkerDepart(marker)
-    map.setCenter(latLng);
-    map.setZoom(14);
-    requete(latitude, longitude);
-}
-
-
-/*
-Cette fonction permet de faire une requête à la base de donnée pour récupérer les données
-de la commune la plus proche de latitude/longitude.
-Si afficherDetailVille == true, on appel la fonction pour afficher le détail d'une commune
-
- */
-function requete(latitude, longitude, afficherDetailVille = false) {
-    let url = "chercherVilleCoor/" + encodeURIComponent(latitude) + "/" + encodeURIComponent(longitude);
-    let request = new XMLHttpRequest();
-    let data;
-    request.open("GET", url, true);
-    request.addEventListener("load", function () {
-        data = JSON.parse(request.responseText);
-        let name = data.map(element => element["nom_comm"]);
-        setVilleDepart(name[0]);
-        if (afficherDetailVille) {
-            afficherDetail(data)
+function initMap(noeuds) {
+    markers.map(m => m.setMap(null));
+    markers = [];
+    let LatLngNoeuds = [];
+    noeuds.forEach(function (n) {
+        if (n !== 0) {
+            LatLngNoeuds.push({lat: parseFloat(n["lat"]), lng: parseFloat(n["long"])});
+            map.setCenter(LatLngNoeuds[LatLngNoeuds.length-1]);
+            map.setZoom(14);
+            markers.push(new google.maps.Marker({
+                position: LatLngNoeuds[LatLngNoeuds.length-1],
+                map,
+                title: n["nomCommune"],
+            }));
         }
     });
-    request.send(null);
-}
+    if (markers.length === noeuds.length) {
 
-imageLocaliser[0].addEventListener("mousedown", function (event) {
-    navigator.geolocation.getCurrentPosition(localiser);
-})
-
-map.addListener('click', function (e) {
-    // addMarker(e.latLng);
-});
-
-
-function initMap(noeudDepart, noeudArrivee) {
-
-    let LatLngDepart;
-    let LatLngArrivee;
-
-    if (noeudDepart !== null) {
-        LatLngDepart = {lat: parseFloat(noeudDepart["lat"]), lng: parseFloat(noeudDepart["long"])};
-        map.setCenter(LatLngDepart);
-        setMarkerDepart(new google.maps.Marker({
-            position: LatLngDepart,
-            map,
-            title: noeudDepart["nomCommune"],
-        }));
-    }
-    if (noeudArrivee !== null) {
-        LatLngArrivee = {lat: parseFloat(noeudArrivee["lat"]), lng: parseFloat(noeudArrivee["long"])};
-        map.setCenter(LatLngArrivee);
-        if (markerArrivee !== null) {
-            markerArrivee.setMap(null);
-        }
-        markerArrivee = new google.maps.Marker({
-            position: LatLngArrivee,
-            map,
-            title: noeudArrivee["nomCommune"],
-        });
-    }
-    if (noeudArrivee !== null && noeudDepart !== null) {
         Latlng = {
-            lat: parseFloat((Number(noeudDepart['lat']) + Number(noeudArrivee['lat'])) / 2),
-            lng: parseFloat((Number(noeudDepart['long']) + Number(noeudArrivee['long'])) / 2)
+            lat: noeuds.map(n => n['lat']).reduce((a, b)=> Number(a)+Number(b), 0)/markers.length,
+            lng: noeuds.map(n => n['long']).reduce((a, b)=> Number(a)+Number(b), 0)/markers.length
         }
+
         map.setCenter(Latlng);
 
-
-        let distance = distanceEntreDeuxPoints([parseFloat(Number(noeudDepart['lat'])), parseFloat(Number(noeudDepart['long']))],
-            [parseFloat(Number(noeudArrivee['lat'])), parseFloat(Number(noeudArrivee['long']))]);
-
+        let distance = distanceDeuxPoints([Math.max.apply(Math, noeuds.map(function(n) { return n['lat']; })), Math.max.apply(Math, noeuds.map(function(n) { return n['long']; }))],
+            [Math.min.apply(Math, noeuds.map(function(n) { return n['lat']; })), Math.min.apply(Math, noeuds.map(function(n) { return n['long']; }))]);
 
         if (distance < 0.5) {
             map.setZoom(20);
         } else if (distance < 1) {
             map.setZoom(17);
         } else if (distance < 5) {
-            map.setZoom(13);
+            map.setZoom(14);
         } else if (distance < 20) {
-            map.setZoom(12);
-        } else if (distance < 50) {
-            map.setZoom(10);
-        } else if (distance < 100) {
-            map.setZoom(9);
-        } else if (distance < 200) {
-            map.setZoom(7);
-        } else if (distance < 300) {
-            map.setZoom(7);
-        } else if (distance < 400) {
-            map.setZoom(7);
+            map.setZoom(13);
         } else {
-            map.setZoom(6);
+            map.setZoom(Math.max(6.5,Math.min(20,200/distance)));
         }
     }
 }
 
 
 function plotTroncon(tabTroncon) {
-    console.log(tabTroncon);
 
     tabTroncon.forEach(troncon => {
         for (let i = 0; i < troncon["geom"]["coordinates"].length - 1; i++) {
@@ -151,7 +57,6 @@ function plotTroncon(tabTroncon) {
             var LatLgnStart = {lat: geom[i][1], lng: geom[i][0]};
             var LatLgnEnd = {lat: geom[i + 1][1], lng: geom[i + 1][0]};
 
-            console.log(LatLgnStart);
             var line = new google.maps.Polyline({
                 path: [LatLgnStart, LatLgnEnd],
                 strokeColor: "#00c4ff",
@@ -164,18 +69,18 @@ function plotTroncon(tabTroncon) {
     });
 }
 
-function distanceEntreDeuxPoints(latlng1, latlng2) {
+function distanceDeuxPoints(latlng1, latlng2) {
+
     const [lat1, lon1] = latlng1;
     const [lat2, lon2] = latlng2;
     const R = 6371; // Rayon de la Terre en km
     const dLat = deg2rad(lat2 - lat1);
     const dLon = deg2rad(lon2 - lon1);
     const a =
-        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.pow(Math.sin(dLat / 2),2) +
         Math.cos(deg2rad(lat1)) *
         Math.cos(deg2rad(lat2)) *
-        Math.sin(dLon / 2) *
-        Math.sin(dLon / 2);
+        Math.pow(Math.sin(dLon / 2),2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     const d = R * c; // Distance en km
     return d;

@@ -1,32 +1,39 @@
 <form class="saisieVille" action="calculer" method="post">
-    <div id="autocompletionDepartDiv">
-        <p class="InputAddOn">
-            <input placeholder="Nom de la commune de départ" class="InputAddOn-field" type="text" value=""
-                   autocomplete="off" name="nomCommuneDepart" id="nomCommuneDepart_id" required>
-            <!-- <img id="loading" src="img/loading.gif"> -->
-<!--            <img class="localiser" src ="assets/img/marker.png">-->
-            <img class="localiser" src="assets/img/placeholder.png">
-        <div class="autocompletion hidden" id="autocompletionDepart"></div>
-        </p>
-    </div>
-    <div id="autocompletionArriveDiv">
-        <p class="InputAddOn">
-            <input placeholder="Nom de la commune d'arrivée" class="InputAddOn-field" type="text" value=""
-                   autocomplete="off" name="nomCommuneArrivee" id="nomCommuneArrivee_id" required>
-        </p>
+    <p class="InputAddOn">
+        <input placeholder="Nom de la commune de départ" class="InputAddOn-field nomCommune" type="text" value="<?php echo (!empty($_POST))? $Communes[0]->getNomCommune():''?>"
+               autocomplete="off" name="nomsCommune[]" required>
         <!-- <img id="loading" src="img/loading.gif"> -->
-        <div class="autocompletion hidden" id="autocompletionArrivee"></div>
-    </div>
+        <!--            <img class="localiser" src ="assets/img/marker.png">-->
+        <img id="localiser" src="assets/img/placeholder.png">
+    </p>
+    <p class="InputAddOn">
+        <input placeholder="Nom de la commune d'arrivée" class="InputAddOn-field nomCommune" type="text" value="<?php echo (!empty($_POST))? end($Communes)->getNomCommune():''?>"
+               autocomplete="off" name="nomsCommune[]" required>
+    </p>
+    <!-- <img id="loading" src="img/loading.gif"> -->
+    <div class="autocompletion hidden" id="autocompletion"></div>
     <div>
         <input type="hidden" name="XDEBUG_TRIGGER">
+        <input class="InputAddOn-field" type="button" value="Ajouter une escale" onclick="addEscale()"/>
         <p>
             <input class="InputAddOn-field" type="submit" value="Calculer"/>
         </p>
     </div>
 
     <?php if (!empty($_POST)) { ?>
+
         <p>
-            Le plus court chemin entre <?= $CommuneDepart->getNomCommune() ?> et <?= $CommuneArrivee->getNomCommune() ?>
+            Le plus court chemin entre : <br>
+            <?php
+            echo $Communes[0]->getNomCommune();
+            for($i = 1;$i<=count($Communes)-1;$i++){
+                if($i == count($Communes)-1){
+                    echo ' et ' . $Communes[$i]->getNomCommune();
+                }else{
+                    echo ', ' . $Communes[$i]->getNomCommune() ;
+                }
+            }
+            ?><br>
             mesure <?= $distance ?>km.
         </p>
         <p>
@@ -53,14 +60,12 @@
 
 <!---------------------------------------INIT MAP--------------------------------------------->
 <script defer src="../src/js/map.js"></script>
-<?php if (!empty($_POST)) { ?>
+<?php if (!empty($_POST)) {?>
 
     <script>
         window.onload = function () {
-            console.log("loaded");
-            let CommuneDepartJSON = <?= $CommuneDepart->toJson() ?>;
-            let CommuneArriveeJSON = <?= $CommuneArrivee->toJson() ?>;
-            initMap(CommuneDepartJSON, CommuneArriveeJSON);
+            let CommunesJSON = <?= json_encode($Communes) ?>;
+            initMap(CommunesJSON);
             let tabTronconJSON = <?= json_encode($troncons) ?>;
             plotTroncon(tabTronconJSON);
             document.getElementById("loading").classList.add("hidden")
@@ -70,4 +75,5 @@
 
 <?php } ?>
 <script src="../src/js/infosVille.js" defer></script>
-<script src="../src/js/AutoCompletion.js" defer></script>
+<script src="../src/js/AutoCompletion.js" data-communes='<?php echo (!empty($_POST))? json_encode(array_map(function($n) { return ['lat' => floatval($n->getLongNoeud()),'long' => floatval($n->getLatNoeud())];}, $noeuds)):'[]' ?>' defer></script>
+<script src="../src/js/Escale.js" data-communes='<?php echo (!empty($_POST))? json_encode($_POST['nomsCommune']):'[]' ?>' defer></script>
