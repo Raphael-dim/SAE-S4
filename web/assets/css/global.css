@@ -197,3 +197,19 @@ footer > p {
 .InputAddOn-item:last-child {
     border-radius: 0 2px 2px 0;
 }
+
+.infoVille {
+    max-width: 300px;
+    border-radius: 3px;
+    padding: 2px;
+    background-color: #ffffff;
+    top: 400px;
+    left: 11px;
+    /* max-width: 600px; */
+    opacity: 0.85;
+    max-height: 300px;
+    overflow-y: scroll;
+    min-width: 220px;
+    position: absolute;
+    z-index: 3;
+}

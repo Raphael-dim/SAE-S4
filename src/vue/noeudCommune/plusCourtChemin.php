@@ -44,6 +44,9 @@
         </p>
     <?php } ?>
 </form>
+<div class="infoVille" id="infoVille">
+
+</div>
 
 
 <!-------------------------------------GOOGLE MAPS API---------------------------------------->
@@ -71,5 +74,6 @@
     <!-------------------------------------------------------------------------------------------->
 
 <?php } ?>
+<script src="../src/js/infosVille.js" defer></script>
 <script defer src="../src/js/AutoCompletion.js" data-communes='<?php echo (!empty($_POST))? json_encode(array_map(function($n) { return ['lat' => floatval($n->getLongNoeud()),'long' => floatval($n->getLatNoeud())];}, $noeuds)):'[]' ?>'></script>
 <script defer src="../src/js/Escale.js" data-communes='<?php echo (!empty($_POST))? json_encode($_POST['nomsCommune']):'[]' ?>'></script>
