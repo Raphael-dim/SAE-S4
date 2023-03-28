@@ -1,46 +1,108 @@
-let autoCompletionDepart = document.getElementById("autocompletionDepart");
-autoCompletionDepart.style.borderWidth = "0px";
-let autoCompletionArrivee = document.getElementById("autocompletionArrivee");
-autoCompletionArrivee.style.borderWidth = "0px";
-let villeDepart = document.getElementById("nomCommuneDepart_id");
-let villeArrivee = document.getElementById("nomCommuneArrivee_id");
+let villesNodes = [...document.getElementsByClassName('nomCommune')];
+let currentVilleNode = villesNodes[0];
 
 let indexDefilement = 0;
 
-let autoCompletionTarget; // LA CHAMP D'AUTOCOMPLETION ACTUELLEMENT SELECTIONNEE (soit autoCompletionDepart ou autoCompletionArrivee)
+let autoCompletion = document.getElementById("autocompletion");
 
 let request;
 
+let communes = JSON.parse(document.currentScript.dataset.communes);
+
 let minuteur;
 
-let villes;
+let villesSuggests;
+let currentVilles = new Array();
 
-let nomVilleDepart = null;
+init();
 
-let nomVilleArrivee = null;
+imageLocaliser = document.getElementById("localiser");
 
-function setVilleDepart(ville) {
-    villeDepart.value = ville;
+imageLocaliser.addEventListener("mousedown", function (event) {
+    navigator.geolocation.getCurrentPosition(localiser);
+})
+
+function localiser(pos) {
+    let latitude = pos.coords.latitude;
+    let longitude = pos.coords.longitude;
+    let Latlng = [{ "lat": latitude, "long": longitude}];
+    currentVilles.splice(0, 1, Latlng);
+    requete(latitude, longitude);
 }
 
-function setVilleArrivee(ville) {
-    villeArrivee.value = ville;
+function requete(latitude, longitude) {
+    let url = "chercherVilleCoor/" + encodeURIComponent(latitude) + "/" + encodeURIComponent(longitude);
+    let request = new XMLHttpRequest();
+    request.open("GET", url, true);
+    request.addEventListener("load", function () {
+        let data = JSON.parse(request.responseText);
+        let ville = data[0];
+        villesNodes[0].value = ville["nom_comm"];
+        miseAJourMap(currentVilles);
+    });
+    request.send(null);
 }
 
+
+/**
+ * Initialise l'écoute de chaque ville.
+ */
+function init(){
+    //Récupère toutes les villes
+    villesNodes = [...document.getElementsByClassName('nomCommune')];
+
+    villesNodes.forEach((villeNode) => {
+        //Quand le contenu change
+        villeNode.addEventListener('input', function (event) {
+            RequeteVille(event.target);
+        });
+
+        //Quand la ville n'est plus selectionné
+        villeNode.addEventListener("focusout", function () {
+            videVilles();
+            indexDefilement = 0;
+        });
+
+        //Quand la ville est selectionné
+        villeNode.addEventListener("focusin", function (event) {
+            currentVilleNode = event.target;
+            villeNode.insertAdjacentElement('afterend',autoCompletion);
+            RequeteVille(currentVilleNode);
+        });
+
+        //Quand une touche du clavier est appuyé
+        villeNode.addEventListener("keydown", function (e) {
+            flecheDefilement(e, currentVilleNode);
+        });
+
+        console.log(communes[1]);
+
+        for(let i = currentVilles.length; i<villesNodes.length;i++){
+            currentVilles.splice(currentVilles.length-1, 0,[communes[i]]);
+        }
+    });
+}
+
+/**
+ * Affiche les villes dans la barre d'auto complétion
+ *
+ * @param tableau
+ */
 function afficheVilles(tableau) {
     videVilles();
+
     for (const ville of tableau) {
         const p = document.createElement("p");
         p.innerHTML = ville;
         p.id = ville;
-        autoCompletionTarget.appendChild(p);
+        autoCompletion.appendChild(p);
     }
-    autoCompletionTarget.classList.remove("hidden");
+    autoCompletion.classList.remove("hidden");
 }
 
 function videVilles() {
-    autoCompletionTarget.innerHTML = "";
-    autoCompletionTarget.classList.add("hidden");
+    autoCompletion.innerHTML = "";
+    autoCompletion.classList.add("hidden");
     indexDefilement = 0;
 }
 
@@ -57,27 +119,24 @@ function requeteAJAX(stringVille, callback, startLoadingAction, endLoadingAction
         On utilise les routes établies dans Routeur.php
     */
     if (stringVille != "") {
-        let url = "chercherVille/" + encodeURIComponent(stringVille);
+        let url = "chercherVille/" + encodeURI(stringVille);
         request = new XMLHttpRequest();
         startLoadingAction();
-        request.open("GET", url, true);
+        request.open("GET", decodeURI(url), true);
         request.addEventListener("load", function () {
             callback(request);
             endLoadingAction();
         });
-        request.send(null);
+        request.send();
     }
 }
 
-
-function callback_4(req) {
+function callback(req) {
     let data = JSON.parse(req.responseText);
-    villes = data;
+    villesSuggests = data;
     let names = data.map(element => element["nomCommune"]);
     afficheVilles(names);
 }
-
-
 
 function RequeteVille(ville) {
 
@@ -89,64 +148,17 @@ function RequeteVille(ville) {
     }
 
     minuteur = setTimeout(() => {
-        requeteAJAX(ville.value, callback_4, startLoadingAction, endLoadingAction)
+        requeteAJAX(ville.value, callback, startLoadingAction, endLoadingAction)
     }, 200);
 }
 
-villeDepart.addEventListener('input', function () {
-    RequeteVille(villeDepart);
-});
-
-villeArrivee.addEventListener('input', function () {
-    RequeteVille(villeArrivee);
-});
-
-autoCompletionDepart.addEventListener('mousedown', function (event) {
-    setVilleDepart(event.target.innerHTML);
-    nomVilleDepart = villes.filter(function (ville) {
-        return ville.nomCommune === event.target.innerHTML
-    })
-    miseAJourMap(nomVilleDepart, nomVilleArrivee)
+autoCompletion.addEventListener('mousedown', function (event) {
+    currentVilleNode.value = event.target.innerHTML;
+    currentVilles.splice(villesNodes.indexOf(currentVilleNode), 1, villesSuggests.filter(function (v) {
+        return v.nomCommune === event.target.innerHTML
+    }));
+    miseAJourMap(currentVilles)
     videVilles();
-})
-
-autoCompletionArrivee.addEventListener('mousedown', function (event) {
-    setVilleArrivee(event.target.innerHTML);
-    nomVilleArrivee = villes.filter(function (ville) {
-        return ville.nomCommune === event.target.innerHTML
-    })
-    miseAJourMap(nomVilleDepart, nomVilleArrivee)
-    videVilles();
-})
-
-villeDepart.addEventListener("focusout", function (event) {
-    videVilles();
-    indexDefilement = 0;
-    autoCompletionTarget = null;
-})
-
-villeArrivee.addEventListener("focusout", function (event) {
-    videVilles();
-    indexDefilement = 0;
-    autoCompletionTarget = null;
-})
-
-villeDepart.addEventListener("focusin", function (event) {
-    autoCompletionTarget = autoCompletionDepart;
-    RequeteVille(villeDepart);
-})
-
-villeArrivee.addEventListener("focusin", function (event) {
-    autoCompletionTarget = autoCompletionArrivee;
-    RequeteVille(villeArrivee);
-})
-
-villeDepart.addEventListener("keydown", function (e) {
-    flecheDefilement(e, villeDepart);
-})
-
-villeArrivee.addEventListener("keydown", function (e) {
-    flecheDefilement(e, villeArrivee);
 })
 
 function flecheDefilement(e, ville) {
@@ -157,38 +169,32 @@ function flecheDefilement(e, ville) {
             indexDefilement--;
         }
     } else if (e.key == "ArrowDown") {
-        if (indexDefilement + 1 < autoCompletionTarget.childElementCount && indexDefilement < 20) {
+        if (indexDefilement + 1 < autoCompletion.childElementCount && indexDefilement < 20) {
             indexDefilement++;
         }
     } else {
         isArrow = false;
     }
     if (e.key == "Enter") {     // on valide le choix
-        let villeSelectionnee = autoCompletionTarget.childNodes.item(indexDefilement);
-        if (autoCompletionTarget == autoCompletionArrivee) {
-            nomVilleArrivee = villes.filter(function (v) {
-                return v.nomCommune === villeSelectionnee.innerHTML;
-            })
-        } else {
-            nomVilleDepart = villes.filter(function (v) {
-                return v.nomCommune === villeSelectionnee.innerHTML;
-            })
-        }
+        let villeSelectionnee = autoCompletion.childNodes.item(indexDefilement);
         e.preventDefault()  // on annule le fait que le formulaire s'envoie alors qu'on souhaite simplement valider la ville
         ville.value = villeSelectionnee.innerHTML;
-        miseAJourMap(nomVilleDepart, nomVilleArrivee)
+        currentVilles.splice(villesNodes.indexOf(currentVilleNode), 1, villesSuggests.filter(function (v) {
+            return v.nomCommune === villeSelectionnee.innerHTML;
+        }));
+        miseAJourMap(currentVilles)
         videVilles();
     }
     if (isArrow && oldIndex !== indexDefilement) {
         /*
-            on gère la liste défilante, en mettant à jour le CSS et en ajustant la barre de défilement en fonction 
+            on gère la liste défilante, en mettant à jour le CSS et en ajustant la barre de défilement en fonction
             de l'élément courant
         */
 
-        let nomVille = autoCompletionTarget.childNodes.item(indexDefilement);
+        let nomVille = autoCompletion.childNodes.item(indexDefilement);
         nomVille.style.backgroundColor = "black";
         ville.value = nomVille.innerHTML;
-        let oldVille = autoCompletionTarget.childNodes.item(oldIndex);
+        let oldVille = autoCompletion.childNodes.item(oldIndex);
         oldVille.style.backgroundColor = "grey";
         let elementVille = document.getElementById(nomVille.innerHTML);
 
@@ -196,19 +202,7 @@ function flecheDefilement(e, ville) {
     }
 
 }
-function miseAJourMap(villeDepart, villeArrivee) {
-    let coorDepart = null;
-    if (villeDepart !== null) {
-        coorDepart = {};
-        coorDepart['lat'] = villeDepart[0]['lat'];
-        coorDepart['long'] = villeDepart[0]['long'];
-    }
-    let coorArrivee = null;
-    if (villeArrivee !== null) {
-        coorArrivee = {};
-        coorArrivee['lat'] = villeArrivee[0]['lat'];
-        coorArrivee['long'] = villeArrivee[0]['long'];
-    }
-    initMap(coorDepart, coorArrivee);
-}
 
+function miseAJourMap(villes) {
+    initMap(villes.map(v => (v[0] == undefined? 0:{lat: v[0]['lat'], long: v[0]['long']})));
+}
