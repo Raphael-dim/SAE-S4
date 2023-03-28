@@ -1,5 +1,3 @@
-
-
 <form class="saisieVille" action="calculer" method="post">
     <div id="autocompletionDepartDiv">
         <p class="InputAddOn">
@@ -39,6 +37,9 @@
         </p>
     <?php } ?>
 </form>
+<div class="infoVille" id="infoVille">
+
+</div>
 
 
 <!-------------------------------------GOOGLE MAPS API---------------------------------------->
@@ -68,5 +69,5 @@
     <!-------------------------------------------------------------------------------------------->
 
 <?php } ?>
-<script src="../src/js/AutoCompletion.js" defer></script>
 <script src="../src/js/infosVille.js" defer></script>
+<script src="../src/js/AutoCompletion.js" defer></script>

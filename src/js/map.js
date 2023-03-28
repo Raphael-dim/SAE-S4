@@ -8,8 +8,7 @@ let markerDepart = null;
 let markerArrivee = null;
 
 map.addListener('click', function(e) {
-    console.log(e.latLng.lat)
-    requete(e.latLng['lat'], e.latLng['lng'], true);
+    requete(e.latLng.lat(), e.latLng.lng(), true);
 });
 
 function addMarker(latLng) {
@@ -47,18 +46,25 @@ function localiser(pos) {
     requete(latitude, longitude);
 }
 
-function requete(latitude, longitude, returnAll = false) {
+
+/*
+Cette fonction permet de faire une requête à la base de donnée pour récupérer les données
+de la commune la plus proche de latitude/longitude.
+Si afficherDetailVille == true, on appel la fonction pour afficher le détail d'une commune
+
+ */
+function requete(latitude, longitude, afficherDetailVille = false) {
     let url = "chercherVilleCoor/" + encodeURIComponent(latitude) + "/" + encodeURIComponent(longitude);
     let request = new XMLHttpRequest();
+    let data;
     request.open("GET", url, true);
     request.addEventListener("load", function () {
-        console.log(request.responseText)
-        let data = JSON.parse(request.responseText);
-        if (returnAll) {
-            return data;
-        }
+        data = JSON.parse(request.responseText);
         let name = data.map(element => element["nom_comm"]);
         setVilleDepart(name[0]);
+        if (afficherDetailVille) {
+            afficherDetail(data)
+        }
     });
     request.send(null);
 }
