@@ -40,14 +40,22 @@ function cacherInfo() {
     infoAffiches = false;
 }
 
-function afficherDetail(infos) {
+function afficherDetail(infos, latitude, longitude) {
     if (infoAffiches) {
         divInfoVille.innerHTML = "";
-        let p = document.createElement("a");
-        p.innerHTML = "Wikipedia"
-        p.href = "https://wikipedia.com";
-        divInfoVille.appendChild(p)
+
+        let infoBD = document.createElement("p");
+        infoBD.innerHTML = infos.map(element => element["nom_comm"]) + "<br>" +
+            infos.map(element => element["statut"])
+            + "<br>Latitude : " + latitude + " <br> Longitude : " + longitude;
+        divInfoVille.appendChild(infoBD);
+
         info(infos.map(element => element["nom_comm"]));
+
+        let link = document.createElement("a");
+        link.innerHTML = "Wikipedia"
+        link.href = "https://wikipedia.com";
+        divInfoVille.appendChild(link)
     }
 }
 
