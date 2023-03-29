@@ -1,18 +1,61 @@
-let div = document.getElementById("infoVille")
-div.style.borderWidth = "0px";
+let divInfoVille = document.getElementById("infoVille");
+let imageFleche = document.getElementsByClassName("fleche")[0];
+let infoAffiches = false;
+let accolade = document.getElementsByClassName("accolade")[0];
+
+
+
+cacherInfo();
+
+accolade.addEventListener('click', switchAffichageInfo);
+imageFleche.addEventListener('click', switchAffichageInfo);
+
+function switchAffichageInfo() {
+    if (infoAffiches) {
+        cacherInfo();
+    } else {
+        afficherInfo()
+    }
+}
+
+function afficherInfo() {
+    divInfoVille.style.display = "block"
+    imageFleche.style.left = "300px"
+    accolade.style.display = "none"
+    imageFleche.style.transform = "rotate(180deg)";
+    infoAffiches = true;
+    if (divInfoVille.childNodes.length == 0) {
+        let msg = document.createElement("p");
+        msg.innerHTML = "Si vous cliquez sur la carte, des informations sur la ville seront affichées ici. " +
+            "<br> En cachant ce panneau, vous désactivez cette fonctionnalité et économisez ainsi des ressources.<br> " +
+            "<br> Pour limiter l'impact de cette page, veuillez fermer ce panneau lorsqu'il ne vous sert pas."
+        divInfoVille.appendChild(msg)
+    }
+}
+
+function cacherInfo() {
+    accolade.style.display = "block"
+    divInfoVille.style.display = "none"
+    imageFleche.style.left = "9px";
+    imageFleche.style.transform = "";
+    // imageFleche.style.hov
+    infoAffiches = false;
+}
 
 function afficherDetail(infos) {
-    div.innerHTML = "";
-    let p = document.createElement("a");
-    p.innerHTML ="Wikipedia"
-    p.href = "https://wikipedia.com";
-    div.appendChild(p)
-    info(infos.map(element => element["nom_comm"]));
+    if (infoAffiches) {
+        divInfoVille.innerHTML = "";
+        let p = document.createElement("a");
+        p.innerHTML = "Wikipedia"
+        p.href = "https://wikipedia.com";
+        divInfoVille.appendChild(p)
+        info(infos.map(element => element["nom_comm"]));
+    }
 }
 
 function info(ville) {
     let urlDesPages = "https://en.wikipedia.org/w/api.php?action=query&list=search&prop=info&inprop=url&utf8=&" +
-        "format=json&origin=*&srlimit=20&lang=fr&srsearch=" +ville;
+        "format=json&origin=*&srlimit=20&lang=fr&srsearch=" + ville;
     let requete = new XMLHttpRequest();
     requete.open("GET", urlDesPages, true);
     requete.addEventListener("load", function () {
@@ -27,7 +70,7 @@ function info(ville) {
             let lesDonnees = data2.query.pages[idPage].extract;
             let p = document.createElement("p");
             p.innerHTML = lesDonnees;
-            div.appendChild(p)
+            divInfoVille.appendChild(p)
         });
         requete2.send(null)
     });
