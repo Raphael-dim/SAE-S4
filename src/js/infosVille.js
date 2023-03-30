@@ -3,7 +3,6 @@ let imageFleche = document.getElementsByClassName("fleche")[0];
 let infoAffiches = false;
 let accolade = document.getElementsByClassName("accolade")[0];
 
-cacherInfo();
 
 accolade.addEventListener('click', switchAffichageInfo);
 imageFleche.addEventListener('click', switchAffichageInfo);
@@ -19,7 +18,6 @@ function switchAffichageInfo() {
 function afficherInfo() {
     divInfoVille.style.animation = "divInfoIn 3.5s";
     divInfoVille.style.display = "block";
-    divInfoVille.style.animation = "divInfoIn 3.5s";
     accolade.style.display = "none";
     imageFleche.style.left = "300px";
     imageFleche.style.animation = "divInfoIn 0.5s";
@@ -35,12 +33,11 @@ function afficherInfo() {
 }
 
 function cacherInfo() {
-    divInfoVille.style.animation = "divInfoOut 3.5s"
+    // divInfoVille.style.animation = "divInfoOut 3.5s"
     accolade.style.display = "block"
-    // divInfoVille.style.display = "none"
+    divInfoVille.style.display = "none"
     imageFleche.style.left = "9px";
     imageFleche.style.transform = "";
-    // imageFleche.style.hov
     infoAffiches = false;
 }
 
