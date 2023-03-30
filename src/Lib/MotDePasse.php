@@ -8,6 +8,11 @@ class MotDePasse
     // Exécutez genererChaineAleatoire() et stockez sa sortie dans le poivre
     private static string $poivre = "";
 
+    /**
+    *Hache un mot de passe en utilisant le poivre stocké dans la classe
+    *@param string $mdpClair: le mot de passe en clair à hacher
+    *@return string $mdpHache : le mot de passe haché
+     */
     public static function hacher(string $mdpClair): string
     {
         $mdpPoivre = hash_hmac("sha256", $mdpClair, MotDePasse::$poivre);
@@ -15,12 +20,23 @@ class MotDePasse
         return $mdpHache;
     }
 
+    /**
+    * Vérifie si un mot de passe clair correspond à un mot de passe haché stocké dans la base de données
+    *@param string $mdpClair: le mot de passe clair à vérifier
+    *@param string $mdpHache: le mot de passe haché stocké dans la base de données
+    *@return bool: true si les mots de passe correspondent, false sinon
+     */
     public static function verifier(string $mdpClair, string $mdpHache): bool
     {
         $mdpPoivre = hash_hmac("sha256", $mdpClair, MotDePasse::$poivre);
         return password_verify($mdpPoivre, $mdpHache);
     }
 
+    /**
+    *@ Génère une chaîne de caractères aléatoires pour être utilisée comme poivre
+    *@param int $nbCaracteres: le nombre de caractères de la chaîne générée (22 par défaut pour avoir au moins 128 bits aléatoires)
+    *@return string: la chaîne de caractères aléatoires générée
+    */
     public static function genererChaineAleatoire(int $nbCaracteres = 22): string
     {
         // 22 caractères par défaut pour avoir au moins 128 bits aléatoires

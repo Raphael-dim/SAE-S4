@@ -8,7 +8,7 @@ use PDO;
 
 class NoeudRoutierRepository extends AbstractRepository
 {
-
+    // Construit un objet NoeudRoutier à partir d'un tableau
     public function construireDepuisTableau(array $noeudRoutierTableau): NoeudRoutier
     {
         return new NoeudRoutier(
@@ -19,16 +19,19 @@ class NoeudRoutierRepository extends AbstractRepository
         );
     }
 
+    // Renvoie le nom de la table correspondante dans la base de données
     protected function getNomTable(): string
     {
         return 'noeud_routier';
     }
 
+    // Renvoie le nom de la clé primaire de la table
     protected function getNomClePrimaire(): string
     {
         return 'gid';
     }
 
+    // Renvoie le nom des colonnes à sélectionner dans la requête SQL
     protected function getNomsColonnes(): array
     {
         return ["gid", "id_rte500", "ST_X(geom)", "ST_Y(geom)"];
@@ -41,6 +44,7 @@ class NoeudRoutierRepository extends AbstractRepository
         return false;
     }
 
+    // Bloque la mise à jour pour ne pas modifier la table
     public function mettreAJour(AbstractDataObject $object): void
     {
         return;
@@ -62,8 +66,6 @@ class NoeudRoutierRepository extends AbstractRepository
      * @param int $noeudRoutierArriveeGid
      * @return String[][]
      */
-
-
     public static function getShortestPathAstar(int $noeudRoutierDepartGid, int $noeudRoutierArriveeGid): array
     {
         $requeteSQL =
