@@ -17,9 +17,12 @@ function switchAffichageInfo() {
 }
 
 function afficherInfo() {
-    divInfoVille.style.display = "block"
-    imageFleche.style.left = "300px"
-    accolade.style.display = "none"
+    divInfoVille.style.animation = "divInfoIn 3.5s";
+    divInfoVille.style.display = "block";
+    divInfoVille.style.animation = "divInfoIn 3.5s";
+    accolade.style.display = "none";
+    imageFleche.style.left = "300px";
+    imageFleche.style.animation = "divInfoIn 0.5s";
     imageFleche.style.transform = "rotate(180deg)";
     infoAffiches = true;
     if (divInfoVille.childNodes.length == 0) {
@@ -32,8 +35,9 @@ function afficherInfo() {
 }
 
 function cacherInfo() {
+    divInfoVille.style.animation = "divInfoOut 3.5s"
     accolade.style.display = "block"
-    divInfoVille.style.display = "none"
+    // divInfoVille.style.display = "none"
     imageFleche.style.left = "9px";
     imageFleche.style.transform = "";
     // imageFleche.style.hov
