@@ -152,7 +152,6 @@ class RouteurURL
         $validerEmail = new Route("/validerEmail/{idUtilisateur}/{nonce}", [
             "_controller" => [ControleurUtilisateur::class, "validerEmail"],
         ]);
-        $validerEmail->setMethods(['GET']);
         $routes->add("validerEmail", $validerEmail);
 
 

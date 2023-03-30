@@ -47,6 +47,10 @@ class ControleurUtilisateur extends ControleurGenerique
     public static function supprimer(string $idUtilisateur) : RedirectResponse
     {
         $utilisateurRepository = new UtilisateurRepository();
+        if (ConnexionUtilisateur::getLoginUtilisateurConnecte() != $idUtilisateur) {
+            MessageFlash::ajouter("warning", "Vous devez être connecté pour supprimer votre compte.");
+            return ControleurUtilisateur::rediriger("utilisateurs");
+        }
         $deleteSuccessful = $utilisateurRepository->supprimer($idUtilisateur);
         $utilisateurs = $utilisateurRepository->recuperer();
         if ($deleteSuccessful) {
@@ -54,7 +58,7 @@ class ControleurUtilisateur extends ControleurGenerique
             return ControleurUtilisateur::rediriger("communes");
         } else {
             MessageFlash::ajouter("warning", "Login inconnu.");
-            return ControleurUtilisateur::rediriger("communes");
+            return ControleurUtilisateur::rediriger("utilisateurs");
         }
 
     }

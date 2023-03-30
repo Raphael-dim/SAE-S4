@@ -56,6 +56,7 @@ function requete(latitude, longitude, afficherDetailVille = false) {
     let data;
     request.open("GET", url, true);
     request.addEventListener("load", function () {
+        console.log(request.responseText)
         data = JSON.parse(request.responseText);
         let name = data.map(element => element["nom_comm"]);
         villesNodes[0].value = (name[0]);

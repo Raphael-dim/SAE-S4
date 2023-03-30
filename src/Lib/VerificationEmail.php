@@ -14,7 +14,7 @@ class VerificationEmail
         $loginURL = rawurlencode($utilisateur->getLogin());
         $nonceURL = rawurlencode($utilisateur->getNonce());
         //$absoluteURL = Configuration::getAbsoluteURL();
-        $url = $generateurUrl->generate('validerEmail', ["idUtilisateur" => $loginURL, "nonce" => $nonceURL]);
+        $url = $generateurUrl->generate('validerEmail', ["idUtilisateur" => $loginURL, "nonce" => $utilisateur->getNonce()]);
         //$lienValidationEmail = "validerEmail/$loginURL/$nonceURL";
         $corpsEmail = "<a href=\"$url\">Validation</a>";
 
