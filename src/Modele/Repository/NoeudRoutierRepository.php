@@ -58,7 +58,6 @@ class NoeudRoutierRepository extends AbstractRepository
 
     /**
      * Renvoie le tableau des voisins d'un noeud routier
-     *
      * Chaque voisin est un tableau avec les 3 champs
      * `noeud_routier_gid`, `troncon_gid`, `longueur`
      *
