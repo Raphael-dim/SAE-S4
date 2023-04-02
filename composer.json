@@ -8,6 +8,7 @@
     "symfony/http-foundation": "^6.0",
     "symfony/routing": "^6.0",
     "symfony/http-kernel": "^6.0",
-    "twig/twig": "^3.5"
+    "twig/twig": "^3.5",
+    "phpunit/phpunit": "9.6.5"
   }
 }

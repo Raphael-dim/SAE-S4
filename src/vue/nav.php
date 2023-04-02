@@ -9,9 +9,12 @@ use App\PlusCourtChemin\Lib\ConnexionUtilisateur;
             <a href="<?= $generateurUrl->generate("utilisateurs") ?>">Utilisateurs</a>
         </li>
         <li class="grosmenu">
-            <a href="<?= $generateurUrl->generate("communes") ?>">Communes</a>
+            <a href="<?= $generateurUrl->generate("plusCourtChemin") ?>">Carte</a>
         </li>
-        <?php
+        <li class="grosmenu">
+            <a href="<?= $generateurUrl->generate("communes") ?>">Liste des communes</a>
+        </li>
+                <?php
 
         if (!ConnexionUtilisateur::estConnecte()) {
             echo '

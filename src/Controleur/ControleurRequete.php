@@ -38,30 +38,12 @@ class ControleurRequete extends ControleurGenerique
 
     public static function getVilleAvecLatlng($lat, $lng): Response
     {
-        $sql = "SELECT *
-        FROM noeud_commune
-        WHERE ST_DWithin(
-          noeud_commune.geom,
-          ST_GeomFromText('POINT($lng $lat)', 4326),
-          100
-        )
-        ORDER BY ST_Distance(
-          noeud_commune.geom,
-          ST_GeomFromText('POINT($lng $lat)', 4326)
-        )
-        LIMIT 1;";
-
-        $pdoStatement = ConnexionBaseDeDonnees::getPdo()->query($sql);
-
-        $tab = [];
-        foreach ($pdoStatement as $a) {
-            $tab[] = $a;
-        }
+        $tab = NoeudCommuneRepository::getCommuneAvecLatLng($lat, $lng);
 
         return ControleurRequete::afficherVue(
             'noeudCommune/requeteRoute.php',
             [
-                "tab" => json_encode($tab),
+                "tab" => $tab,
                 "pagetitle" => "Plus court chemin"
             ]
         );

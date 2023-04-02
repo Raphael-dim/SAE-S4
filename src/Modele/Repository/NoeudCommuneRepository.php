@@ -5,6 +5,7 @@ namespace App\PlusCourtChemin\Modele\Repository;
 use App\PlusCourtChemin\Modele\DataObject\AbstractDataObject;
 use App\PlusCourtChemin\Modele\DataObject\NoeudCommune;
 use PDO;
+use PhpParser\Node\Expr\Array_;
 
 class NoeudCommuneRepository extends AbstractRepository
 {
@@ -51,6 +52,31 @@ class NoeudCommuneRepository extends AbstractRepository
     public function ajouter(AbstractDataObject $object): bool
     {
         return false;
+    }
+
+    public static function getCommuneAvecLatLng($lat, $lng): false|string
+    {
+        $sql = "SELECT *
+        FROM noeud_commune
+        WHERE ST_DWithin(
+          noeud_commune.geom,
+          ST_GeomFromText('POINT($lng $lat)', 4326),
+          100
+        )
+        ORDER BY ST_Distance(
+          noeud_commune.geom,
+          ST_GeomFromText('POINT($lng $lat)', 4326)
+        )
+        LIMIT 1;";
+
+        $pdoStatement = ConnexionBaseDeDonnees::getPdo()->query($sql);
+
+        $tab = [];
+        foreach ($pdoStatement as $a) {
+            $tab[] = $a;
+        }
+
+        return json_encode($tab);
     }
 
     public function recuperer($start = 0, $limit = 200, $nomCommune = null): array

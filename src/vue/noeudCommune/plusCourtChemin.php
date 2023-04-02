@@ -44,9 +44,9 @@
         </p>
     <?php } ?>
 </form>
-<div class="infoVille" id="infoVille">
-
-</div>
+<div class="infoVille" id="infoVille"></div>
+<img class="fleche" src="<?= $assistantUrl->getAbsoluteUrl("assets/img/fleche.png") ?>" alt="fleche">
+<div class="accolade" alt="accolade"></div>
 
 
 <!-------------------------------------GOOGLE MAPS API---------------------------------------->

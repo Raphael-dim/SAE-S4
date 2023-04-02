@@ -72,7 +72,7 @@ function requete(latitude, longitude, afficherDetailVille = false) {
         let name = data.map(element => element["nom_comm"]);
         currentTarget.value = (name[0]);
         if (afficherDetailVille) {
-            afficherDetail(data)
+            afficherDetail(data, latitude, longitude)
         }
         miseAJourMap(currentVilles);
     });
