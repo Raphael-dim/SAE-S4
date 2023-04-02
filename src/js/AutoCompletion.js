@@ -14,6 +14,18 @@ let minuteur;
 let villesSuggests;
 let currentVilles = new Array();
 
+
+inputs =document.getElementsByClassName("nomCommune");
+let currentTarget = inputs[0];
+
+Array.prototype.forEach.call(inputs,function(input){
+    input.addEventListener("focusin",function(e){
+        currentTarget.style.borderColor = "black"
+        e.target.style.borderColor = "cornflowerblue";
+        currentTarget = e.target;
+    })
+});
+
 init();
 
 imageLocaliser = document.getElementById("localiser");
@@ -58,7 +70,7 @@ function requete(latitude, longitude, afficherDetailVille = false) {
     request.addEventListener("load", function () {
         data = JSON.parse(request.responseText);
         let name = data.map(element => element["nom_comm"]);
-        villesNodes[0].value = (name[0]);
+        currentTarget.value = (name[0]);
         if (afficherDetailVille) {
             afficherDetail(data)
         }
@@ -227,4 +239,29 @@ function flecheDefilement(e, ville) {
 
 function miseAJourMap(villes) {
     initMap(villes.map(v => (v[0] == undefined? 0:{lat: v[0]['lat'], long: v[0]['long']})));
+}
+
+
+
+/***** ESCALES ******/
+let nbEscale = 0;
+let noms = JSON.parse(document.currentScript.dataset.communes);
+
+for(let i = 0;i<noms.length-2;i++){
+    addEscale();
+}
+
+function addEscale(){
+    nbEscale++;
+    let escaleHTML =
+        '<p class="InputAddOn"> ' +
+        '<input placeholder="Nom de la commune d\'escale ' + nbEscale.toString() + '" class="InputAddOn-field nomCommune" type="text" value="' + ((typeof noms[nbEscale+1] != "undefined")? noms[nbEscale]:"") + '"\n autocomplete="off" name="nomsCommune[]" required>' +
+        '</p>'
+    document.getElementsByClassName("InputAddOn")[nbEscale].insertAdjacentHTML('beforebegin',escaleHTML);
+    document.getElementsByClassName("InputAddOn")[nbEscale].addEventListener("focusin",function(e){
+        currentTarget.style.borderColor = "black"
+        e.target.style.borderColor = "cornflowerblue";
+        currentTarget = e.target;
+    })
+    init();
 }

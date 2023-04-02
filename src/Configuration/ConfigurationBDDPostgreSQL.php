@@ -7,7 +7,7 @@ use PDO;
 
 class ConfigurationBDDPostgreSQL implements ConfigurationBDDInterface
 {
-    private string $nomBDD = "sae-s4";
+    private string $nomBDD = "postgres";
     private string $hostname = "localhost";
 
     public function getLogin(): string
@@ -17,7 +17,7 @@ class ConfigurationBDDPostgreSQL implements ConfigurationBDDInterface
 
     public function getMotDePasse(): string
     {
-        return "123";
+        return "1234";
     }
 
     public function getDSN() : string{
