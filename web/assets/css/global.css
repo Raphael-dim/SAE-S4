@@ -14,7 +14,8 @@ main {
 }
 
 #content{
-    margin-top: 30px;
+    margin: 30px auto;
+    max-width: 70%;
 }
 
 ul {
@@ -163,8 +164,8 @@ footer > p {
 }
 
 fieldset {
-    margin: auto;
-    max-width: 70%;
+    /*margin: auto;*/
+    /*max-width: 70%;*/
 }
 
 /* https://philipwalton.github.io/solved-by-flexbox/demos/input-add-ons/ */
