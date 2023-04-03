@@ -242,3 +242,8 @@ fieldset {
     min-height: 160px;
     z-index: 9;
 }
+
+.trajets {
+    max-width: 60%;
+    margin: auto;
+}

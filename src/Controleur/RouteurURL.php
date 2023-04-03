@@ -108,6 +108,7 @@ class RouteurURL
         $routes->add("calculer", $routePlusCourtChemin);
 
 
+
         // ROUTE POUR CompletionAuto Villes
         //$routeRequeteVille = new Route("/villes", [
         //    "_controller" => [ControleurRequete::class, "getVille"],
