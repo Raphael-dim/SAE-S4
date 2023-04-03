@@ -23,34 +23,29 @@ $loginURL = rawurlencode($login);
         echo '<a href=/deconnexion">
         <img class="sortie" src="../../web/assets/img/logo_sortie.png" alt="Déconnexion"></a>';
     }
-    ?>
-</div>
-<div id="modif" style="margin-bottom: 60px">
-    <?php
+
+    echo '</div><div id="modif" style="margin-bottom: 60px">';
     if ($bool) {
         echo '<a class="lien"
        href="' . $generateurUrl->generate("formulaireMiseAJour", ["idUtilisateur" => $loginURL]) . '">
         Modifier les informations</a>';
-    } ?>
-</div>
-
-<p>
-
-    <?php if (ConnexionUtilisateur::estUtilisateur($login) || ConnexionUtilisateur::estAdministrateur()) { ?>
-        <a href="<?= $generateurUrl->generate('supprimerUtilisateur', ["idUtilisateur" => $loginURL]) ?>">supprimer</a>
-    <?php } ?>
-</p>
-<p>
-    <?php
+    }
+    echo '</div><p>';
+    if (ConnexionUtilisateur::estUtilisateur($login) || ConnexionUtilisateur::estAdministrateur()) {
+        echo '<a href="' . $generateurUrl->generate("supprimerUtilisateur", ["idUtilisateur" => $loginURL]) . '">supprimer</a>';
+    }
     if (ConnexionUtilisateur::estUtilisateur($login)) {
         echo '<div class="trajets">
-            <h2>Mes trajets : </h2>
-            <ul>';
+        <h2 > Mes trajets : </h2 >
+        <ul > ';
         foreach ($trajets as $trajet) {
-            echo ' < li><a href = "" > de ' . $trajet->getCommuneDepart()->getNomCommune() . ' vers ' .
+            echo ' < li ><a href = "" > de ' . $trajet->getCommuneDepart()->getNomCommune() . ' vers ' .
                 $trajet->getCommuneArrivee()->getNomCommune() . ' </a ></li > ';
         }
-        echo '</ul></div>';
+        echo '
+        </ul >
+    </div >
+    ';
     }
     ?>
 

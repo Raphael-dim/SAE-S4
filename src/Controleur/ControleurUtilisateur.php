@@ -118,11 +118,11 @@ class ControleurUtilisateur extends ControleurGenerique
         $utilisateur = (new UtilisateurRepository())->recupererParClePrimaire($idUtilisateur);
         if ($utilisateur === null) {
             MessageFlash::ajouter("danger", "Login inconnu.");
-            return ControleurUtilisateur::rediriger("utilisateur", "afficherListe");
+            return ControleurUtilisateur::rediriger("utilisateurs");
         }
         if (!(ConnexionUtilisateur::estUtilisateur($idUtilisateur) || ConnexionUtilisateur::estAdministrateur())) {
             MessageFlash::ajouter("danger", "La mise à jour n'est possible que pour l'utilisateur connecté ou un administrateur");
-            return ControleurUtilisateur::rediriger("utilisateur", "afficherListe");
+            return ControleurUtilisateur::rediriger("utilisateurs");
         }
 
         $loginHTML = htmlspecialchars($idUtilisateur);
@@ -154,17 +154,17 @@ class ControleurUtilisateur extends ControleurGenerique
 
         if ($_REQUEST["mdp"] !== $_REQUEST["mdp2"]) {
             MessageFlash::ajouter("warning", "Mots de passe distincts.");
-            return ControleurUtilisateur::rediriger("utilisateur", "afficherFormulaireMiseAJour", ["login" => $_REQUEST["login"]]);
+            return ControleurUtilisateur::rediriger("mettreAJour", ["login" => $_REQUEST["login"]]);
         }
 
-        if (!(ConnexionUtilisateur::estConnecte($_REQUEST["login"]) || ConnexionUtilisateur::estAdministrateur())) {
+        if (!(ConnexionUtilisateur::estConnecte() || ConnexionUtilisateur::estAdministrateur())) {
             MessageFlash::ajouter("danger", "La mise à jour n'est possible que pour l'utilisateur connecté ou un administrateur");
-            return ControleurUtilisateur::rediriger("utilisateur", "afficherListe");
+            return ControleurUtilisateur::rediriger("utilisateurs");
         }
 
         if (!filter_var($_REQUEST["email"], FILTER_VALIDATE_EMAIL)) {
             MessageFlash::ajouter("warning", "Email non valide");
-            return ControleurUtilisateur::rediriger("utilisateur", "afficherFormulaireMiseAJour", ["login" => $_REQUEST["login"]]);
+            return ControleurUtilisateur::rediriger("mettreAJour", ["login" => $_REQUEST["login"]]);
         }
 
         $utilisateurRepository = new UtilisateurRepository();
@@ -173,12 +173,12 @@ class ControleurUtilisateur extends ControleurGenerique
 
         if ($utilisateur == null) {
             MessageFlash::ajouter("danger", "Login inconnu");
-            return ControleurUtilisateur::rediriger("utilisateur", "afficherListe");
+            return ControleurUtilisateur::rediriger("utilisateurs");
         }
 
         if (!MotDePasse::verifier($_REQUEST["mdpAncien"], $utilisateur->getMdpHache())) {
             MessageFlash::ajouter("warning", "Ancien mot de passe erroné.");
-            return ControleurUtilisateur::rediriger("afficherFormulaireMiseAJour", ["login" => $_REQUEST["login"]]);
+            return ControleurUtilisateur::rediriger("mettreAJour", ["login" => $_REQUEST["login"]]);
         }
 
         $utilisateur->setNom($_REQUEST["nom"]);
@@ -199,7 +199,7 @@ class ControleurUtilisateur extends ControleurGenerique
         $utilisateurRepository->mettreAJour($utilisateur);
 
         MessageFlash::ajouter("success", "L'utilisateur a bien été modifié !");
-        return ControleurUtilisateur::rediriger("utilisateurs");
+        return ControleurUtilisateur::rediriger("detailUtilisateur", ["idUtilisateur" => $utilisateur->getLogin()]);
     }
 
     public static function afficherFormulaireConnexion(): Response
