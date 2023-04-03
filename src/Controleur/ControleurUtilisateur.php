@@ -55,6 +55,7 @@ class ControleurUtilisateur extends ControleurGenerique
         $utilisateurs = $utilisateurRepository->recuperer();
         if ($deleteSuccessful) {
             MessageFlash::ajouter("success", "L'utilisateur a bien été supprimé !");
+            self::deconnecter();
             return ControleurUtilisateur::rediriger("communes");
         } else {
             MessageFlash::ajouter("warning", "Login inconnu.");

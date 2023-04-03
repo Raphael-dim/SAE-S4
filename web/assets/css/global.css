@@ -124,6 +124,8 @@ footer > p {
     z-index: 100;
 }
 
+
+
 .alert {
     padding: 15px;
     margin-bottom: 20px;
@@ -158,6 +160,11 @@ footer > p {
     color: #a94442;
     background-color: #f2dede;
     border-color: #ebccd1;
+}
+
+fieldset {
+    margin: auto;
+    max-width: 70%;
 }
 
 /* https://philipwalton.github.io/solved-by-flexbox/demos/input-add-ons/ */
