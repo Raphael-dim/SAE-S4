@@ -4,7 +4,7 @@
                autocomplete="off" name="nomsCommune[]" required>
         <!-- <img id="loading" src="img/loading.gif"> -->
         <!--            <img class="localiser" src ="assets/img/marker.png">-->
-        <img id="localiser" src="assets/img/placeholder.png">
+        <img id="localiser" alt="localiser" src="assets/img/placeholder.png">
     </p>
     <p class="InputAddOn">
         <input placeholder="Nom de la commune d'arrivée" class="InputAddOn-field nomCommune" type="text" value="<?php echo (!empty($_POST))? end($Communes)->getNomCommune():''?>"
@@ -14,9 +14,9 @@
     <div class="autocompletion hidden" id="autocompletion"></div>
     <div>
         <input type="hidden" name="XDEBUG_TRIGGER">
-        <input class="InputAddOn-field" type="button" value="Ajouter une escale" onclick="addEscale()"/>
+        <input class="InputAddOn-field" type="button" value="Ajouter une escale" onclick="addEscale()">
         <p>
-            <input class="InputAddOn-field" type="submit" value="Calculer"/>
+            <input class="InputAddOn-field" type="submit" value="Calculer">
         </p>
     </div>
 
@@ -46,7 +46,7 @@
 </form>
 <div class="infoVille" id="infoVille"></div>
 <img class="fleche" src="<?= $assistantUrl->getAbsoluteUrl("assets/img/fleche.png") ?>" alt="fleche">
-<div class="accolade" alt="accolade"></div>
+<div class="accolade"></div>
 
 
 <!-------------------------------------GOOGLE MAPS API---------------------------------------->
@@ -56,7 +56,6 @@
 
 <script defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCNgiSeE--QYZtlP4qYMTDatGQrDXgql8M&v=weekly"></script>
-<!-------------------------------------------------------------------------------------------->
 
 <!---------------------------------------INIT MAP--------------------------------------------->
 <script defer src="../src/js/map.js"></script>

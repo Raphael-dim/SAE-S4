@@ -27,15 +27,23 @@ class RouteurURL
         $routes = new RouteCollection();
 
         // ROUTE POUR AFFICHER TOUTES LES COMMUNES
-        $routeFeed = new Route("/communes", [
+        $routeCommunes= new Route("/communes", [
             "_controller" => [ControleurNoeudCommune::class, "afficherListe"],
         ]);
-        $routes->add("communes", $routeFeed);
+        $routes->add("communes", $routeCommunes);
 
-        $routeFeed = new Route("/", [
+
+        $routeCommunesPost= new Route("/communesKeyWord", [
             "_controller" => [ControleurNoeudCommune::class, "afficherListe"],
         ]);
-        $routes->add("communes", $routeFeed);
+        $routeCommunesPost->setMethods(['POST']);
+        $routes->add("communesKeyWord", $routeCommunesPost);
+
+
+        $route = new Route("/", [
+            "_controller" => [ControleurNoeudCommune::class, "afficherListe"],
+        ]);
+        $routes->add("communes", $route);
 
 
         // ROUTE POUR AFFICHER LA PAGE DE CONNEXION

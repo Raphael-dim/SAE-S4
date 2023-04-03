@@ -9,7 +9,7 @@ $assistantUrl = Conteneur::recupererService("assistantUrl");
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">

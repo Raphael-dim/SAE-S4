@@ -30,4 +30,3 @@ $loginURL = rawurlencode($login);
     ?>
 </ul>
 
-</p>
