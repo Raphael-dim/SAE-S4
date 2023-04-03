@@ -9,6 +9,7 @@
     "symfony/routing": "^6.0",
     "symfony/http-kernel": "^6.0",
     "twig/twig": "^3.5",
-    "phpunit/phpunit": "9.6.5"
+    "phpunit/phpunit": "9.6.5",
+    "symfony/mailer": "^6.0"
   }
 }

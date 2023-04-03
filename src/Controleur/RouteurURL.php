@@ -176,6 +176,13 @@ class RouteurURL
         $routes->add("chercherVilleCoor", $requeteVilleCoordonnees);
 
 
+        $envoyerMail = new Route("/envoyerMail/{idUtilisateur}", [
+            "_controller" => [ControleurUtilisateur::class, "envoyerMail"],
+        ]);
+        $routes->add("envoyerMail", $envoyerMail);
+
+
+
         $contexteRequete = (new RequestContext())->fromRequest($requete);
         $associateurUrl = new UrlMatcher($routes, $contexteRequete);
 

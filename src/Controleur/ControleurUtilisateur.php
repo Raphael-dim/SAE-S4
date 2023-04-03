@@ -44,7 +44,7 @@ class ControleurUtilisateur extends ControleurGenerique
         }
     }
 
-    public static function supprimer(string $idUtilisateur) : RedirectResponse
+    public static function supprimer(string $idUtilisateur): RedirectResponse
     {
         $utilisateurRepository = new UtilisateurRepository();
         if (ConnexionUtilisateur::getLoginUtilisateurConnecte() != $idUtilisateur) {
@@ -232,12 +232,20 @@ class ControleurUtilisateur extends ControleurGenerique
 
         if (!VerificationEmail::aValideEmail($utilisateur)) {
             MessageFlash::ajouter("warning", "Adresse email non validée.");
-            VerificationEmail::traiterEmailValidation($utilisateur->getLogin(), $utilisateur->getNonce());
+            MessageFlash::ajouter('info', "Cliquez <a href='./envoyerMail/" . $utilisateur->getLogin() . "'>
+                                    ici</a> pour renvoyer un mail");
             return ControleurUtilisateur::rediriger("connexion");
         }
 
         ConnexionUtilisateur::connecter($utilisateur->getLogin());
         return ControleurUtilisateur::rediriger("detailUtilisateur", ["idUtilisateur" => $utilisateur->getLogin()]);
+    }
+
+    public static function envoyerMail($idUtilisateur): RedirectResponse
+    {
+        $utilisateur = (new UtilisateurRepository())->recupererParClePrimaire($idUtilisateur);
+        VerificationEmail::envoiEmailValidation($utilisateur);
+        return ControleurUtilisateur::rediriger('connexion');
     }
 
     public static function deconnecter(): RedirectResponse
@@ -251,7 +259,7 @@ class ControleurUtilisateur extends ControleurGenerique
         return ControleurUtilisateur::rediriger("utilisateurs");
     }
 
-    public static function validerEmail(string $idUtilisateur, string $nonce) : RedirectResponse
+    public static function validerEmail(string $idUtilisateur, string $nonce): RedirectResponse
     {
         $succesValidation = VerificationEmail::traiterEmailValidation($idUtilisateur, $nonce);
 
@@ -262,7 +270,7 @@ class ControleurUtilisateur extends ControleurGenerique
 
         $utilisateur = (new UtilisateurRepository())->recupererParClePrimaire($idUtilisateur);
         MessageFlash::ajouter("warning", "Validation d'email réussie");
-        return  ControleurUtilisateur::rediriger("detailUtilisateur", ["idUtilisateur" => $idUtilisateur]);
+        return ControleurUtilisateur::rediriger("detailUtilisateur", ["idUtilisateur" => $idUtilisateur]);
 
     }
 }
