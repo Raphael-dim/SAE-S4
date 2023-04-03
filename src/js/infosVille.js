@@ -62,7 +62,7 @@ function afficherDetail(infos, latitude, longitude) {
 
 function info(ville) {
     let urlDesPages = "https://fr.wikipedia.org/w/api.php?action=query&list=search&prop=info&inprop=url&utf8=&" +
-        "format=json&origin=*&srlimit=20&lang=fr&srsearch=" + ville;
+    "format=json&origin=*&srlimit=20&lang=fr&srsearch=" + ville;
     let requete = new XMLHttpRequest();
     requete.open("GET", urlDesPages, true);
     requete.addEventListener("load", function () {
