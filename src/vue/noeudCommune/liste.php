@@ -9,33 +9,33 @@ $previouspass = $start - 1000;
 echo <<<HTML
 <a href="plusCourtChemin">Calculer un plus court chemin</a>
 
-<h3>Liste des noeuds communes :</h3>
+<h3>Liste des nœuds communes :</h3>
 
 <div style ="margin:auto;width:fit-content;display: flex">
-<form action = "controleurFrontal.php?action=afficherListe&controleur=noeudCommune" method = "post">
-    <input type="submit" id="previous" name="previous" value = "<<">
+<form action = "./communesKeyWord" method = "post">
+    <input type="submit" name="previous" value = "<<">
     <input type = "hidden" name="start" value=$previouspass>
 </form>
 
-<form action = "controleurFrontal.php?action=afficherListe&controleur=noeudCommune" method = "post">
-    <input type="submit" id="previous" name="previous" value = "-">
+<form action = "./communesKeyWord" method = "post">
+    <input type="submit" name="previous" value = "-">
     <input type = "hidden" name="start" value=$previousstart>
 </form>
 
-<p style = "margin:auto;width:fit-content;">$start &#8594 $nextstart</p>
+<p style = "margin:auto;width:fit-content;">$start &#8594; $nextstart</p>
 
-<form action = "controleurFrontal.php?action=afficherListe&controleur=noeudCommune" method = "post">
-    <input type="submit" id="next" name="next" value = "+">
+<form action = "./communesKeyWord" method = "post">
+    <input type="submit"  name="next" value = "+">
     <input type = "hidden" name="start" value=$nextstart>
 </form>
 
-<form action = "controleurFrontal.php?action=afficherListe&controleur=noeudCommune" method = "post">
-    <input type="submit" id="next" name="next" value = ">>">
+<form action = "./communesKeyWord" method = "post">
+    <input type="submit"  name="next" value = ">>">
     <input type = "hidden" name="start" value=$nextpass>
 </form>
 </div>
 
-<form action = "controleurFrontal.php?action=afficherListe&controleur=noeudCommune" method = "post">
+<form action = "./communesKeyWord" method = "post">
     <input type="submit" id="search_keyword" name="search_keyword" value = "search">
     <input type = "text" id = "keyword" name ="keyword" required>
 </form>

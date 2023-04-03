@@ -1,5 +1,2 @@
-composer.lock
-/vendor/**/.git
-vendor
-vendor/*
 /src/Config/ConfigurationBDDPostgreSQL.php
+/vendor/

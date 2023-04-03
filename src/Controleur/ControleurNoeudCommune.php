@@ -85,7 +85,6 @@ class ControleurNoeudCommune extends ControleurGenerique
                 $noeudsRoutier[] = $noeudRoutierRepository->recupererPar(["id_rte500" => $noeud->getId_nd_rte()])[0];
             }
 
-            echo "<br>";
 
             for($i = 0;$i<count($noeudsRoutier)-1;$i++){
                 $results[] = (new NoeudRoutierRepository())->getShortestPathAstar($noeudsRoutier[$i]->getGid(), $noeudsRoutier[$i+1]->getGid());

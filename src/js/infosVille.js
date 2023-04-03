@@ -3,7 +3,6 @@ let imageFleche = document.getElementsByClassName("fleche")[0];
 let infoAffiches = false;
 let accolade = document.getElementsByClassName("accolade")[0];
 
-cacherInfo();
 
 accolade.addEventListener('click', switchAffichageInfo);
 imageFleche.addEventListener('click', switchAffichageInfo);
@@ -17,9 +16,11 @@ function switchAffichageInfo() {
 }
 
 function afficherInfo() {
-    divInfoVille.style.display = "block"
-    imageFleche.style.left = "300px"
-    accolade.style.display = "none"
+    divInfoVille.style.animation = "divInfoIn 3.5s";
+    divInfoVille.style.display = "block";
+    accolade.style.display = "none";
+    imageFleche.style.left = "300px";
+    imageFleche.style.animation = "divInfoIn 0.5s";
     imageFleche.style.transform = "rotate(180deg)";
     infoAffiches = true;
     if (divInfoVille.childNodes.length == 0) {
@@ -32,11 +33,11 @@ function afficherInfo() {
 }
 
 function cacherInfo() {
+    // divInfoVille.style.animation = "divInfoOut 3.5s"
     accolade.style.display = "block"
     divInfoVille.style.display = "none"
     imageFleche.style.left = "9px";
     imageFleche.style.transform = "";
-    // imageFleche.style.hov
     infoAffiches = false;
 }
 
@@ -61,7 +62,7 @@ function afficherDetail(infos, latitude, longitude) {
 
 function info(ville) {
     let urlDesPages = "https://fr.wikipedia.org/w/api.php?action=query&list=search&prop=info&inprop=url&utf8=&" +
-        "format=json&origin=*&srlimit=20&lang=fr&srsearch=" + ville;
+    "format=json&origin=*&srlimit=20&lang=fr&srsearch=" + ville;
     let requete = new XMLHttpRequest();
     requete.open("GET", urlDesPages, true);
     requete.addEventListener("load", function () {

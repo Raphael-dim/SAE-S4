@@ -1,5 +1,4 @@
 body {
-    margin: 50px 1px 1px 1px;
     background-color: #ffffff;
     background-image: linear-gradient(#eeeeff 2px, transparent 2px), linear-gradient(90deg, #edeeff 2px, transparent 2px), linear-gradient(#eaebff 1px, transparent 1px), linear-gradient(90deg, #f4f5ff 1px, #ffffff 1px);
     background-size: 50px 50px, 50px 50px, 10px 10px, 10px 10px;
@@ -70,8 +69,8 @@ li:nth-child(odd) {
 .map {
     position: absolute;
     left: 0px;
-    top: 40px;
-    height: 94%;
+    top: 0px;
+    height: 100%;
     width: 100%;
 }
 
@@ -199,6 +198,7 @@ footer > p {
 }
 
 .infoVille {
+    display: none;
     max-width: 285px;
     border-radius: 3px;
     padding: 2px;
@@ -223,11 +223,11 @@ footer > p {
 .accolade {
     background-color: white;
     cursor: pointer;
-    min-width: 32px;
+    min-width: 27px;
     bottom: 76px;
     border-radius: 10px;
     left: -16px;
     position: absolute;
-    min-height: 113px;
+    min-height: 160px;
     z-index: 9;
 }
