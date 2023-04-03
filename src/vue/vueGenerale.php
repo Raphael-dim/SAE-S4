@@ -39,12 +39,14 @@ $assistantUrl = Conteneur::recupererService("assistantUrl");
     </div>
 </header>
 <main>
+    <div id="content">
     <?php
     /**
      * @var string $cheminVueBody
      */
     require __DIR__ . "/{$cheminVueBody}";
     ?>
+    </div>
 </main>
 <footer>
     <p>

@@ -13,12 +13,12 @@ nav {
 
 
 #Menu {
+    margin-bottom: 20px;
     justify-content: space-between;
     padding: 0;
     display: flex;
     margin-top: -1%;
     height: 50px;
-    padding-bottom: 10px;
     transition: ease-in-out 0.5s;
 }
 

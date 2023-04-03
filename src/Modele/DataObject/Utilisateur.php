@@ -35,6 +35,9 @@ class Utilisateur extends AbstractDataObject
         $this->estAdmin = $estAdmin;
         $this->email = $email;
         $this->emailAValider = $emailAValider;
+        if (str_contains($nonce,  '/')) {
+            str_replace("/", "", $nonce);
+        }
         $this->nonce = $nonce;
     }
 
