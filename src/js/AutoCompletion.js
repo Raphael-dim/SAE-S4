@@ -59,7 +59,7 @@ function requete(latitude, longitude, afficherDetailVille = false) {
         if (afficherDetailVille) {
             afficherDetail(data, latitude, longitude)
         }
-        miseAJourMap(currentVilles);
+        miseAJourMap(currentVilles, name[0]);
     });
     request.send(null);
 }
@@ -176,7 +176,7 @@ autoCompletion.addEventListener('mousedown', function (event) {
     currentVilles.splice(villesNodes.indexOf(currentVilleNode), 1, villesSuggests.filter(function (v) {
         return v.nomCommune === event.target.innerHTML;
     }));
-    miseAJourMap(currentVilles);
+    miseAJourMap(currentVilles, event.target.innerHTML);
     videVilles();
 })
 
@@ -201,7 +201,7 @@ function flecheDefilement(e, ville) {
         currentVilles.splice(villesNodes.indexOf(currentVilleNode), 1, villesSuggests.filter(function (v) {
             return v.nomCommune === villeSelectionnee.innerHTML;
         }));
-        miseAJourMap(currentVilles)
+        miseAJourMap(currentVilles, villeSelectionnee.innerHTML)
         videVilles();
     }
     if (isArrow && oldIndex !== indexDefilement) {
@@ -222,8 +222,8 @@ function flecheDefilement(e, ville) {
 
 }
 
-function miseAJourMap(villes) {
-    initMap(villes.map(v => (v[0] == undefined ? 0 : {lat: v[0]['lat'], long: v[0]['long']})));
+function miseAJourMap(villes, nomVille) {
+    initMap(villes.map(v => (v[0] == undefined ? 0 : {lat: v[0]['lat'], long: v[0]['long']})), nomVille);
 }
 
 
@@ -250,7 +250,9 @@ function addEscale() {
 
     img.addEventListener("click", function (e) {
         nbEscale -= 1;
-        document.getElementsByClassName("InputAddOn")[nbEscale + 1].parentNode.removeChild(document.getElementsByClassName("InputAddOn")[nbEscale + 1]);
+        let element = document.getElementsByClassName("InputAddOn")[nbEscale + 1];
+        element.parentNode.removeChild(element);
+        supprimerMarker(element.value);
     });
     document.getElementsByClassName("InputAddOn")[nbEscale].appendChild(img);
 
