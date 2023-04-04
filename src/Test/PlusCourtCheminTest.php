@@ -1,6 +1,7 @@
 <?php
 
 use App\PlusCourtChemin\Modele\Repository\NoeudRoutierRepository;
+use App\PlusCourtChemin\Modele\Repository\NoeudCommuneRepository;
 use PHPUnit\Framework\TestCase;
 
 class PlusCourtCheminTest extends TestCase {
@@ -22,10 +23,10 @@ class PlusCourtCheminTest extends TestCase {
     }
 
     public function testPathBetween2Random() {
-        $randomGid1 = random_int(1,910833);
-        $randomGid2 = random_int(1,910833);
+        $randomNom1 = (new NoeudCommuneRepository())->recupererPar(["id_rte500" => random_int(1,910833)])[0]->getNomCommune();
+        $randomNom2 = (new NoeudCommuneRepository())->recupererPar(["id_rte500" => random_int(1,910833)])[0]->getNomCommune();
 
-        $this->testPathBetween2($randomGid1, $randomGid2);
+        $this->testPathBetween2($randomNom1, $randomNom2);
     }
 
     public function testPathBetweenFranceCorse() {

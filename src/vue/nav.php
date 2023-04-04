@@ -5,9 +5,11 @@ use App\PlusCourtChemin\Lib\ConnexionUtilisateur;
 ?>
 <nav>
     <ul id="Menu">
-        <li class="grosmenu">
-            <a href="<?= $generateurUrl->generate("utilisateurs") ?>">Utilisateurs</a>
-        </li>
+        <?php if(ConnexionUtilisateur::estAdministrateur()) echo '
+            <li class="grosmenu">
+                <a href="<?= $generateurUrl->generate("utilisateurs") ?>">Utilisateurs</a>
+            </li>';
+        ?>
         <li class="grosmenu">
             <a href="<?= $generateurUrl->generate("plusCourtChemin") ?>">Carte</a>
         </li>
