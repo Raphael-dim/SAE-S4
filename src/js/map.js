@@ -12,10 +12,10 @@ function initMap(noeuds) {
     noeuds.forEach(function (n) {
         if (n !== 0) {
             LatLngNoeuds.push({lat: parseFloat(n["lat"]), lng: parseFloat(n["long"])});
-            map.setCenter(LatLngNoeuds[LatLngNoeuds.length-1]);
-            map.setZoom(14);
+            // map.setCenter(LatLngNoeuds[LatLngNoeuds.length - 1]);
+            // map.setZoom(14);
             markers.push(new google.maps.Marker({
-                position: LatLngNoeuds[LatLngNoeuds.length-1],
+                position: LatLngNoeuds[LatLngNoeuds.length - 1],
                 map,
                 title: n["nomCommune"],
             }));
@@ -24,14 +24,22 @@ function initMap(noeuds) {
     if (markers.length === noeuds.length) {
 
         Latlng = {
-            lat: noeuds.map(n => n['lat']).reduce((a, b)=> Number(a)+Number(b), 0)/markers.length,
-            lng: noeuds.map(n => n['long']).reduce((a, b)=> Number(a)+Number(b), 0)/markers.length
+            lat: noeuds.map(n => n['lat']).reduce((a, b) => Number(a) + Number(b), 0) / markers.length,
+            lng: noeuds.map(n => n['long']).reduce((a, b) => Number(a) + Number(b), 0) / markers.length
         }
 
         map.setCenter(Latlng);
 
-        let distance = distanceDeuxPoints([Math.max.apply(Math, noeuds.map(function(n) { return n['lat']; })), Math.max.apply(Math, noeuds.map(function(n) { return n['long']; }))],
-            [Math.min.apply(Math, noeuds.map(function(n) { return n['lat']; })), Math.min.apply(Math, noeuds.map(function(n) { return n['long']; }))]);
+        let distance = distanceDeuxPoints([Math.max.apply(Math, noeuds.map(function (n) {
+                return n['lat'];
+            })), Math.max.apply(Math, noeuds.map(function (n) {
+                return n['long'];
+            }))],
+            [Math.min.apply(Math, noeuds.map(function (n) {
+                return n['lat'];
+            })), Math.min.apply(Math, noeuds.map(function (n) {
+                return n['long'];
+            }))]);
 
         if (distance < 0.5) {
             map.setZoom(20);
@@ -42,7 +50,7 @@ function initMap(noeuds) {
         } else if (distance < 20) {
             map.setZoom(13);
         } else {
-            map.setZoom(Math.max(6.5,Math.min(20,200/distance)));
+            map.setZoom(Math.max(6.5, Math.min(20, 200 / distance)));
         }
     }
 }
@@ -77,10 +85,10 @@ function distanceDeuxPoints(latlng1, latlng2) {
     const dLat = deg2rad(lat2 - lat1);
     const dLon = deg2rad(lon2 - lon1);
     const a =
-        Math.pow(Math.sin(dLat / 2),2) +
+        Math.pow(Math.sin(dLat / 2), 2) +
         Math.cos(deg2rad(lat1)) *
         Math.cos(deg2rad(lat2)) *
-        Math.pow(Math.sin(dLon / 2),2);
+        Math.pow(Math.sin(dLon / 2), 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     const d = R * c; // Distance en km
     return d;
