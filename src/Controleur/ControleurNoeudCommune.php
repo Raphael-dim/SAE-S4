@@ -16,6 +16,11 @@ use Symfony\Component\HttpFoundation\Response;
 class ControleurNoeudCommune extends ControleurGenerique
 {
 
+    /**
+     * Affiche la liste des noeuds communes.
+     *
+     * @return Response La réponse HTTP.
+     */
     public static function afficherListe(): Response
     {
 
@@ -40,6 +45,13 @@ class ControleurNoeudCommune extends ControleurGenerique
         ]);
     }
 
+
+    /**
+     * Affiche le détail d'un noeud commune.
+     *
+     * @param string $idCommune L'identifiant du noeud commune.
+     * @return Response La réponse HTTP.
+     */
     public static function afficherDetail($idCommune): Response
     {
         if (!isset($idCommune)) {
