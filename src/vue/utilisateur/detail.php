@@ -20,7 +20,7 @@ $loginURL = rawurlencode($login);
     $bool = false;
     if (ConnexionUtilisateur::getLoginUtilisateurConnecte() == $login || ConnexionUtilisateur::estAdministrateur()) {
         $bool = true;
-        echo '<a href=/deconnexion">
+        echo '<a href="../deconnecter">
         <img class="sortie" src="../../web/assets/img/logo_sortie.png" alt="Déconnexion"></a>';
     }
 
@@ -32,7 +32,7 @@ $loginURL = rawurlencode($login);
     }
     echo '</div><p>';
     if (ConnexionUtilisateur::estUtilisateur($login) || ConnexionUtilisateur::estAdministrateur()) {
-        echo '<a href="' . $generateurUrl->generate("supprimerUtilisateur", ["idUtilisateur" => $loginURL]) . '">supprimer</a>';
+        echo '<a class="lien" href="' . $generateurUrl->generate("supprimerUtilisateur", ["idUtilisateur" => $loginURL]) . '">supprimer</a>';
     }
     if (ConnexionUtilisateur::estUtilisateur($login)) {
         echo '<div class="trajets">

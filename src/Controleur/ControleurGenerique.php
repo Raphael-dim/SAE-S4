@@ -45,10 +45,12 @@ class ControleurGenerique
         $reponse->setStatusCode($statusCode);
         return $reponse;
     }
+
     protected static function afficherTwig(string $cheminVue, array $parametres = []): Response
     {
         /** @var Environment $twig */
         $twig = Conteneur::recupererService("twig");
         return new Response($twig->render($cheminVue, $parametres));
     }
+
 }
