@@ -93,7 +93,12 @@ li:nth-child(odd) {
 }
 
 #localiser {
-    max-width: 30px;
+    background-image: url("../img/placeholder.png");
+    background-repeat: no-repeat;
+    background-position: 0px 0px;
+    background-size:30px;
+    color:transparent;
+    max-width:30px;
 }
 
 footer {
@@ -160,19 +165,40 @@ footer > p {
 .InputAddOn {
     display: flex;
     margin-bottom: 1.5em;
+    width:60%;
+}
+
+.InputAddOn > #delete{
+    margin-top:7px;
 }
 
 .InputAddOn-field {
     flex: 1;
 }
 
-.InputAddOn-field:not(:first-child) {
-    border-left: 0;
+.InputAddOn-field:hover {
+    opacity:0.95;
+    background:lightgrey;
+    cursor: pointer;
+}
+#inputs{
+    height:125px;
+    overflow-y:auto;
+    margin-bottom: 10px;
 }
 
-.InputAddOn-field:not(:last-child) {
-    border-right: 0;
+#inputs>p{
+    padding-left:10px;
 }
+#delete{
+    width:15px;
+    height:15px;
+}
+#delete:hover{
+     cursor:pointer;
+ }
+
+
 
 .InputAddOn-item {
     background-color: rgba(147, 128, 108, 0.1);
@@ -213,20 +239,21 @@ footer > p {
 
 .fleche {
     cursor: pointer;
-    bottom: 120px;
+    bottom: 90px;
     position: absolute;
     z-index: 10;
+    left:-5px;
     max-height: 30px;
 }
 
 .accolade {
     background-color: white;
     cursor: pointer;
-    min-width: 32px;
+    min-width: 35px;
     bottom: 76px;
     border-radius: 10px;
-    left: -16px;
+    left: -8px;
     position: absolute;
-    min-height: 113px;
+    min-height: 60px;
     z-index: 9;
 }

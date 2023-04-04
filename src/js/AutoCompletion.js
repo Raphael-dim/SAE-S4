@@ -257,7 +257,19 @@ function addEscale(){
         '<p class="InputAddOn"> ' +
         '<input placeholder="Nom de la commune d\'escale ' + nbEscale.toString() + '" class="InputAddOn-field nomCommune" type="text" value="' + ((typeof noms[nbEscale+1] != "undefined")? noms[nbEscale]:"") + '"\n autocomplete="off" name="nomsCommune[]" required>' +
         '</p>'
+
     document.getElementsByClassName("InputAddOn")[nbEscale].insertAdjacentHTML('beforebegin',escaleHTML);
+
+    let img = document.createElement("img");
+    img.src = "../web/assets/img/delete.png";
+    img.id = "delete";
+
+    img.addEventListener("click",function(e){
+        nbEscale -=1;
+        document.getElementsByClassName("InputAddOn")[nbEscale+1].parentNode.removeChild(document.getElementsByClassName("InputAddOn")[nbEscale+1]);
+    });
+    document.getElementsByClassName("InputAddOn")[nbEscale].appendChild(img);
+
     document.getElementsByClassName("InputAddOn")[nbEscale].addEventListener("focusin",function(e){
         currentTarget.style.borderColor = "black"
         e.target.style.borderColor = "cornflowerblue";

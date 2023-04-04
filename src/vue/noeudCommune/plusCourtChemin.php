@@ -1,25 +1,24 @@
 <form class="saisieVille" action="calculer" method="post">
-    <p class="InputAddOn">
-        <input placeholder="Nom de la commune de départ" class="InputAddOn-field nomCommune" type="text" value="<?php echo (!empty($_POST))? $Communes[0]->getNomCommune():''?>"
-               autocomplete="off" name="nomsCommune[]" required>
-        <!-- <img id="loading" src="img/loading.gif"> -->
-        <!--            <img class="localiser" src ="assets/img/marker.png">-->
-        <img id="localiser" src="assets/img/placeholder.png">
-    </p>
-    <p class="InputAddOn">
-        <input placeholder="Nom de la commune d'arrivée" class="InputAddOn-field nomCommune" type="text" value="<?php echo (!empty($_POST))? end($Communes)->getNomCommune():''?>"
-               autocomplete="off" name="nomsCommune[]" required>
-    </p>
+    <div id = "inputs">
+        <p class="InputAddOn">
+            <input placeholder="Nom de la commune de départ" class="InputAddOn-field nomCommune" type="text" value="<?php echo (!empty($_POST))? $Communes[0]->getNomCommune():''?>"
+                   autocomplete="off" name="nomsCommune[]" required>
+            <!-- <img id="loading" src="img/loading.gif"> -->
+            <!--            <img class="localiser" src ="assets/img/marker.png">-->
+        </p>
+        <p class="InputAddOn">
+            <input placeholder="Nom de la commune d'arrivée" class="InputAddOn-field nomCommune" type="text" value="<?php echo (!empty($_POST))? end($Communes)->getNomCommune():''?>"
+                   autocomplete="off" name="nomsCommune[]" required>
+        </p>
+    </div>
     <!-- <img id="loading" src="img/loading.gif"> -->
     <div class="autocompletion hidden" id="autocompletion"></div>
     <div>
         <input type="hidden" name="XDEBUG_TRIGGER">
         <input class="InputAddOn-field" type="button" value="Ajouter une escale" onclick="addEscale()"/>
-        <p>
-            <input class="InputAddOn-field" type="submit" value="Calculer"/>
-        </p>
+        <input class="InputAddOn-field" type = "button" value="Localiser" id="localiser">
+        <input class="InputAddOn-field" type="submit" value="Calculer"/>
     </div>
-
     <?php if (!empty($_POST)) { ?>
 
         <p>

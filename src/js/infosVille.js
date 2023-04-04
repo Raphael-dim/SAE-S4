@@ -34,7 +34,7 @@ function afficherInfo() {
 function cacherInfo() {
     accolade.style.display = "block"
     divInfoVille.style.display = "none"
-    imageFleche.style.left = "9px";
+    imageFleche.style.left = "0px";
     imageFleche.style.transform = "";
     // imageFleche.style.hov
     infoAffiches = false;
