@@ -3,6 +3,7 @@ let imageFleche = document.getElementsByClassName("fleche")[0];
 let infoAffiches = false;
 let accolade = document.getElementsByClassName("accolade")[0];
 
+cacherInfo();
 
 accolade.addEventListener('click', switchAffichageInfo);
 imageFleche.addEventListener('click', switchAffichageInfo);
