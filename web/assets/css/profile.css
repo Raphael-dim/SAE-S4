@@ -86,7 +86,7 @@
 
 .sortie {
     max-width: 50px;
-    filter: invert(1);
+    /*filter: invert(1);*/
 }
 
 .sortie:hover {

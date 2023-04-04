@@ -153,7 +153,7 @@ class RouteurURL
         $supprimerUtilisateur = new Route("/supprimerUtilisateur/{idUtilisateur}", [
             "_controller" => [ControleurUtilisateur::class, "supprimer"],
         ]);
-        $supprimerUtilisateur->setMethods(['GET']);
+        $supprimerUtilisateur->setMethods(['GET', 'POST']);
         $routes->add("supprimerUtilisateur", $supprimerUtilisateur);
 
 
@@ -214,12 +214,17 @@ class RouteurURL
         } catch (ResourceNotFoundException $exception) {
             $reponse = ControleurGenerique::afficherErreur($exception->getMessage(), 404);
             $reponse->send();
+            exit();
+
         } catch (MethodNotAllowedException $exception) {
             $reponse = ControleurGenerique::afficherErreur($exception->getMessage(), 405);
             $reponse->send();
+            exit();
+
         } catch (Exception $exception) {
             $reponse = ControleurGenerique::afficherErreur($exception->getMessage());
             $reponse->send();
+            exit();
         }
 
         $reponse = call_user_func_array($controleur, $arguments);
