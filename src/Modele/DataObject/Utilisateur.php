@@ -35,6 +35,10 @@ class Utilisateur extends AbstractDataObject
         $this->estAdmin = $estAdmin;
         $this->email = $email;
         $this->emailAValider = $emailAValider;
+        $nonce = str_replace('/', "", $nonce);
+        /*
+         * Pour éviter que la vérification du mail pause problème du clic sur le lien.
+         */
         $this->nonce = $nonce;
     }
 
@@ -132,7 +136,7 @@ class Utilisateur extends AbstractDataObject
         $this->nonce = $nonce;
     }
 
-    public function getTrajets() : array
+    public function getTrajets(): array
     {
         return (new TrajetRepository())->recupererWhere(["loginutilisateur" => "LIKE LOWER('" . $this->login . "%')"]);
     }

@@ -45,7 +45,7 @@
 </form>
 <div class="infoVille" id="infoVille"></div>
 <img class="fleche" src="<?= $assistantUrl->getAbsoluteUrl("assets/img/fleche.png") ?>" alt="fleche">
-<div class="accolade" alt="accolade"></div>
+<div class="accolade"></div>
 
 
 <!-------------------------------------GOOGLE MAPS API---------------------------------------->
@@ -55,7 +55,6 @@
 
 <script defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCNgiSeE--QYZtlP4qYMTDatGQrDXgql8M&v=weekly"></script>
-<!-------------------------------------------------------------------------------------------->
 
 <!---------------------------------------INIT MAP--------------------------------------------->
 <script defer src="../src/js/map.js"></script>

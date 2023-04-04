@@ -1,0 +1,108 @@
+#picture {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+}
+
+
+#infos_utilisateur {
+    display: inline-block;
+    position: absolute;
+    top: 50px;
+    left: 40%;
+}
+
+#nom, #identifiant {
+    color: black;
+
+}
+
+#nom {
+    margin: auto;
+}
+
+#identifiant {
+    font-weight: 50;
+    font-size: medium;
+    width: auto;
+    text-align: left;
+    margin: 0;
+}
+
+#suppression > a {
+    display: inline-block;
+    float: left;
+    color: lightcoral;
+    text-decoration: none;
+}
+
+.barre_utilisateur {
+    position: relative;
+}
+
+.barre_utilisateur > a {
+    margin-left: 60%;
+}
+
+.user_questions {
+    width: 90%;
+    text-align: center;
+    margin-top: 5px;
+}
+
+.user_questions > a {
+    overflow-y: hidden;
+    max-height: 50px;
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    color: black;
+    text-decoration: none;
+}
+
+.user_questions:hover {
+    background: var(--details);
+}
+
+.user_questions > a:hover {
+    color: white;
+}
+
+.listes_sans_puces {
+    background: white;
+    width: 70%;
+    height: 200px;
+    margin: auto;
+    border: solid black 1px;
+    overflow-y: auto;
+    justify-content: normal;
+}
+
+#new > a {
+    display: inline-block;
+    text-decoration: none;
+    float: right;
+}
+
+.sortie {
+    max-width: 50px;
+    filter: invert(1);
+}
+
+.sortie:hover {
+    max-width: 50px;
+    filter: none;
+}
+
+.barre_utilisateur .sortie {
+    float: right;
+
+}
+
+#modif {
+    margin-top: 20px;
+}
+
+#modif > a {
+    text-decoration: none;
+}

@@ -13,6 +13,11 @@ main {
     opacity: 1;
 }
 
+#content{
+    margin: 30px auto;
+    max-width: 70%;
+}
+
 ul {
     list-style: none;
     padding-left: 0;
@@ -125,6 +130,8 @@ footer > p {
     z-index: 100;
 }
 
+
+
 .alert {
     padding: 15px;
     margin-bottom: 20px;
@@ -159,6 +166,11 @@ footer > p {
     color: #a94442;
     background-color: #f2dede;
     border-color: #ebccd1;
+}
+
+fieldset {
+    /*margin: auto;*/
+    /*max-width: 70%;*/
 }
 
 /* https://philipwalton.github.io/solved-by-flexbox/demos/input-add-ons/ */
@@ -224,6 +236,7 @@ footer > p {
 }
 
 .infoVille {
+    display: none;
     max-width: 285px;
     border-radius: 3px;
     padding: 2px;
@@ -256,4 +269,9 @@ footer > p {
     position: absolute;
     min-height: 60px;
     z-index: 9;
+}
+
+.trajets {
+    max-width: 60%;
+    margin: auto;
 }
