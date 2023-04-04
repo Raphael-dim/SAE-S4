@@ -8,8 +8,9 @@ use App\PlusCourtChemin\Lib\MessageFlash;
 use App\PlusCourtChemin\Lib\MotDePasse;
 use App\PlusCourtChemin\Lib\VerificationEmail;
 use App\PlusCourtChemin\Modele\DataObject\Utilisateur;
-use App\PlusCourtChemin\Modele\Repository\TrajetRepository;
 use App\PlusCourtChemin\Modele\Repository\UtilisateurRepository;
+use App\PlusCourtChemin\Service\Exception\ServiceException;
+use App\PlusCourtChemin\Service\UtilisateurService;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -18,7 +19,13 @@ class ControleurUtilisateur extends ControleurGenerique
 
     public static function afficherListe(): Response
     {
-        $utilisateurs = (new UtilisateurRepository())->recuperer();     //appel au modèle pour gerer la BD
+        try{
+            $utilisateurs = UtilisateurService::recupererUtilisateurs();
+        }catch(ServiceException $e){
+            MessageFlash::ajouter('danger', $e->getMessage());
+            return ControleurNoeudCommune::rediriger("communes");
+        }
+
         return ControleurUtilisateur::afficherVue('vueGenerale.php', [
             "utilisateurs" => $utilisateurs,
             "pagetitle" => "Liste des utilisateurs",
@@ -28,20 +35,19 @@ class ControleurUtilisateur extends ControleurGenerique
 
     public static function afficherDetail($idUtilisateur): Response
     {
-        $utilisateur = (new UtilisateurRepository())->recupererParClePrimaire($idUtilisateur);
-        if ($utilisateur === null) {
-            MessageFlash::ajouter("warning", "Login inconnu.");
-            return ControleurUtilisateur::rediriger("utilisateur", "afficherListe");
-        } else {
-            $trajets = $utilisateur->getTrajets();
-
-            return ControleurUtilisateur::afficherVue('vueGenerale.php', [
-                "utilisateur" => $utilisateur,
-                "trajets" => $trajets,
-                "pagetitle" => "Détail de l'utilisateur",
-                "cheminVueBody" => "utilisateur/detail.php"
-            ]);
+        try{
+            $utilisateur = UtilisateurService::recupererDetailUtilisateur($idUtilisateur);
+        }catch(ServiceException $e){
+            MessageFlash::ajouter('danger', $e->getMessage());
+            return ControleurNoeudCommune::rediriger("afficherListe");
         }
+
+        return ControleurUtilisateur::afficherVue('vueGenerale.php', [
+            "utilisateur" => $utilisateur,
+            "trajets" => $utilisateur->getTrajets(),
+            "pagetitle" => "Détail de l'utilisateur",
+            "cheminVueBody" => "utilisateur/detail.php"
+        ]);
     }
 
     public static function supprimer(string $idUtilisateur): RedirectResponse
@@ -61,7 +67,6 @@ class ControleurUtilisateur extends ControleurGenerique
             MessageFlash::ajouter("warning", "Login inconnu.");
             return ControleurUtilisateur::rediriger("utilisateurs");
         }
-
     }
 
     public static function afficherFormulaireCreation(): Response
@@ -79,21 +84,16 @@ class ControleurUtilisateur extends ControleurGenerique
             isset($_REQUEST['login']) && isset($_REQUEST['prenom']) && isset($_REQUEST['nom'])
             && isset($_REQUEST['mdp']) && isset($_REQUEST['mdp2'])
         ) {
-            if ($_REQUEST["mdp"] !== $_REQUEST["mdp2"]) {
-                MessageFlash::ajouter("warning", "Mots de passe distincts.");
-                return ControleurUtilisateur::rediriger("inscription");
-            }
-
             if (!ConnexionUtilisateur::estAdministrateur()) {
                 unset($_REQUEST["estAdmin"]);
             }
 
-            if (!filter_var($_REQUEST["email"], FILTER_VALIDATE_EMAIL)) {
-                MessageFlash::ajouter("warning", "Email non valide");
-                return ControleurUtilisateur::rediriger("inscription");
+            try{
+                $utilisateur = UtilisateurService::verificationCreation($_REQUEST['login'], $_REQUEST['prenom'], $_REQUEST['nom'], $_REQUEST["mdp"], $_REQUEST["mdp2"], $_REQUEST['email']);
+            }catch(ServiceException $e){
+                MessageFlash::ajouter('danger', $e->getMessage());
+                return ControleurNoeudCommune::rediriger("creerDepuisFormulaire");
             }
-
-            $utilisateur = Utilisateur::construireDepuisFormulaire($_REQUEST);
 
             VerificationEmail::envoiEmailValidation($utilisateur);
 
@@ -103,7 +103,7 @@ class ControleurUtilisateur extends ControleurGenerique
                 MessageFlash::ajouter("success", "L'utilisateur a bien été créé !");
                 return ControleurUtilisateur::rediriger("connexion");
             } else {
-                MessageFlash::ajouter("warning", "Login existant.");
+                MessageFlash::ajouter("warning", "Login deja existant.");
                 return ControleurUtilisateur::rediriger("inscription");
             }
         } else {
@@ -152,51 +152,25 @@ class ControleurUtilisateur extends ControleurGenerique
             return ControleurUtilisateur::rediriger("utilisateurs");
         }
 
-        if ($_REQUEST["mdp"] !== $_REQUEST["mdp2"]) {
-            MessageFlash::ajouter("warning", "Mots de passe distincts.");
+        try{
+            $utilisateur = UtilisateurService::verificationMiseAJour($_REQUEST['login'], $_REQUEST['prenom'], $_REQUEST['nom'], $_REQUEST['mdp'], $_REQUEST['mdp2'], $_REQUEST['mdpAncien'], $_REQUEST['email']);
+        }catch(ServiceException $e){
+            MessageFlash::ajouter("warning", $e->getMessage());
             return ControleurUtilisateur::rediriger("mettreAJour", ["login" => $_REQUEST["login"]]);
         }
-
-        if (!(ConnexionUtilisateur::estConnecte() || ConnexionUtilisateur::estAdministrateur())) {
-            MessageFlash::ajouter("danger", "La mise à jour n'est possible que pour l'utilisateur connecté ou un administrateur");
-            return ControleurUtilisateur::rediriger("utilisateurs");
-        }
-
-        if (!filter_var($_REQUEST["email"], FILTER_VALIDATE_EMAIL)) {
-            MessageFlash::ajouter("warning", "Email non valide");
-            return ControleurUtilisateur::rediriger("mettreAJour", ["login" => $_REQUEST["login"]]);
-        }
-
-        $utilisateurRepository = new UtilisateurRepository();
-        /** @var Utilisateur $utilisateur */
-        $utilisateur = $utilisateurRepository->recupererParClePrimaire($_REQUEST['login']);
-
-        if ($utilisateur == null) {
-            MessageFlash::ajouter("danger", "Login inconnu");
-            return ControleurUtilisateur::rediriger("utilisateurs");
-        }
-
-        if (!MotDePasse::verifier($_REQUEST["mdpAncien"], $utilisateur->getMdpHache())) {
-            MessageFlash::ajouter("warning", "Ancien mot de passe erroné.");
-            return ControleurUtilisateur::rediriger("mettreAJour", ["login" => $_REQUEST["login"]]);
-        }
-
-        $utilisateur->setNom($_REQUEST["nom"]);
-        $utilisateur->setPrenom($_REQUEST["prenom"]);
-        $utilisateur->setMdpHache($_REQUEST["mdp"]);
 
         if (ConnexionUtilisateur::estAdministrateur()) {
             $utilisateur->setEstAdmin(isset($_REQUEST["estAdmin"]));
         }
 
         if ($_REQUEST["email"] !== $utilisateur->getEmail()) {
-            $utilisateur->setEmailAValider($_REQUEST["email"]);
+            $utilisateur->setEmailAValider($_REQUEST['email']);
             $utilisateur->setNonce(MotDePasse::genererChaineAleatoire());
 
             VerificationEmail::envoiEmailValidation($utilisateur);
         }
 
-        $utilisateurRepository->mettreAJour($utilisateur);
+        (new UtilisateurRepository())->mettreAJour($utilisateur);
 
         MessageFlash::ajouter("success", "L'utilisateur a bien été modifié !");
         return ControleurUtilisateur::rediriger("detailUtilisateur", ["idUtilisateur" => $utilisateur->getLogin()]);
@@ -214,27 +188,17 @@ class ControleurUtilisateur extends ControleurGenerique
     public static function connecter(): RedirectResponse
     {
         if (!(isset($_REQUEST['login']) && isset($_REQUEST['mdp']))) {
-            MessageFlash::ajouter("danger", "Login ou mot de passe manquant.");
-            return ControleurUtilisateur::rediriger("connexion");
-        }
-        $utilisateurRepository = new UtilisateurRepository();
-        /** @var Utilisateur $utilisateur */
-        $utilisateur = $utilisateurRepository->recupererParClePrimaire($_REQUEST["login"]);
-
-        if ($utilisateur == null) {
-            MessageFlash::ajouter("warning", "Login inconnu.");
+            MessageFlash::ajouter('danger', "Login ou mot de passe manquant");
             return ControleurUtilisateur::rediriger("connexion");
         }
 
-        if (!MotDePasse::verifier($_REQUEST["mdp"], $utilisateur->getMdpHache())) {
-            MessageFlash::ajouter("warning", "Mot de passe incorrect.");
-            return ControleurUtilisateur::rediriger("connexion");
-        }
-
-        if (!VerificationEmail::aValideEmail($utilisateur)) {
-            MessageFlash::ajouter("warning", "Adresse email non validée.");
-            MessageFlash::ajouter('info', "Cliquez <a href='./envoyerMail/" . $utilisateur->getLogin() . "'>
-                                    ici</a> pour renvoyer un mail");
+        try{
+            $utilisateur = UtilisateurService::verificationConnexion($_REQUEST['login'], $_REQUEST['mdp']);
+        }catch (ServiceException $e){
+            MessageFlash::ajouter('danger', $e->getMessage());
+            if($e->getCode() === 1){
+                MessageFlash::ajouter('info', "Cliquez <a href='./envoyerMail/" . $utilisateur->getLogin() . "'>ici</a> pour renvoyer un mail");
+            }
             return ControleurUtilisateur::rediriger("connexion");
         }
 
@@ -253,11 +217,11 @@ class ControleurUtilisateur extends ControleurGenerique
     {
         if (!ConnexionUtilisateur::estConnecte()) {
             MessageFlash::ajouter("danger", "Utilisateur non connecté.");
-            return ControleurUtilisateur::rediriger("utilisateurs");
+            return ControleurUtilisateur::rediriger("communes");
         }
         ConnexionUtilisateur::deconnecter();
         MessageFlash::ajouter("success", "L'utilisateur a bien été déconnecté.");
-        return ControleurUtilisateur::rediriger("utilisateurs");
+        return ControleurUtilisateur::rediriger("communes");
     }
 
     public static function validerEmail(string $idUtilisateur, string $nonce): RedirectResponse
@@ -272,6 +236,5 @@ class ControleurUtilisateur extends ControleurGenerique
         $utilisateur = (new UtilisateurRepository())->recupererParClePrimaire($idUtilisateur);
         MessageFlash::ajouter("warning", "Validation d'email réussie");
         return ControleurUtilisateur::rediriger("detailUtilisateur", ["idUtilisateur" => $idUtilisateur]);
-
     }
 }
