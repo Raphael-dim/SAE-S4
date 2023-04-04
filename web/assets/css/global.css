@@ -87,14 +87,12 @@ li:nth-child(odd) {
     top: 170px;
     left: 11px;
     /* max-width: 600px; */
-    opacity: 0.85;
     min-width: 220px;
     z-index: 2;
     position: absolute;
 }
 
 .saisieVille:hover {
-    opacity: 0.95;
 }
 
 #localiser {
@@ -272,6 +270,24 @@ fieldset {
 }
 
 .trajets {
+    text-align: center;
+}
+
+.trajets li input {
+    height: 50px;
+    min-width: 200px;
+    border-radius: 8px;
+
+}
+
+.trajets li input:hover {
+    background-color: #e1f1f0;
+
+}
+
+.trajets li {
+    background-color: white;
+    padding: 10px;
     max-width: 60%;
     margin: auto;
 }
@@ -289,4 +305,9 @@ fieldset {
     border: solid 1px white;
     background-color: #1a3341;
     color: white;
+}
+
+form p {
+    margin-right: auto;
+    margin-left: auto;
 }

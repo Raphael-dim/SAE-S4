@@ -36,16 +36,38 @@ $loginURL = rawurlencode($login);
     }
     if (ConnexionUtilisateur::estUtilisateur($login)) {
         echo '<div class="trajets">
-        <h2 > Mes trajets : </h2 >
+        <h2 > Mes trajets : </h2>(sans doublons)
         <ul > ';
+
+        // La liste des trajets uniques
+        $trajetsUniques = array();
+
+        // On parcourt tous les trajets du tableau
         foreach ($trajets as $trajet) {
-            echo ' < li ><a href = "" > de ' . $trajet->getCommuneDepart()->getNomCommune() . ' vers ' .
-                $trajet->getCommuneArrivee()->getNomCommune() . ' </a ></li > ';
+            // On regarde si le trajet est déjà présent dans la liste des trajets uniques
+            $estDejaPresent = false;
+            foreach ($trajetsUniques as $trajetUnique) {
+                if ($trajet->getCommuneDepart()->getNomCommune() == $trajetUnique->getCommuneDepart()->getNomCommune() &&
+                    $trajet->getCommuneArrivee()->getNomCommune() == $trajetUnique->getCommuneArrivee()->getNomCommune()) {
+                    $estDejaPresent = true;
+                    break;
+                }
+            }
+            // Si le trajet n'est pas déjà présent dans la liste des trajets uniques, on l'ajoute
+            if (!$estDejaPresent) {
+                $trajetsUniques[] = $trajet;
+            }
         }
-        echo '
-        </ul >
-    </div >
-    ';
+        foreach ($trajetsUniques as $trajet) {
+            echo '<li><form method="post" action="../calculer">
+                <input type="submit" value="de ' . $trajet->getCommuneDepart()->getNomCommune() .
+                 ' vers ' . $trajet->getCommuneArrivee()->getNomCommune() . '">
+                    <input type="hidden" name="nomsCommune[]" value="' . $trajet->getCommuneDepart()->getNomCommune() . '">
+                    <input type="hidden" name="nomsCommune[]" value="' . $trajet->getCommuneArrivee()->getNomCommune() . '">
+                    
+                    </form></li>';
+        }
+        echo '</ul></div>';
     }
     ?>
 
