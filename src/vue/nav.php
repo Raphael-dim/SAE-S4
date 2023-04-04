@@ -12,7 +12,7 @@ use App\PlusCourtChemin\Lib\ConnexionUtilisateur;
             <a href="<?= $generateurUrl->generate("plusCourtChemin") ?>">Carte</a>
         </li>
         <li class="grosmenu">
-            <a href="<?= $generateurUrl->generate("communes") ?>">Liste des communes</a>
+            <a href="<?= $generateurUrl->generate("communes") ?>">Liste</a>
         </li>
                 <?php
 

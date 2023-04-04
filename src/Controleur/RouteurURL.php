@@ -108,6 +108,7 @@ class RouteurURL
         $routes->add("calculer", $routePlusCourtChemin);
 
 
+
         // ROUTE POUR CompletionAuto Villes
         //$routeRequeteVille = new Route("/villes", [
         //    "_controller" => [ControleurRequete::class, "getVille"],
@@ -152,7 +153,7 @@ class RouteurURL
         $supprimerUtilisateur = new Route("/supprimerUtilisateur/{idUtilisateur}", [
             "_controller" => [ControleurUtilisateur::class, "supprimer"],
         ]);
-        $supprimerUtilisateur->setMethods(['GET']);
+        $supprimerUtilisateur->setMethods(['GET', 'POST']);
         $routes->add("supprimerUtilisateur", $supprimerUtilisateur);
 
 
@@ -174,6 +175,13 @@ class RouteurURL
             "_controller" => [ControleurRequete::class, "getVilleAvecLatlng"],
         ]);
         $routes->add("chercherVilleCoor", $requeteVilleCoordonnees);
+
+
+        $envoyerMail = new Route("/envoyerMail/{idUtilisateur}", [
+            "_controller" => [ControleurUtilisateur::class, "envoyerMail"],
+        ]);
+        $routes->add("envoyerMail", $envoyerMail);
+
 
 
         $contexteRequete = (new RequestContext())->fromRequest($requete);
@@ -206,12 +214,17 @@ class RouteurURL
         } catch (ResourceNotFoundException $exception) {
             $reponse = ControleurGenerique::afficherErreur($exception->getMessage(), 404);
             $reponse->send();
+            exit();
+
         } catch (MethodNotAllowedException $exception) {
             $reponse = ControleurGenerique::afficherErreur($exception->getMessage(), 405);
             $reponse->send();
+            exit();
+
         } catch (Exception $exception) {
             $reponse = ControleurGenerique::afficherErreur($exception->getMessage());
             $reponse->send();
+            exit();
         }
 
         $reponse = call_user_func_array($controleur, $arguments);

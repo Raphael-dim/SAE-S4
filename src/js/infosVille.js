@@ -3,6 +3,7 @@ let imageFleche = document.getElementsByClassName("fleche")[0];
 let infoAffiches = false;
 let accolade = document.getElementsByClassName("accolade")[0];
 
+cacherInfo();
 
 accolade.addEventListener('click', switchAffichageInfo);
 imageFleche.addEventListener('click', switchAffichageInfo);
@@ -36,7 +37,7 @@ function cacherInfo() {
     // divInfoVille.style.animation = "divInfoOut 3.5s"
     accolade.style.display = "block"
     divInfoVille.style.display = "none"
-    imageFleche.style.left = "9px";
+    imageFleche.style.left = "0px";
     imageFleche.style.transform = "";
     infoAffiches = false;
 }

@@ -10,15 +10,13 @@ nav {
 }
 
 
-
-
 #Menu {
+    margin-bottom: 20px;
     justify-content: space-between;
     padding: 0;
     display: flex;
     margin-top: -1%;
     height: 50px;
-    padding-bottom: 10px;
     transition: ease-in-out 0.5s;
 }
 
@@ -31,29 +29,29 @@ ul[id="Menu"] li.grosmenu {
     margin-right: 5px;
     background-color: white;
     border: solid 1px black;
-    height:35px;
+    height: 35px;
     /*margin: 0;*/
 }
 
 ul[id="Menu"] li.grosmenu > a {
     text-decoration: none;
     display: inline-block;
-    width: 150px;
+    width: 170px;
     position: relative;
     color: #000000;
     text-align: center;
     font-size: 19px;
-    margin-top:7px;
+    margin-top: 7px;
 }
 
 ul[id="Menu"] li.grosmenu:hover {
     transition: ease-in-out 0.1s;
-    height:37px;
+    height: 37px;
 }
 
 ul[id="Menu"] li:hover a {
     transition: ease-in-out 0.1s;
-    margin-top:8px;
+    margin-top: 8px;
 }
 
 
@@ -93,10 +91,18 @@ nav img {
         opacity: 1;
     }
 
+    nav {
+        position: relative;
+    }
+
     #Menu {
+        position: absolute;
+        left: 0;
+        margin-right: 90%;
+        right: 90%;
         width: 75px;
         padding: 0;
-        margin: 0;
+        /*margin: 0;*/
         display: inline-block;
         height: 60px;
         padding-top: 40px;
@@ -111,6 +117,7 @@ nav img {
     }
 
     #Menu > li {
+        min-width: fit-content;
         display: none;
         position: absolute;
     }

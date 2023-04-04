@@ -10,13 +10,14 @@ $assistantUrl = Conteneur::recupererService("assistantUrl");
 
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
     <meta charset="UTF-8">
     <title><?= $pagetitle ?></title>
+    <link rel="stylesheet" href="<?= $assistantUrl->getAbsoluteUrl("assets/css/profile.css") ?>">
     <link rel="stylesheet" href="<?= $assistantUrl->getAbsoluteUrl("assets/css/global.css") ?>">
     <link rel="stylesheet" href="<?= $assistantUrl->getAbsoluteUrl("assets/css/keyFrames.css") ?>">
     <link rel="stylesheet" href="<?= $assistantUrl->getAbsoluteUrl("assets/css/nav.css") ?>">
+    <link rel="icon" href="<?= $assistantUrl->getAbsoluteUrl("assets/img/logo_site.jpg") ?>">
 </head>
 
 <body>
@@ -39,17 +40,16 @@ $assistantUrl = Conteneur::recupererService("assistantUrl");
     </div>
 </header>
 <main>
+    <div id="content">
     <?php
     /**
      * @var string $cheminVueBody
      */
     require __DIR__ . "/{$cheminVueBody}";
     ?>
+    </div>
 </main>
 <footer>
-    <p>
-        Copyleft Romain Lebreton
-    </p>
 </footer>
 </body>
 
