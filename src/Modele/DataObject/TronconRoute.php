@@ -2,7 +2,6 @@
 
 namespace App\PlusCourtChemin\Modele\DataObject;
 
-
 class TronconRoute extends AbstractDataObject
 {
 

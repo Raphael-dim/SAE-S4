@@ -1,11 +1,14 @@
 <?php
+
+use App\PlusCourtChemin\Modele\DataObject\NoeudCommune;
+
 $nextstart = $start + $limit;
 
 $nextpass = $start + 1000;
 
-$previousstart = $start - $limit;
+$previousstart = max($start - $limit,0);
 
-$previouspass = $start - 1000;
+$previouspass = max($start - 1000,0);
 echo <<<HTML
 <a href="plusCourtChemin">Calculer un plus court chemin</a>
 
@@ -36,13 +39,13 @@ echo <<<HTML
 </div>
 
 <form action = "./communesKeyWord" method = "post">
-    <input type="submit" id="search_keyword" name="search_keyword" value = "search">
+    <input type="submit" id="search_keyword" name="search_keyword" value = "Rechercher">
     <input type = "text" id = "keyword" name ="keyword" required>
 </form>
 
 <ul id ="liste_Noeud_Commune">
 HTML;
-function my_sort(\App\PlusCourtChemin\Modele\DataObject\NoeudCommune $a, \App\PlusCourtChemin\Modele\DataObject\NoeudCommune $b)
+function my_sort(NoeudCommune $a, NoeudCommune $b)
 {
     return str_replace("É", "E", $a->getNomCommune()) > str_replace("É", "E", $b->getNomCommune());
 }
