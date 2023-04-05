@@ -10,6 +10,8 @@ Contribution des membres sur la SAE :
     6. Utilisation de l'API Wikipédia pour afficher des informations sur une ville
     7. Design/ergonomie du site (CSS, HTML)
     8. Amélioration de la carte (markers, zoom)
+    9. Ajouts divers :
+        --> Confirmation lors de la suppression d'un compte
 
 
  -- Yanis Makloufi --  (30%)
