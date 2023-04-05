@@ -39,7 +39,7 @@ class ControleurUtilisateur extends ControleurGenerique
             $utilisateur = UtilisateurService::recupererDetailUtilisateur($idUtilisateur);
         }catch(ServiceException $e){
             MessageFlash::ajouter('danger', $e->getMessage());
-            return ControleurNoeudCommune::rediriger("afficherListe");
+            return ControleurNoeudCommune::rediriger("utilisateurs");
         }
 
         return ControleurUtilisateur::afficherVue('vueGenerale.php', [
@@ -58,7 +58,6 @@ class ControleurUtilisateur extends ControleurGenerique
             return ControleurUtilisateur::rediriger("utilisateurs");
         }
         $deleteSuccessful = $utilisateurRepository->supprimer($idUtilisateur);
-        $utilisateurs = $utilisateurRepository->recuperer();
         if ($deleteSuccessful) {
             MessageFlash::ajouter("success", "L'utilisateur a bien été supprimé !");
             self::deconnecter();
@@ -233,7 +232,7 @@ class ControleurUtilisateur extends ControleurGenerique
             return ControleurUtilisateur::rediriger("utilisateurs");
         }
 
-        $utilisateur = (new UtilisateurRepository())->recupererParClePrimaire($idUtilisateur);
+        //$utilisateur = (new UtilisateurRepository())->recupererParClePrimaire($idUtilisateur);
         MessageFlash::ajouter("success", "Validation d'email réussie");
         return ControleurUtilisateur::rediriger("detailUtilisateur", ["idUtilisateur" => $idUtilisateur]);
     }

@@ -7,7 +7,7 @@ use App\PlusCourtChemin\Lib\ConnexionUtilisateur;
     <ul id="Menu">
         <?php if(ConnexionUtilisateur::estAdministrateur()) echo '
             <li class="grosmenu">
-                <a href="<?= $generateurUrl->generate("utilisateurs") ?>">Utilisateurs</a>
+                <a href="'.$generateurUrl->generate("utilisateurs").'">Utilisateurs</a>
             </li>';
         ?>
         <li class="grosmenu">
