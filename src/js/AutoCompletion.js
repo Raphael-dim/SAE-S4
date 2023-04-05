@@ -15,11 +15,11 @@ let villesSuggests;
 let currentVilles = new Array();
 
 
-inputs =document.getElementsByClassName("nomCommune");
+inputs = document.getElementsByClassName("nomCommune");
 let currentTarget = inputs[0];
 
-Array.prototype.forEach.call(inputs,function(input){
-    input.addEventListener("focusin",function(e){
+Array.prototype.forEach.call(inputs, function (input) {
+    input.addEventListener("focusin", function (e) {
         currentTarget.style.borderColor = "black"
         e.target.style.borderColor = "cornflowerblue";
         currentTarget = e.target;
@@ -37,32 +37,17 @@ imageLocaliser.addEventListener("mousedown", function (event) {
 function localiser(pos) {
     let latitude = pos.coords.latitude;
     let longitude = pos.coords.longitude;
-    let Latlng = [{ "lat": latitude, "long": longitude}];
+    let Latlng = [{"lat": latitude, "long": longitude}];
     currentVilles.splice(0, 1, Latlng);
     requete(latitude, longitude);
 }
 
-/*function requete(latitude, longitude) {
-    currentVilles.splice(0, 1, [{ "lat": latitude, "long": longitude}]);
-    console.log(currentVilles);
-    let url = "chercherVilleCoor/" + encodeURIComponent(latitude) + "/" + encodeURIComponent(longitude);
-    let request = new XMLHttpRequest();
-    request.open("GET", url, true);
-    request.addEventListener("load", function () {
-        let data = JSON.parse(request.responseText);
-        let ville = data[0];
-        villesNodes[0].value = ville["nom_comm"];
-        miseAJourMap(currentVilles);
-    });
-    request.send(null);
-}*/
-
-map.addListener('click', function(e) {
+map.addListener('click', function (e) {
     requete(e.latLng.lat(), e.latLng.lng(), true);
 });
 
 function requete(latitude, longitude, afficherDetailVille = false) {
-    currentVilles.splice(0, 1, [{ "lat": latitude, "long": longitude}]);
+    currentVilles.splice(villesNodes.indexOf(currentVilleNode), 1, [{"lat": latitude, "long": longitude}]);
     let url = "chercherVilleCoor/" + encodeURIComponent(latitude) + "/" + encodeURIComponent(longitude);
     let request = new XMLHttpRequest();
     let data;
@@ -74,7 +59,7 @@ function requete(latitude, longitude, afficherDetailVille = false) {
         if (afficherDetailVille) {
             afficherDetail(data, latitude, longitude)
         }
-        miseAJourMap(currentVilles);
+        miseAJourMap(currentVilles, name[0]);
     });
     request.send(null);
 }
@@ -83,7 +68,7 @@ function requete(latitude, longitude, afficherDetailVille = false) {
 /**
  * Initialise l'écoute de chaque ville.
  */
-function init(){
+function init() {
     //Récupère toutes les villes
     villesNodes = [...document.getElementsByClassName('nomCommune')];
 
@@ -102,7 +87,7 @@ function init(){
         //Quand la ville est selectionné
         villeNode.addEventListener("focusin", function (event) {
             currentVilleNode = event.target;
-            villeNode.insertAdjacentElement('afterend',autoCompletion);
+            villeNode.insertAdjacentElement('afterend', autoCompletion);
             RequeteVille(currentVilleNode);
         });
 
@@ -111,8 +96,8 @@ function init(){
             flecheDefilement(e, currentVilleNode);
         });
 
-        for(let i = currentVilles.length; i<villesNodes.length;i++){
-            currentVilles.splice(currentVilles.length-1, 0,[communes[i]]);
+        for (let i = currentVilles.length; i < villesNodes.length; i++) {
+            currentVilles.splice(currentVilles.length - 1, 0, [communes[i]]);
         }
     });
 }
@@ -189,9 +174,9 @@ function RequeteVille(ville) {
 autoCompletion.addEventListener('mousedown', function (event) {
     currentVilleNode.value = event.target.innerHTML;
     currentVilles.splice(villesNodes.indexOf(currentVilleNode), 1, villesSuggests.filter(function (v) {
-        return v.nomCommune === event.target.innerHTML
+        return v.nomCommune === event.target.innerHTML;
     }));
-    miseAJourMap(currentVilles)
+    miseAJourMap(currentVilles, event.target.innerHTML);
     videVilles();
 })
 
@@ -216,7 +201,7 @@ function flecheDefilement(e, ville) {
         currentVilles.splice(villesNodes.indexOf(currentVilleNode), 1, villesSuggests.filter(function (v) {
             return v.nomCommune === villeSelectionnee.innerHTML;
         }));
-        miseAJourMap(currentVilles)
+        miseAJourMap(currentVilles, villeSelectionnee.innerHTML)
         videVilles();
     }
     if (isArrow && oldIndex !== indexDefilement) {
@@ -232,45 +217,46 @@ function flecheDefilement(e, ville) {
         oldVille.style.backgroundColor = "grey";
         let elementVille = document.getElementById(nomVille.innerHTML);
 
-        elementVille.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        elementVille.scrollIntoView({behavior: 'smooth', block: 'center'})
     }
 
 }
 
-function miseAJourMap(villes) {
-    initMap(villes.map(v => (v[0] == undefined? 0:{lat: v[0]['lat'], long: v[0]['long']})));
+function miseAJourMap(villes, nomVille) {
+    initMap(villes.map(v => (v[0] == undefined ? 0 : {lat: v[0]['lat'], long: v[0]['long']})), nomVille);
 }
-
 
 
 /***** ESCALES ******/
 let nbEscale = 0;
 let noms = JSON.parse(document.currentScript.dataset.communes);
 
-for(let i = 0;i<noms.length-2;i++){
+for (let i = 0; i < noms.length - 2; i++) {
     addEscale();
 }
 
-function addEscale(){
+function addEscale() {
     nbEscale++;
     let escaleHTML =
         '<p class="InputAddOn"> ' +
-        '<input placeholder="Nom de la commune d\'escale ' + nbEscale.toString() + '" class="InputAddOn-field nomCommune" type="text" value="' + ((typeof noms[nbEscale+1] != "undefined")? noms[nbEscale]:"") + '"\n autocomplete="off" name="nomsCommune[]" required>' +
+        '<input placeholder="Nom de la commune d\'escale ' + nbEscale.toString() + '" class="InputAddOn-field nomCommune" type="text" value="' + ((typeof noms[nbEscale + 1] != "undefined") ? noms[nbEscale] : "") + '"\n autocomplete="off" name="nomsCommune[]" required>' +
         '</p>'
 
-    document.getElementsByClassName("InputAddOn")[nbEscale].insertAdjacentHTML('beforebegin',escaleHTML);
+    document.getElementsByClassName("InputAddOn")[nbEscale].insertAdjacentHTML('beforebegin', escaleHTML);
 
     let img = document.createElement("img");
     img.src = "../web/assets/img/delete.png";
     img.id = "delete";
 
-    img.addEventListener("click",function(e){
-        nbEscale -=1;
-        document.getElementsByClassName("InputAddOn")[nbEscale+1].parentNode.removeChild(document.getElementsByClassName("InputAddOn")[nbEscale+1]);
+    img.addEventListener("click", function (e) {
+        nbEscale -= 1;
+        let element = document.getElementsByClassName("InputAddOn")[nbEscale + 1];
+        element.parentNode.removeChild(element);
+        supprimerMarker(element.value);
     });
     document.getElementsByClassName("InputAddOn")[nbEscale].appendChild(img);
 
-    document.getElementsByClassName("InputAddOn")[nbEscale].addEventListener("focusin",function(e){
+    document.getElementsByClassName("InputAddOn")[nbEscale].addEventListener("focusin", function (e) {
         currentTarget.style.borderColor = "black"
         e.target.style.borderColor = "cornflowerblue";
         currentTarget = e.target;
