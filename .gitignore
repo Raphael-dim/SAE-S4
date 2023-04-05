@@ -1,2 +1,9 @@
 /src/Config/ConfigurationBDDPostgreSQL.php
 /vendor/
+vendor/
+vendor/*
+/vendor
+S4/vendor/*
+S4/vendor/
+S4/vendor
+/vendor/*

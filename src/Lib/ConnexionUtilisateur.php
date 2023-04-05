@@ -56,6 +56,7 @@ class ConnexionUtilisateur
         /** @var Utilisateur $utilisateurConnecte */
         $utilisateurConnecte = $utilisateurRepository->recupererParClePrimaire($loginConnecte);
 
+
         return ($utilisateurConnecte !== null && $utilisateurConnecte->getEstAdmin());
     }
 }
