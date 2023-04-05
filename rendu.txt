@@ -15,7 +15,7 @@ Contribution des membres sur la SAE :
 
     1. Mise en place et utilisation de l'extension pgrouting (qui utilise la table relation)
         + création de la requête SQL
-    9. Implémentation de l'ajout des escales
+    9. Mise en place de l'ajout des escales
     10. Diviser les controller en 2 parties (controller et service)
     11. Implémentation de tests
 
