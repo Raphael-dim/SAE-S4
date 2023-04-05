@@ -3,7 +3,6 @@
 namespace App\PlusCourtChemin\Modele\Repository;
 
 use App\PlusCourtChemin\Modele\DataObject\Utilisateur;
-use Exception;
 
 class UtilisateurRepository extends AbstractRepository
 {

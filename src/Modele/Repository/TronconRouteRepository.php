@@ -16,8 +16,7 @@ class TronconRouteRepository extends AbstractRepository
             $noeudRoutierTableau["sens"],
             $noeudRoutierTableau["num_route"] ?? "",
             (float) $noeudRoutierTableau["longueur"],
-            $noeudRoutierTableau["geom"],
-            null
+            $noeudRoutierTableau["geom"]
         );
     }
 
@@ -45,7 +44,7 @@ class TronconRouteRepository extends AbstractRepository
 
     public function mettreAJour(AbstractDataObject $object): void
     {
-        return;
+
     }
 
     public function ajouter(AbstractDataObject $object): bool

@@ -2,9 +2,8 @@
 
 namespace App\PlusCourtChemin\Service;
 
-use App\PlusCourtChemin\Controleur\ControleurNoeudCommune;
 use App\PlusCourtChemin\Lib\ConnexionUtilisateur;
-use App\PlusCourtChemin\Lib\MessageFlash;
+use App\PlusCourtChemin\Modele\DataObject\AbstractDataObject;
 use App\PlusCourtChemin\Modele\DataObject\Trajet;
 use App\PlusCourtChemin\Modele\Repository\NoeudCommuneRepository;
 use App\PlusCourtChemin\Modele\Repository\NoeudRoutierRepository;
@@ -14,7 +13,11 @@ use App\PlusCourtChemin\Service\Exception\ServiceException;
 
 class NoeudCommuneService
 {
-    static function recupererCommunes($keyword, $limit = 200) {
+    /**
+     * @throws ServiceException
+     */
+    static function recupererCommunes($keyword, $limit = 200): array
+    {
         if (!isset($_POST["start"]) || $_POST["start"] < 0) {
             $start = 0;
         } else {
@@ -32,7 +35,11 @@ class NoeudCommuneService
 
     }
 
-    static function recupererDetailCommune($idCommune) {
+    /**
+     * @throws ServiceException
+     */
+    static function recupererDetailCommune($idCommune): AbstractDataObject
+    {
         if(!isset($idCommune)){
             throw new ServiceException("Immatriculation manquante.");
         }
@@ -45,7 +52,11 @@ class NoeudCommuneService
         return $noeudCommune;
     }
 
-    static function calculPlusCourtChemin($nomsCommune) {
+    /**
+     * @throws ServiceException
+     */
+    static function calculPlusCourtChemin($nomsCommune): array
+    {
         $parametres = [
             "pagetitle" => "Plus court chemin",
             "cheminVueBody" => "noeudCommune/plusCourtChemin.php",

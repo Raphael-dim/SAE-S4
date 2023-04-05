@@ -234,7 +234,7 @@ class ControleurUtilisateur extends ControleurGenerique
         }
 
         $utilisateur = (new UtilisateurRepository())->recupererParClePrimaire($idUtilisateur);
-        MessageFlash::ajouter("warning", "Validation d'email réussie");
+        MessageFlash::ajouter("success", "Validation d'email réussie");
         return ControleurUtilisateur::rediriger("detailUtilisateur", ["idUtilisateur" => $idUtilisateur]);
     }
 }

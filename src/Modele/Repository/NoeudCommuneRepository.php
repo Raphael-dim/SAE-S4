@@ -5,7 +5,6 @@ namespace App\PlusCourtChemin\Modele\Repository;
 use App\PlusCourtChemin\Modele\DataObject\AbstractDataObject;
 use App\PlusCourtChemin\Modele\DataObject\NoeudCommune;
 use PDO;
-use PhpParser\Node\Expr\Array_;
 
 class NoeudCommuneRepository extends AbstractRepository
 {
