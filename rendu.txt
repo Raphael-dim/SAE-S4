@@ -1,0 +1,34 @@
+Contribution des membres sur la SAE :
+
+ -- Raphael Dimeck --  (30%)
+
+    1. Mise en place de la base de donnée (table relation et index)
+    2. Mise en place du routage des url (suppression de "controlleur=" et "action=" dans les URL du site)
+    3. Mise en place de l'autocomplétion des champs de texte
+    4. Mise en place de l'historique des trajets par utilisateur
+    5. Envoie des mails grâce à Symfony
+    6. Utilisation de l'API Wikipédia pour afficher des informations sur une ville
+    7. Design/ergonomie du site (CSS, HTML)
+    8. Amélioration de la carte (markers, zoom)
+    9. Ajouts divers :
+        --> Confirmation lors de la suppression d'un compte
+
+
+ -- Yanis Makloufi --  (30%)
+
+    1. Mise en place et utilisation de l'extension pgrouting (qui utilise la table relation)
+        + création de la requête SQL
+    2. Les escales
+    3. Amélioration de la carte (markers)
+
+
+ -- Théo Guenezan --  (30%)
+
+    1. Mise en place de la base de donnée (table relation et index)
+    2. Mise en place de la carte issue de l'extension Google Map
+    3. Amélioration de la carte (markers)
+    7. Design/ergonomie du site (CSS, HTML)
+
+
+
+ -- Nael Fradet --

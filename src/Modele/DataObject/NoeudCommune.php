@@ -8,6 +8,7 @@ class NoeudCommune extends AbstractDataObject
         private int    $gid,
         private string $id_rte500,
         private string $nomCommune,
+        private string $numInsee,
         private string $id_nd_rte,
         private string $long,
         private string $lat
@@ -33,6 +34,11 @@ class NoeudCommune extends AbstractDataObject
     public function getNomCommune(): string
     {
         return $this->nomCommune;
+    }
+
+    public function getNumInsee(): string
+    {
+        return $this->numInsee;
     }
 
     public function getLongCommune(): string
@@ -62,6 +68,7 @@ class NoeudCommune extends AbstractDataObject
             "gid" => $this->gid,
             "id_rte500" => $this->id_rte500,
             "nomCommune" => $this->nomCommune,
+            "numInsee" => $this->numInsee,
             "id_nd_rte" => $this->id_nd_rte,
             "long" => $this->long,
             "lat" => $this->lat,
