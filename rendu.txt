@@ -33,5 +33,4 @@ Contribution des membres sur la SAE :
     16. Recherche des communes
 
 
- -- Nael Fradet --  (10%)
-    17. Documentation du code
+ -- Nael Fradet --
