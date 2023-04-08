@@ -16,19 +16,21 @@ Contribution des membres sur la SAE :
 
  -- Yanis Makloufi --  (30%)
 
-    1. Mise en place et utilisation de l'extension pgrouting (qui utilise la table relation)
+    10. Mise en place et utilisation de l'extension pgrouting (qui utilise la table relation)
         + création de la requête SQL
-    2. Les escales
-    3. Amélioration de la carte (markers)
+    11. Les escales
+    8. Amélioration de la carte (markers)
+    12. Diviser les controller en 2 parties (controller et service)
+    13. Implémentation de tests
 
 
  -- Théo Guenezan --  (30%)
 
-    1. Mise en place de la base de donnée (table relation et index)
-    2. Mise en place de la carte issue de l'extension Google Map
-    3. Amélioration de la carte (markers)
+    14. Mise en place de la base de donnée (table relation et index)
+    15. Mise en place de la carte issue de l'extension Google Map
+    8. Amélioration de la carte (markers)
     7. Design/ergonomie du site (CSS, HTML)
-
+    16. Recherche des communes
 
 
  -- Nael Fradet --
