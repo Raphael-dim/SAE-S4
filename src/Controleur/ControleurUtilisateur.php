@@ -96,15 +96,9 @@ class ControleurUtilisateur extends ControleurGenerique
 
             VerificationEmail::envoiEmailValidation($utilisateur);
 
-            $utilisateurRepository = new UtilisateurRepository();
-            $succesSauvegarde = $utilisateurRepository->ajouter($utilisateur);
-            if ($succesSauvegarde) {
-                MessageFlash::ajouter("success", "L'utilisateur a bien été créé !");
-                return ControleurUtilisateur::rediriger("connexion");
-            } else {
-                MessageFlash::ajouter("warning", "Login deja existant.");
-                return ControleurUtilisateur::rediriger("inscription");
-            }
+            MessageFlash::ajouter("success", "L'utilisateur a bien été créé !");
+            return ControleurUtilisateur::rediriger("connexion");
+
         } else {
             MessageFlash::ajouter("danger", "Login, nom, prenom ou mot de passe manquant.");
             return ControleurUtilisateur::rediriger("inscription");

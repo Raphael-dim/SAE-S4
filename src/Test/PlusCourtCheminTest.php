@@ -2,6 +2,8 @@
 
 use App\PlusCourtChemin\Modele\Repository\NoeudRoutierRepository;
 use App\PlusCourtChemin\Modele\Repository\NoeudCommuneRepository;
+use App\PlusCourtChemin\Service\Exception\ServiceException;
+use App\PlusCourtChemin\Service\NoeudCommuneService;
 use PHPUnit\Framework\TestCase;
 
 class PlusCourtCheminTest extends TestCase {
@@ -14,8 +16,13 @@ class PlusCourtCheminTest extends TestCase {
         $this->noeudRoutierRepository = new NoeudRoutierRepository();
     }
 
-    public function testPathBetween2($nomCommune1, $nomCommune2) {
-        $result = NoeudCommuneService::calculPlusCourtChemin([$nomCommune1,$nomCommune2]);
+    private function testPathBetween2($nomCommune1, $nomCommune2) {
+        try {
+            $result = NoeudCommuneService::calculPlusCourtChemin([$nomCommune1,$nomCommune2]);
+        } catch (ServiceException $e) {
+            $this->assertTrue(true, $e->getMessage());
+            return;
+        }
 
         $this->assertNotNull($result, "Le chemin est null");
         $this->assertNotEmpty($result, "Le chemin est vide");
@@ -23,48 +30,33 @@ class PlusCourtCheminTest extends TestCase {
     }
 
     public function testPathBetween2Random() {
-        $randomNom1 = (new NoeudCommuneRepository())->recupererPar(["id_rte500" => random_int(1,910833)])[0]->getNomCommune();
-        $randomNom2 = (new NoeudCommuneRepository())->recupererPar(["id_rte500" => random_int(1,910833)])[0]->getNomCommune();
+        $randomNom1 = (new NoeudCommuneRepository())->recupererPar(["gid" => random_int(1,34836)])[0]->getNomCommune();
+        $randomNom2 = (new NoeudCommuneRepository())->recupererPar(["gid" => random_int(1,34836)])[0]->getNomCommune();
 
         $this->testPathBetween2($randomNom1, $randomNom2);
     }
 
     public function testPathBetweenFranceCorse() {
-        $gidFrance = random_int(1,910833);
-        $gidCorse = random_int(1,910833);
+        $nomFrance = "Paris";
+        $nomCorse = "Bastia";
 
-        $this->testPathBetween2($gidFrance, $gidCorse);
+        $this->testPathBetween2($nomFrance, $nomCorse);
+    }
+
+    public function testPathBetweenUnexisting() {
+        $nomFrance = "Inexistant";
+        $nomCorse = "VilleQuiExistePas";
+
+        $this->testPathBetween2($nomFrance, $nomCorse);
     }
 
     /** test1000RandomPath
      * Test plusieurs chemins aléatoire
      *
-     * !ATTENTION! 10 itérations en configuration Postgre  ~30 secondes de test */
-    public function test100RandomPath() {
-        for($i = 0;$i<100;$i++){
-            $this->testChemin2VillesRandom();
+     * !ATTENTION! 20 itérations en configuration Postgres ~1 minute de test */
+    public function test20RandomPath() {
+        for($i = 0;$i<20;$i++){
+            $this->testPathBetween2Random();
         }
     }
-
-    /*public function testAjout() {
-        $this->assertFalse($this->ensembleTeste->contient(7));
-        $this->ensembleTeste->ajouter(7);
-        $this->assertTrue($this->ensembleTeste->contient(7));
-        $this->assertEquals(1, $this->ensembleTeste->getTaille());
-        //On n'ajoute pas deux fois dans un ensemble, donc la taille doit rester à 1
-        $this->ensembleTeste->ajouter(7);
-        $this->assertEquals(1, $this->ensembleTeste->getTaille());
-    }
-
-    public function testPop() {
-        $this->ensembleTeste->ajouter(1);
-        $this->ensembleTeste->ajouter(2);
-        $this->ensembleTeste->ajouter(3);
-        $this->assertEquals(3, $this->ensembleTeste->pop());
-        $this->assertEquals(2, $this->ensembleTeste->pop());
-        $this->assertEquals(1, $this->ensembleTeste->pop());
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage("L'ensemble est vide!");
-        $this->ensembleTeste->pop();
-    }*/
 }

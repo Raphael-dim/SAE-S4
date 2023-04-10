@@ -68,7 +68,7 @@ class NoeudCommuneService
         $noeudRoutierRepository = new NoeudRoutierRepository();
 
         foreach($nomsCommune as $nom){
-            $noeudsCommune[] = $noeudCommuneRepository->recupererPar(["nom_comm" => $nom])[0];
+            $noeudsCommune[] = array_key_first($noeudCommuneRepository->recupererPar(["nom_comm" => $nom]));
             if(is_null(end($noeudsCommune)) || empty(end($noeudsCommune))){
                 throw new ServiceException("La ville " . $nom . " n'existe pas");
             }
@@ -78,7 +78,7 @@ class NoeudCommuneService
         }
 
         foreach($noeudsCommune as $noeud){
-            $noeudsRoutier[] = $noeudRoutierRepository->recupererPar(["id_rte500" => $noeud->getId_nd_rte()])[0];
+            $noeudsRoutier[] = array_key_first($noeudRoutierRepository->recupererPar(["id_rte500" => $noeud->getId_nd_rte()]));
             if(is_null(end($noeudsRoutier)) || empty(end($noeudsRoutier))){
                 throw new ServiceException("Le numéro de route " . $noeud->getId_nd_rte() . " n'existe pas");
             }
@@ -88,7 +88,7 @@ class NoeudCommuneService
             }
         }
 
-        echo "<br>";
+        /*echo "<br>";*/
 
         for($i = 0;$i<count($noeudsRoutier)-1;$i++){
             $results[] = (new NoeudRoutierRepository())->getShortestPathAstar($noeudsRoutier[$i]->getGid(), $noeudsRoutier[$i+1]->getGid());
@@ -98,7 +98,7 @@ class NoeudCommuneService
         }
 
         if (ConnexionUtilisateur::estConnecte()) {
-            $trajet = new Trajet(ConnexionUtilisateur::getLoginUtilisateurConnecte(), $noeudsCommune[0]->getGid(),
+            $trajet = new Trajet(ConnexionUtilisateur::getLoginUtilisateurConnecte(), array_key_first($noeudsCommune)->getGid(),
                 end($noeudsCommune)->getGid(), date('Y-m-d : H:i:s'));
             (new TrajetRepository())->ajouter($trajet);
         }

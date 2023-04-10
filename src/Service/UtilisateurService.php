@@ -93,6 +93,23 @@ class UtilisateurService
             throw new ServiceException("Email non valide");
         }
 
-        return Utilisateur::construireDepuisFormulaire($_REQUEST);
+        $utilisateurRepository = new UtilisateurRepository();
+
+        $test = $utilisateurRepository->recupererParClePrimaire($login);
+
+        if($test){
+            if($test->getEmail() === $email){
+                throw new ServiceException("Email deja existant.");
+            }
+            if($test->getLogin() === $login){
+                throw new ServiceException("Login deja existant.");
+            }
+        }
+
+        $utilisateur = Utilisateur::construireDepuisFormulaire($_REQUEST);
+
+        $utilisateurRepository->ajouter($utilisateur);
+
+        return $utilisateur;
     }
 }
