@@ -32,14 +32,19 @@
         <div class="trajets">
             <h2> Mes trajets : </h2>(sans doublons)
             <ul>
+                {% set uniqueTrajets = [] %}
+
                 {% for trajet in trajets %}
-                    <li>
-                        <form method="post" action="{{ route("calculer") }}">
-                            <input type="submit" value="de {{ trajet.getCommuneDepart().getNomCommune|e }} vers {{ trajet.getCommuneArrivee().getNomCommune()|e }}">
-                            <input type="hidden" name="nomsCommune[]" value="{{ trajet.getCommuneDepart().getNomCommune()|e }}">
-                            <input type="hidden" name="nomsCommune[]" value="{{ trajet.getCommuneArrivee().getNomCommune()|e }}">
-                        </form>
-                    </li>
+                    {% if trajet not in uniqueTrajets %}
+                        <li>
+                            <form method="post" action="{{ route("calculer") }}">
+                                <input type="submit" value="de {{ trajet.getCommuneDepart().getNomCommune|e }} vers {{ trajet.getCommuneArrivee().getNomCommune()|e }}">
+                                <input type="hidden" name="nomsCommune[]" value="{{ trajet.getCommuneDepart().getNomCommune()|e }}">
+                                <input type="hidden" name="nomsCommune[]" value="{{ trajet.getCommuneArrivee().getNomCommune()|e }}">
+                            </form>
+                        </li>
+                        {% set uniqueTrajets = uniqueTrajets|merge([trajet]) %}
+                    {% endif %}
                 {% endfor %}
             </ul>
         </div>

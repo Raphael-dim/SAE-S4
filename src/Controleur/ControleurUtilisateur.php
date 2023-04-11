@@ -44,7 +44,7 @@ class ControleurUtilisateur extends ControleurGenerique
 
         return ControleurUtilisateur::afficherTwig('utilisateur/detail.html.twig',[
             "page_title" => "Détail de l'utilisateur",
-            "trajets" => array_unique($utilisateur->getTrajets()),
+            "trajets" => $utilisateur->getTrajets(),
             "utilisateur" => $utilisateur,
             "method" => Configuration::getDebug() ? "get" : "post",
         ]);
