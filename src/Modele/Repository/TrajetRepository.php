@@ -19,7 +19,7 @@ class TrajetRepository extends AbstractRepository
 
     protected function getNomsColonnes(): array
     {
-        return ["gid_commune_depart", "gid_commune_arrivee", "loginutilisateur", "date", "idtrajet"];
+        return ["gid_commune_depart", "gid_commune_arrivee", "loginutilisateur", "date"];
     }
 
     protected function construireDepuisTableau(array $objetFormatTableau): Trajet
