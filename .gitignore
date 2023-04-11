@@ -1,9 +1,6 @@
 /src/Config/ConfigurationBDDPostgreSQL.php
 /vendor/
-vendor/
-vendor/*
-/vendor
-S4/vendor/*
-S4/vendor/
-S4/vendor
-/vendor/*
+/vendor/egulias/
+/vendor/myclabs/
+/vendor/nikic/
+/vendor/phar-io/
