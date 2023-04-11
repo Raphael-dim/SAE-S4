@@ -44,12 +44,16 @@ class Utilisateur extends AbstractDataObject
 
     public static function construireDepuisFormulaire(array $tableauFormulaire): Utilisateur
     {
+        $admin = 0;
+        if (isset($tableauFormulaire['estAdmin'])) {
+            $admin = 1;
+        }
         return new Utilisateur(
             $tableauFormulaire["login"],
             $tableauFormulaire["nom"],
             $tableauFormulaire["prenom"],
             MotDePasse::hacher($tableauFormulaire["mdp"]),
-            isset($tableauFormulaire["estAdmin"]),
+            $admin,
             "",
             $tableauFormulaire["email"],
             MotDePasse::genererChaineAleatoire(),
@@ -143,12 +147,16 @@ class Utilisateur extends AbstractDataObject
 
     public function exporterEnFormatRequetePreparee(): array
     {
+        $admin = 0;
+        if ($this->estAdmin) {
+            $admin = 1;
+        }
         return array(
             "login_tag" => $this->login,
             "nom_tag" => $this->nom,
             "prenom_tag" => $this->prenom,
             "mdp_hache_tag" => $this->mdpHache,
-            "est_admin_tag" => $this->estAdmin,
+            "est_admin_tag" => $admin,
             "email_tag" => $this->email,
             "nonce_tag" => $this->nonce,
             "email_a_valider_tag" => $this->emailAValider,
