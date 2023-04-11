@@ -2,7 +2,6 @@
 
 namespace App\PlusCourtChemin\Controleur;
 
-use App\PlusCourtChemin\Modele\Repository\ConnexionBaseDeDonnees;
 use App\PlusCourtChemin\Modele\Repository\NoeudCommuneRepository;
 use Symfony\Component\HttpFoundation\Response;
 

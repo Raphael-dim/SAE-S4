@@ -13,7 +13,7 @@ main {
     opacity: 1;
 }
 
-#content{
+#content {
     margin: 30px auto;
     max-width: 70%;
 }
@@ -51,7 +51,7 @@ li:nth-child(odd) {
     border: solid black 2px;
     width: 90%;
     color: white;
-    margin-top:35px;
+    margin-top: 35px;
     background-color: grey;
     line-height: 1.5;
     position: absolute;
@@ -87,7 +87,7 @@ li:nth-child(odd) {
     top: 170px;
     left: 11px;
     /* max-width: 600px; */
-    min-width: 220px;
+    min-width: 263px;
     z-index: 2;
     position: absolute;
 }
@@ -95,13 +95,18 @@ li:nth-child(odd) {
 .saisieVille:hover {
 }
 
+
+.saisieVille .InputAddOn {
+    width: 90%;
+}
+
 #localiser {
     background-image: url("../img/placeholder.png");
     background-repeat: no-repeat;
     background-position: 0px 0px;
-    background-size:30px;
-    color:transparent;
-    max-width:30px;
+    background-size: 30px;
+    color: transparent;
+    max-width: 30px;
 }
 
 footer {
@@ -127,7 +132,6 @@ footer > p {
     right: 2px;
     z-index: 100;
 }
-
 
 
 .alert {
@@ -175,11 +179,11 @@ fieldset {
 .InputAddOn {
     display: flex;
     margin-bottom: 1.5em;
-    width:60%;
+    width: 60%;
 }
 
-.InputAddOn > #delete{
-    margin-top:7px;
+.InputAddOn > #delete {
+    margin-top: 7px;
 }
 
 .InputAddOn-field {
@@ -187,27 +191,29 @@ fieldset {
 }
 
 .InputAddOn-field:hover {
-    opacity:0.95;
-    background:lightgrey;
+    opacity: 0.95;
+    background: lightgrey;
     cursor: pointer;
 }
-#inputs{
-    height:125px;
-    overflow-y:auto;
+
+#inputs {
+    max-height: 190px;
+    overflow-y: auto;
     margin-bottom: 10px;
 }
 
-#inputs>p{
-    padding-left:10px;
+#inputs > p {
+    padding-left: 1px;
 }
-#delete{
-    width:15px;
-    height:15px;
-}
-#delete:hover{
-     cursor:pointer;
- }
 
+#delete {
+    width: 15px;
+    height: 15px;
+}
+
+#delete:hover {
+    cursor: pointer;
+}
 
 
 .InputAddOn-item {
@@ -253,7 +259,7 @@ fieldset {
     bottom: 90px;
     position: absolute;
     z-index: 10;
-    left:-5px;
+    left: -5px;
     max-height: 30px;
 }
 

@@ -148,7 +148,7 @@ class Utilisateur extends AbstractDataObject
             "nom_tag" => $this->nom,
             "prenom_tag" => $this->prenom,
             "mdp_hache_tag" => $this->mdpHache,
-            "est_admin_tag" => $this->estAdmin ? "1" : "0",
+            "est_admin_tag" => $this->estAdmin,
             "email_tag" => $this->email,
             "nonce_tag" => $this->nonce,
             "email_a_valider_tag" => $this->emailAValider,

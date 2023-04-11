@@ -2,7 +2,6 @@
 
 namespace App\PlusCourtChemin\Modele\Repository;
 
-use App\PlusCourtChemin\Modele\DataObject\AbstractDataObject;
 use App\PlusCourtChemin\Modele\DataObject\Trajet;
 
 class TrajetRepository extends AbstractRepository

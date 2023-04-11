@@ -156,8 +156,6 @@ abstract class AbstractRepository
 
         $objetFormatTableau = $object->exporterEnFormatRequetePreparee();
         $req_prep->execute($objetFormatTableau);
-
-        return;
     }
 
     public function ajouter(AbstractDataObject $object): bool
