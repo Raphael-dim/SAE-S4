@@ -33,4 +33,9 @@ Contribution des membres sur la SAE :
     16. Recherche des communes
 
 
- -- Nael Fradet --
+ -- Nael Fradet --  (10%)
+
+    1. Mise en place de la base de donnée (table relation et index)
+    17. Commenter les méthodes
+    18. Amelioration du modèle de la BD
+    8. Amélioration de la carte (markers)
