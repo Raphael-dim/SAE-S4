@@ -1,34 +1,37 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-    <title>{% block page_title %}The Feed{% endblock %}</title>
-    <meta charset="utf-8">
-    <link rel="stylesheet" type="text/css" href="{# lien vers le CSS #}">
-</head>
-<body>
-<header>
-    <div id="titre" class="center">
-        <a href="{# lien #}"><span>The Feed</span></a>
-        <nav>
-            <a href="{# lien #}">Accueil</a>
-            {# si l'utilisateur est connecte #}
-            <a href="{# lien #}">Ma page</a>
-            <a href="{# lien #}">Déconnexion</a>
-            {# sinon #}
-            <a href="{# lien #}">Inscription</a>
-            <a href="{# lien #}">Connexion</a>
-            {# fin si #}
-        </nav>
-    </div>
-</header>
-<div id="flashes-container">
-    {# boucle sur les types de messages flash #}
-        {# boucle sur les messages flash de ce type #}
-            <span class="flashes flashes-{# type du message #}">{# message flash #}</span>
-        {# fin boucle #}
-    {# fin boucle #}
-</div>
-{% block page_content %}{% endblock %}
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block page_title %}Plus Court Chemin{% endblock %}</title>
+        <link rel="stylesheet" href="{{asset("assets/css/profile.css")}}">
+        <link rel="stylesheet" href="{{asset("assets/css/global.css")}}">
+        <link rel="stylesheet" href="{{asset("assets/css/keyFrames.css")}}">
+        <link rel="stylesheet" href="{{asset("assets/css/nav.css")}}">
+        <link rel="icon" href="{{asset("assets/img/logo_site.jpg")}}">
+    </head>
 
-</body>
+    <body>
+        <header>
+            {% include('nav.html.twig') %}
+
+            <div class="pileFlash">
+                {% set types = ['success','info', 'warning', 'danger']%}
+                {% for type in types %}
+                    {% for messageFlash in messagesFlash[type] %}
+                        <div class="alert alert-{{ type }}">{{messageFlash}}</div>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+        </header>
+
+        <main>
+            <div id="content">
+                {% block page_content %}{% endblock %}
+            </div>
+        </main>
+
+        <footer>
+            Site du plus court chemin, 2023 Prog'Raleur
+        </footer>
+    </body>
 </html>

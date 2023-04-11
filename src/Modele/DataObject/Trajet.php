@@ -129,7 +129,8 @@ class Trajet extends AbstractDataObject
             "gid_commune_depart_tag" => $this->commune_depart->getGid(),
             "gid_commune_arrivee_tag" => $this->commune_arrivee->getGid(),
             "loginutilisateur_tag" => $this->loginUtilisateur,
-            "date_tag" => $this->date
+            "date_tag" => $this->date,
+            "idtrajet_tag" => 0
         );
     }
 }

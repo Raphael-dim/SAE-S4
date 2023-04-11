@@ -2,6 +2,7 @@
 
 namespace App\PlusCourtChemin\Controleur;
 
+use App\PlusCourtChemin\Configuration\Configuration;
 use App\PlusCourtChemin\Lib\MessageFlash;
 use App\PlusCourtChemin\Service\Exception\ServiceException;
 use App\PlusCourtChemin\Service\NoeudCommuneService;
@@ -22,12 +23,20 @@ class ControleurNoeudCommune extends ControleurGenerique
             MessageFlash::ajouter("error", $e->getMessage());
         }
 
-        return ControleurNoeudCommune::afficherVue('vueGenerale.php', [
+        /*return ControleurNoeudCommune::afficherVue('vueGenerale.php', [
             "noeudsCommunes" => $noeudsCommunes,
             "pagetitle" => "Liste des Noeuds Routiers",
             "cheminVueBody" => "noeudCommune/liste.php",
             "limit" => $limit,
             "start" => $start
+        ]);*/
+
+        return ControleurUtilisateur::afficherTwig('noeudCommune/liste.html.twig',[
+            "page_title" => "Liste des Noeuds Routiers",
+            "method" => Configuration::getDebug() ? "get" : "post",
+            "limit" => $limit,
+            "start" => $start,
+            "noeudsCommunes" => $noeudsCommunes
         ]);
     }
 
@@ -40,10 +49,16 @@ class ControleurNoeudCommune extends ControleurGenerique
             return ControleurNoeudCommune::rediriger("communes");
         }
 
-        return ControleurNoeudCommune::afficherVue('vueGenerale.php', [
+        /*return ControleurNoeudCommune::afficherVue('vueGenerale.php', [
             "noeudCommune" => $noeudCommune,
             "pagetitle" => "Détail de la commune",
             "cheminVueBody" => "noeudCommune/detail.php"
+        ]);*/
+
+        return ControleurUtilisateur::afficherTwig('noeudCommune/detail.html.twig',[
+            "page_title" => "Détail de la commune",
+            "method" => Configuration::getDebug() ? "get" : "post",
+            "noeudCommune" => $noeudCommune
         ]);
     }
 
@@ -51,7 +66,7 @@ class ControleurNoeudCommune extends ControleurGenerique
     {
         $plusCourtChemin = [
             "pagetitle" => "Plus court chemin",
-            "cheminVueBody" => "noeudCommune/plusCourtChemin.php",
+            "cheminVueBody" => "noeudCommune/plusCourtChemin.php"
         ];
 
         if (!empty($_POST)) {

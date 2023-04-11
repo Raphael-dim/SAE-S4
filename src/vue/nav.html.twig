@@ -1,0 +1,34 @@
+ <nav>
+    <ul id="Menu">
+        {% if adminUser %}
+            <li class="grosmenu">
+                <a href="{{route("utilisateurs")}}">Utilisateurs</a>
+            </li>
+        {% endif %}
+        <li class="grosmenu">
+            <a href="{{route("plusCourtChemin")}}">Carte</a>
+        </li>
+        <li class="grosmenu">
+            <a href="{{route("communes")}}">Liste</a>
+        </li>
+
+        {% if not connectedUser %}
+            <li class="grosmenu user">
+                <a href="{{route("connexion")}}">
+                    <img alt="login" src="{{asset("assets/img/enter.png")}}" width="18">
+                </a>
+            </li>
+        {% else %}
+            <li class="grosmenu user">
+                <a  href="{{route("detailUtilisateur", {'idUtilisateur' : connectedUser|e})}}">
+                    <img alt="user" src="{{asset("assets/img/user.png")}}" width="18"> {{ connectedUser|e }}
+                </a>
+            </li>
+            <li class="grosmenu">
+                <a href="{{route("deconnecter")}}">
+                    <img alt="logout" src="{{asset("assets/img/logout.png")}}" width="18">
+                </a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>

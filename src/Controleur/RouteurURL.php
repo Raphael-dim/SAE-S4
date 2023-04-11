@@ -2,7 +2,9 @@
 
 namespace App\PlusCourtChemin\Controleur;
 
+use App\PlusCourtChemin\Lib\ConnexionUtilisateur;
 use App\PlusCourtChemin\Lib\Conteneur;
+use App\PlusCourtChemin\Lib\MessageFlash;
 use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -18,6 +20,7 @@ use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
+use Twig\TwigFunction;
 
 class RouteurURL
 {
@@ -202,6 +205,9 @@ class RouteurURL
                 'strict_variables' => true
             ]
         );
+        $twig->addFunction(new TwigFunction("route", [$generateurUrl, "generate"]));
+        $twig->addFunction(new TwigFunction("asset", [$assistantUrl, "getAbsoluteUrl"]));
+
         Conteneur::ajouterService("twig", $twig);
 
         try {
@@ -226,6 +232,10 @@ class RouteurURL
             $reponse->send();
             exit();
         }
+
+        $twig->addGlobal('connectedUser', ConnexionUtilisateur::getLoginUtilisateurConnecte());
+        $twig->addGlobal('adminUser', ConnexionUtilisateur::getLoginUtilisateurConnecte());
+        $twig->addGlobal('messagesFlash', MessageFlash::lireTousMessages());
 
         $reponse = call_user_func_array($controleur, $arguments);
         $reponse->send();

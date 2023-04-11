@@ -1,0 +1,47 @@
+{% extends "base.html.twig" %}
+
+{% block page_title %}Détail{% endblock %}
+
+{% block page_content %}
+
+    <div class="barre_utilisateur">
+        <img id="picture" src="{{ asset("assets/img/profile_pic.jpg") }}" alt="profile">
+        <div id="infos_utilisateur">
+            <h1 id="nom"> {{ utilisateur.getPrenom()|e }} {{ utilisateur.getNom()|e }}</h1>
+            <h2 id="identifiant"> {{ utilisateur.getLogin()|e }}</h2>
+        </div>
+
+        {% if connectedUser == utilisateur.getLogin() or adminUser %}
+        <a href="{{ route("deconnecter") }}">
+            <img class="sortie" src="{{ asset("assets/img/logo_sortie.png") }}" alt="Déconnexion">
+        </a>
+        {% endif %}
+    </div>
+
+    <div id="modif" style="margin-bottom: 60px">
+        {% if connectedUser == utilisateur.getLogin() or adminUser %}
+            <a class="lien" href="{{route("formulaireMiseAJour",{'idUtilisateur' : utilisateur.getLogin|e})}}"> Modifier les informations</a>
+        {% endif %}
+    </div>
+
+    {% if connectedUser == utilisateur.getLogin() or adminUser %}
+        <a class="lien" href="{{route("supprimerUtilisateur",{'idUtilisateur' : utilisateur.getLogin|e})}}">supprimer</a>
+    {% endif %}
+
+    {% if connectedUser == utilisateur.getLogin() %}
+        <div class="trajets">
+            <h2> Mes trajets : </h2>(sans doublons)
+            <ul>
+                {% for trajet in trajets %}
+                    <li>
+                        <form method="post" action="{{ route("calculer") }}">
+                            <input type="submit" value="de {{ trajet.getCommuneDepart().getNomCommune|e }} vers {{ trajet.getCommuneArrivee().getNomCommune()|e }}">
+                            <input type="hidden" name="nomsCommune[]" value="{{ trajet.getCommuneDepart().getNomCommune()|e }}">
+                            <input type="hidden" name="nomsCommune[]" value="{{ trajet.getCommuneArrivee().getNomCommune()|e }}">
+                        </form>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+{% endblock %}

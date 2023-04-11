@@ -22,15 +22,16 @@ Contribution des membres sur la SAE :
     8. Amélioration de la carte (markers)
     12. Diviser les controller en 2 parties (controller et service)
     13. Implémentation de tests
+    14. Page Twig
 
 
  -- Théo Guenezan --  (30%)
 
-    14. Mise en place de la base de donnée (table relation et index)
-    15. Mise en place de la carte issue de l'extension Google Map
+    15. Mise en place de la base de donnée (table relation et index)
+    16. Mise en place de la carte issue de l'extension Google Map
     8. Amélioration de la carte (markers)
     7. Design/ergonomie du site (CSS, HTML)
-    16. Recherche des communes
+    17. Recherche des communes
 
 
  -- Nael Fradet --

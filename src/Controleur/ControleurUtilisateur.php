@@ -26,10 +26,10 @@ class ControleurUtilisateur extends ControleurGenerique
             return ControleurNoeudCommune::rediriger("communes");
         }
 
-        return ControleurUtilisateur::afficherVue('vueGenerale.php', [
+        return ControleurUtilisateur::afficherTwig('utilisateur/liste.html.twig',[
+            "page_title" => "Liste des utilisateurs",
             "utilisateurs" => $utilisateurs,
-            "pagetitle" => "Liste des utilisateurs",
-            "cheminVueBody" => "utilisateur/liste.php"
+            "method" => Configuration::getDebug() ? "get" : "post",
         ]);
     }
 
@@ -42,11 +42,11 @@ class ControleurUtilisateur extends ControleurGenerique
             return ControleurNoeudCommune::rediriger("utilisateurs");
         }
 
-        return ControleurUtilisateur::afficherVue('vueGenerale.php', [
+        return ControleurUtilisateur::afficherTwig('utilisateur/detail.html.twig',[
+            "page_title" => "Détail de l'utilisateur",
+            "trajets" => array_unique($utilisateur->getTrajets()),
             "utilisateur" => $utilisateur,
-            "trajets" => $utilisateur->getTrajets(),
-            "pagetitle" => "Détail de l'utilisateur",
-            "cheminVueBody" => "utilisateur/detail.php"
+            "method" => Configuration::getDebug() ? "get" : "post",
         ]);
     }
 
@@ -70,9 +70,8 @@ class ControleurUtilisateur extends ControleurGenerique
 
     public static function afficherFormulaireCreation(): Response
     {
-        return ControleurUtilisateur::afficherVue('vueGenerale.php', [
-            "pagetitle" => "Création d'un utilisateur",
-            "cheminVueBody" => "utilisateur/formulaireCreation.php",
+        return ControleurUtilisateur::afficherTwig('utilisateur/creation.html.twig',[
+            "page_title" => "Création d'un utilisateur",
             "method" => Configuration::getDebug() ? "get" : "post",
         ]);
     }
@@ -122,9 +121,9 @@ class ControleurUtilisateur extends ControleurGenerique
         $prenomHTML = htmlspecialchars($utilisateur->getPrenom());
         $nomHTML = htmlspecialchars($utilisateur->getNom());
         $emailHTML = htmlspecialchars($utilisateur->getEmail());
-        return ControleurUtilisateur::afficherVue('vueGenerale.php', [
-            "pagetitle" => "Mise à jour d'un utilisateur",
-            "cheminVueBody" => "utilisateur/formulaireMiseAJour.php",
+
+        return ControleurUtilisateur::afficherTwig('utilisateur/maj.html.twig',[
+            "page_title" => "Mise à jour d'un utilisateur",
             "loginHTML" => $loginHTML,
             "prenomHTML" => $prenomHTML,
             "nomHTML" => $nomHTML,
@@ -171,9 +170,8 @@ class ControleurUtilisateur extends ControleurGenerique
 
     public static function afficherFormulaireConnexion(): Response
     {
-        return ControleurUtilisateur::afficherVue('vueGenerale.php', [
-            "pagetitle" => "Formulaire de connexion",
-            "cheminVueBody" => "utilisateur/formulaireConnexion.php",
+        return ControleurUtilisateur::afficherTwig('utilisateur/connexion.html.twig',[
+            "page_title" => "Formulaire de connexion",
             "method" => Configuration::getDebug() ? "get" : "post",
         ]);
     }
