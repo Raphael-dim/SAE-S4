@@ -19,9 +19,9 @@ class ControleurUtilisateur extends ControleurGenerique
 
     public static function afficherListe(): Response
     {
-        try{
+        try {
             $utilisateurs = UtilisateurService::recupererUtilisateurs();
-        }catch(ServiceException $e){
+        } catch (ServiceException $e) {
             MessageFlash::ajouter('danger', $e->getMessage());
             return ControleurNoeudCommune::rediriger("communes");
         }
@@ -35,9 +35,9 @@ class ControleurUtilisateur extends ControleurGenerique
 
     public static function afficherDetail($idUtilisateur): Response
     {
-        try{
+        try {
             $utilisateur = UtilisateurService::recupererDetailUtilisateur($idUtilisateur);
-        }catch(ServiceException $e){
+        } catch (ServiceException $e) {
             MessageFlash::ajouter('danger', $e->getMessage());
             return ControleurNoeudCommune::rediriger("utilisateurs");
         }
@@ -86,9 +86,9 @@ class ControleurUtilisateur extends ControleurGenerique
                 unset($_REQUEST["estAdmin"]);
             }
 
-            try{
+            try {
                 $utilisateur = UtilisateurService::verificationCreation($_REQUEST['login'], $_REQUEST['prenom'], $_REQUEST['nom'], $_REQUEST["mdp"], $_REQUEST["mdp2"], $_REQUEST['email']);
-            }catch(ServiceException $e){
+            } catch (ServiceException $e) {
                 MessageFlash::ajouter('danger', $e->getMessage());
                 return ControleurNoeudCommune::rediriger("creerDepuisFormulaire");
             }
@@ -144,9 +144,9 @@ class ControleurUtilisateur extends ControleurGenerique
             return ControleurUtilisateur::rediriger("utilisateurs");
         }
 
-        try{
+        try {
             $utilisateur = UtilisateurService::verificationMiseAJour($_REQUEST['login'], $_REQUEST['prenom'], $_REQUEST['nom'], $_REQUEST['mdp'], $_REQUEST['mdp2'], $_REQUEST['mdpAncien'], $_REQUEST['email']);
-        }catch(ServiceException $e){
+        } catch (ServiceException $e) {
             MessageFlash::ajouter("warning", $e->getMessage());
             return ControleurUtilisateur::rediriger("mettreAJour", ["login" => $_REQUEST["login"]]);
         }
@@ -183,11 +183,11 @@ class ControleurUtilisateur extends ControleurGenerique
             return ControleurUtilisateur::rediriger("connexion");
         }
 
-        try{
+        try {
             $utilisateur = UtilisateurService::verificationConnexion($_REQUEST['login'], $_REQUEST['mdp']);
-        }catch (ServiceException $e){
+        } catch (ServiceException $e) {
             MessageFlash::ajouter('danger', $e->getMessage());
-            if($e->getCode() === 1){
+            if ($e->getCode() === 1) {
                 MessageFlash::ajouter('info', "Cliquez <a href='./envoyerMail/" . $utilisateur->getLogin() . "'>ici</a> pour renvoyer un mail");
             }
             return ControleurUtilisateur::rediriger("connexion");

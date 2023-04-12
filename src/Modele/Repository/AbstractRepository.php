@@ -173,9 +173,8 @@ abstract class AbstractRepository
         $sql = "INSERT INTO $nomTable $insertString VALUES $valueString";
         // Préparation de la requête
         $pdoStatement = ConnexionBaseDeDonnees::getPdo()->prepare($sql);
-
         $objetFormatTableau = $object->exporterEnFormatRequetePreparee();
-
+        var_dump($objetFormatTableau);
         try {
             $pdoStatement->execute($objetFormatTableau);
             return true;
