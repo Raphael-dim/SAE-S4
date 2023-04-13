@@ -4,6 +4,7 @@ namespace App\PlusCourtChemin\Controleur;
 
 use App\PlusCourtChemin\Configuration\Configuration;
 use App\PlusCourtChemin\Lib\ConnexionUtilisateur;
+use App\PlusCourtChemin\Lib\Conteneur;
 use App\PlusCourtChemin\Lib\MessageFlash;
 use App\PlusCourtChemin\Lib\MotDePasse;
 use App\PlusCourtChemin\Lib\VerificationEmail;
@@ -13,6 +14,7 @@ use App\PlusCourtChemin\Service\Exception\ServiceException;
 use App\PlusCourtChemin\Service\UtilisateurService;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use function PHPUnit\Framework\logicalNot;
 
 class ControleurUtilisateur extends ControleurGenerique
 {
@@ -50,22 +52,51 @@ class ControleurUtilisateur extends ControleurGenerique
         ]);
     }
 
-    public static function supprimer(string $idUtilisateur): RedirectResponse
+    public static function supprimer(string $idUtilisateur): RedirectResponse|Response
     {
+        if (ConnexionUtilisateur::getLoginUtilisateurConnecte() == $idUtilisateur) {
+            $message = "Êtes vous sûr de vouloir supprimer votre compte ?";
+        } else {
+            $message = "Êtes vous sûr de vouloir supprimer ce compte ?";
+        }
+        $conteneur = Conteneur::recupererService('generateurUrl');
         $utilisateurRepository = new UtilisateurRepository();
         if (ConnexionUtilisateur::getLoginUtilisateurConnecte() != $idUtilisateur) {
             MessageFlash::ajouter("warning", "Vous devez être connecté pour supprimer votre compte.");
             return ControleurUtilisateur::rediriger("utilisateurs");
         }
-        $deleteSuccessful = $utilisateurRepository->supprimer($idUtilisateur);
-        if ($deleteSuccessful) {
-            MessageFlash::ajouter("success", "L'utilisateur a bien été supprimé !");
-            self::deconnecter();
-            return ControleurUtilisateur::rediriger("communes");
-        } else {
-            MessageFlash::ajouter("warning", "Login inconnu.");
-            return ControleurUtilisateur::rediriger("utilisateurs");
+        if (!isset($_POST["cancel"]) && !isset($_POST["confirm"])) {
+            return ControleurGenerique::afficherVue('vueGenerale.php', ["pagetitle" => "Demande de confirmation ",
+                "cheminVueBody" => "confirm.php",
+                "url" => $conteneur->generate("supprimerUtilisateur", ["idUtilisateur" => $idUtilisateur]),
+                "mdp" => true,
+                "message" => $message]);
+        } else if (isset($_POST["cancel"])) {
+            return ControleurGenerique::rediriger("detailUtilisateur", ["idUtilisateur" => $idUtilisateur]);
+        } else if (isset($_POST["confirm"])) {
+            /** @var Utilisateur $utilisateur */
+            $utilisateur = $utilisateurRepository->recupererParClePrimaire($idUtilisateur);
+            if (!MotDePasse::verifier($_POST['mdp'], $utilisateur->getMdpHache())) {
+                MessageFlash::ajouter('warning', 'Mot de passe incorrect');
+                return ControleurGenerique::afficherVue('vueGenerale.php', ["pagetitle" => "Demande de confirmation ",
+                    "cheminVueBody" => "confirm.php",
+                    "url" => $conteneur->generate("supprimerUtilisateur", ["idUtilisateur" => $idUtilisateur]),
+                    "mdp" => true,
+                    "message" => $message]);
+            } else {
+                $deleteSuccessful = $utilisateurRepository->supprimer($idUtilisateur);
+                $utilisateurs = $utilisateurRepository->recuperer();
+                if ($deleteSuccessful) {
+                    MessageFlash::ajouter("success", "L'utilisateur a bien été supprimé !");
+                    self::deconnecter();
+                    return ControleurUtilisateur::rediriger("communes");
+                } else {
+                    MessageFlash::ajouter("warning", "Login inconnu.");
+                    return ControleurUtilisateur::rediriger("utilisateurs");
+                }
+            }
         }
+        return ControleurGenerique::rediriger("communes");
     }
 
     public static function afficherFormulaireCreation(): Response
@@ -185,7 +216,7 @@ class ControleurUtilisateur extends ControleurGenerique
         } catch (ServiceException $e) {
             MessageFlash::ajouter('danger', $e->getMessage());
             if ($e->getCode() === 1) {
-                MessageFlash::ajouter('info', "Cliquez <a href='./envoyerMail/" . $utilisateur->getLogin() . "'>ici</a> pour renvoyer un mail");
+                MessageFlash::ajouter('info', "Cliquez <a href='./envoyerMail/" . $_REQUEST['login'] . "'>ici</a> pour renvoyer un mail");
             }
             return ControleurUtilisateur::rediriger("connexion");
         }
