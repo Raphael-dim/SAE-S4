@@ -82,7 +82,7 @@ class PlusCourtCheminTest extends TestCase {
     /** test10CheminAleatoire
      * Test plusieurs chemins aléatoire
      *
-     * !ATTENTION! 10 itérations en configuration Postgres ~1 minute de test */
+     * !ATTENTION! 10 itérations en configuration Postgres ~1 minute 30 de test */
     public function test10CheminEntre4Aleatoire() {
         for($i = 0;$i<10;$i++){
             $this->testCheminEntre4Aleatoire();
