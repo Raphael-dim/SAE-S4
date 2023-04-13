@@ -17,8 +17,8 @@ class VerificationEmail
         $loginURL = rawurlencode($utilisateur->getLogin());
         $nonceURL = rawurlencode($utilisateur->getNonce());
         $generateurUrl = Conteneur::recupererService("generateurUrl");
-        $url = $generateurUrl->generate('validerEmail', ["idUtilisateur" => $loginURL, "nonce" => $utilisateur->getNonce()]);
-        //$url = "http://localhost/SAE%20Semestre%204/SAE-S4/web/validerEmail/" . $loginURL . "/" . $nonceURL;
+        //$url = $generateurUrl->generate('validerEmail', ["idUtilisateur" => $loginURL, "nonce" => $utilisateur->getNonce()]);
+        $url = "http://localhost/SAE%20Semestre%204/SAE-S4/web/validerEmail/" . $loginURL . "/" . $nonceURL;
         $corpsEmail = '
         <!DOCTYPE html>
         <head>
