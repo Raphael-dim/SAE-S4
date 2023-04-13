@@ -27,7 +27,7 @@
     {% if connectedUser == utilisateur.getLogin() or adminUser %}
         <a class="lien" href="{{route("supprimerUtilisateur",{'idUtilisateur' : utilisateur.getLogin|e})}}">supprimer</a>
     {% endif %}
-
+    <hr>
     {% if connectedUser == utilisateur.getLogin() %}
         <div class="trajets">
             <h2> Mes trajets : </h2>(sans doublons)

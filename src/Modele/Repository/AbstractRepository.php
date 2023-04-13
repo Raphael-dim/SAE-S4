@@ -49,7 +49,7 @@ abstract class AbstractRepository
         $partiesWhere = array_map(function ($nomcolonne) {
             return "$nomcolonne = :$nomcolonne";
         }, array_keys($critereSelection));
-        $whereClause = join(',', $partiesWhere);
+        $whereClause = join(' and ', $partiesWhere);
 
         $requeteSQL = <<<SQL
             SELECT $champsSelect FROM $nomTable WHERE $whereClause LIMIT $limit;
@@ -174,9 +174,7 @@ abstract class AbstractRepository
         // Préparation de la requête
         $pdoStatement = ConnexionBaseDeDonnees::getPdo()->prepare($sql);
         $objetFormatTableau = $object->exporterEnFormatRequetePreparee();
-        var_dump($objetFormatTableau);
         try {
-            var_dump($objetFormatTableau);
             $pdoStatement->execute($objetFormatTableau);
             return true;
         } catch (PDOException $exception) {

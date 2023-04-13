@@ -100,7 +100,9 @@ class NoeudCommuneService
         if (ConnexionUtilisateur::estConnecte()) {
             $trajet = new Trajet(ConnexionUtilisateur::getLoginUtilisateurConnecte(), $noeudsCommune[0]->getGid(),
                 end($noeudsCommune)->getGid(), date('Y-m-d : H:i:s'));
-            (new TrajetRepository())->ajouter($trajet);
+            if(is_null((new TrajetRepository())->recupererPar(["gid_commune_depart" => $noeudsCommune[0]->getGid(),"gid_commune_arrivee" => end($noeudsCommune)->getGid()])[0])){
+                (new TrajetRepository())->ajouter($trajet);
+            }
         }
 
         $distance = 0;
