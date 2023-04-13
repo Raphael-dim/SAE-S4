@@ -1,0 +1,84 @@
+{% extends "base.html.twig" %}
+
+{% block page_title %}Détail{% endblock %}
+
+{% block page_content %}
+
+    <form class="saisieVille" action="calculer" method="post">
+        <div id = "inputs">
+            <p class="InputAddOn">
+                <input placeholder="Nom de la commune de départ" class="InputAddOn-field nomCommune" type="text" value="{{ Communes is defined? Communes|first.getNomCommune():'' }}"
+                       autocomplete="off" name="nomsCommune[]" required>
+                <!-- <img id="loading" src="img/loading.gif"> -->
+                <!--            <img class="localiser" src ="assets/img/marker.png">-->
+            </p>
+            <p class="InputAddOn">
+                <input placeholder="Nom de la commune d'arrivée" class="InputAddOn-field nomCommune" type="text" value="{{ Communes is defined? Communes|last.getNomCommune():'' }}"
+                       autocomplete="off" name="nomsCommune[]" required>
+            </p>
+        </div>
+        <!-- <img id="loading" src="img/loading.gif"> -->
+        <div class="autocompletion hidden" id="autocompletion"></div>
+        <div>
+            <input type="hidden" name="XDEBUG_TRIGGER">
+            <input class="InputAddOn-field" type="button" value="Ajouter une escale" onclick="addEscale()"/>
+            <input class="InputAddOn-field" type = "button" value="Localiser" id="localiser">
+            <input class="InputAddOn-field" type="submit" value="Calculer"/>
+        </div>
+
+        {% if Communes is defined %}
+        <p>
+            Le plus court chemin entre : <br>
+            <?php
+            {{ Communes|first.getNomCommune() }}
+            {% for i  in 0..Communes|length-1 %}
+                {% if i == Communes|length-1 %}
+                    et {{ Communes[i].getNomCommune() }}
+                {% else %}
+                    , {{ Communes[i].getNomCommune() }}
+                {% endif %}
+            {% endfor %}
+            <br>
+            mesure {{ distance }}km.
+        </p>
+        <p>
+            Temps d'execution : {{ temps }}s
+        </p>
+        <p id="loading">
+            loading
+        </p>
+        {% endif %}
+    </form>
+    <div class="infoVille" id="infoVille"></div>
+    <img class="fleche" src="{{ asset("assets/img/fleche.png") }}" alt="fleche">
+    <div class="accolade"></div>
+
+
+    <!-------------------------------------GOOGLE MAPS API---------------------------------------->
+    <script defer src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <div id="map" class="map"></div>
+
+
+    <script defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCNgiSeE--QYZtlP4qYMTDatGQrDXgql8M&v=weekly"></script>
+
+    <!---------------------------------------INIT MAP--------------------------------------------->
+    <script defer src="../src/js/map.js"></script>
+
+    {% if Communes is defined %}
+    <script>
+        window.onload = function () {
+            let CommunesJSON = {{Communes|json_encode}};
+            initMap(CommunesJSON);
+            let tabTronconJSON = {{troncons|json_encode}};
+            plotTroncon(tabTronconJSON);
+            document.getElementById("loading").classList.add("hidden")
+        }
+    </script>
+    {% endif %}
+    <!-------------------------------------------------------------------------------------------->
+
+    <script src="../src/js/infosVille.js" defer></script>
+    <script src="../src/js/AutoCompletion.js" data-communes='{{Communes is defined? noeuds|map(n => "['lat' => floatval(n->getLongNoeud()),'long' => floatval(n->getLatNoeud())]")|json_encode:'[]'}}' defer></script>
+    <script src="../src/js/Escale.js" data-communes='{{Communes is defined? nomsCommune|json_encode:'[]'}}' defer></script>
+{% endblock %}

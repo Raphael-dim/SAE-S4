@@ -1,0 +1,52 @@
+{% extends "base.html.twig" %}
+
+{% block page_title %}Mise a jour d'un compte{% endblock %}
+
+{% block page_content %}
+    <div>
+        <form method="POST" action="../mettreAJour">
+            <fieldset>
+                <legend>Mon formulaire :</legend>
+                <p class="InputAddOn">
+                    <label class="InputAddOn-item" for="login_id">Login&#42;</label>
+                    <input class="InputAddOn-field" type="text" value="{{ login|e }}" placeholder="Ex : rlebreton" name="login" id="login_id" required>
+                </p>
+                <p class="InputAddOn">
+                    <label class="InputAddOn-item" for="prenom_id">Prenom&#42;</label>
+                    <input class="InputAddOn-field" type="text" value="{{ prenom|e }}" placeholder="Ex : Romain" name="prenom" id="prenom_id" required>
+                </p>
+                <p class="InputAddOn">
+                    <label class="InputAddOn-item" for="nom_id">Nom&#42;</label>
+                    <input class="InputAddOn-field" type="text" value="{{ nom|e }}" placeholder="Ex : Lebreton" name="nom" id="nom_id" required>
+                </p>
+                <p class="InputAddOn">
+                    <label class="InputAddOn-item" for="email_id">Email&#42;</label>
+                    <input class="InputAddOn-field" type="email" value="{{ email|e }}" placeholder="rlebreton@yopmail.com" name="email" id="email_id" required>
+                </p>
+                <p class="InputAddOn">
+                    <label class="InputAddOn-item" for="mdp_id">Ancien mot de passe&#42;</label>
+                    <input class="InputAddOn-field" type="password" value="" placeholder="" name="mdpAncien" id="mdp_id" required>
+                </p>
+                <p class="InputAddOn">
+                    <label class="InputAddOn-item" for="mdp_id">Nouveau mot de passe&#42;</label>
+                    <input class="InputAddOn-field" type="password" value="" placeholder="" name="mdp" id="mdp_id" required>
+                </p>
+                <p class="InputAddOn">
+                    <label class="InputAddOn-item" for="mdp2_id">Vérification du nouveau mot de passe&#42;</label>
+                    <input class="InputAddOn-field" type="password" value="" placeholder="" name="mdp2" id="mdp2_id" required>
+                </p>
+
+                {% if adminUser %}
+                    <p class="InputAddOn">
+                        <label class="InputAddOn-item" for="estAdmin_id">Administrateur</label>
+                        <input class="InputAddOn-field" type="checkbox" placeholder="" name="estAdmin" id="estAdmin_id" {{ estAdmin ? "checked" : "" }}>
+                    </p>
+                {% endif %}
+
+                <p class="InputAddOn">
+                    <input class="InputAddOn-field" type="submit" value="Envoyer" />
+                </p>
+            </fieldset>
+        </form>
+    </div>
+{% endblock %}

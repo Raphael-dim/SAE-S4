@@ -85,6 +85,7 @@ class UtilisateurService
 
     static function verificationCreation($login, $prenom, $nom, $password, $password2, $email){
 
+
         if ($password !== $password2) {
             throw new ServiceException("Mots de passe distincts.");
         }
@@ -93,6 +94,22 @@ class UtilisateurService
             throw new ServiceException("Email non valide");
         }
 
-        return Utilisateur::construireDepuisFormulaire($_REQUEST);
+        $utilisateurRepository = new UtilisateurRepository();
+
+        $test = $utilisateurRepository->recupererParClePrimaire($login);
+
+        if($test){
+            if($test->getEmail() === $email){
+                throw new ServiceException("Email deja existant.");
+            }else if($test->getLogin() === $login){
+                throw new ServiceException("Login deja existant.");
+            }else{
+                throw new ServiceException("Erreur.");
+            }
+        }
+
+        $utilisateur = Utilisateur::construireDepuisFormulaire(["login" => $login, "nom" => $nom, "prenom" => $prenom, "mdp" => $password, "email" => $email]);
+
+        return $utilisateur;
     }
 }

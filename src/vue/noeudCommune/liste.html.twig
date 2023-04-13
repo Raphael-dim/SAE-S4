@@ -1,0 +1,54 @@
+{% extends "base.html.twig" %}
+
+{% block page_title %}Détail{% endblock %}
+
+{% block page_content %}
+
+    {% set nextstart = start + limit %}
+    {% set nextpass = start + 1000 %}
+    {% set previousstart = max(start - limit,0) %}
+    {% set previouspass = max(start - 1000,0) %}
+
+    <a href="plusCourtChemin">Calculer un plus court chemin</a>
+
+    <h3>Liste des nœuds communes :</h3>
+
+    <div style ="margin:auto;width:fit-content;display: flex">
+        <form action = "./communesKeyWord" method = "post">
+            <input type="submit" name="previous" value = "<<">
+            <input type = "hidden" name="start" value={{ previouspass }}>
+        </form>
+
+        <form action = "./communesKeyWord" method = "post">
+            <input type="submit" name="previous" value = "-">
+            <input type = "hidden" name="start" value={{ previousstart }}>
+        </form>
+
+        <p style = "margin:auto;width:fit-content;">{{ start }} &#8594; {{ nextstart }}</p>
+
+        <form action = "./communesKeyWord" method = "post">
+            <input type="submit"  name="next" value = "+">
+            <input type = "hidden" name="start" value={{ nextstart }}>
+        </form>
+
+        <form action = "./communesKeyWord" method = "post">
+            <input type="submit"  name="next" value = ">>">
+            <input type = "hidden" name="start" value={{ nextpass }}>
+        </form>
+    </div>
+
+    <form action = "./communesKeyWord" method = "post">
+        <input type="submit" id="search_keyword" name="search_keyword" value = "Rechercher">
+        <input type = "text" id = "keyword" name ="keyword" required>
+    </form>
+
+    <ul id ="liste_Noeud_Commune">
+        {% for noeudCommune in noeudsCommunes|sort((a,b) => a.getNomCommune()|replace({'É' : 'E'}) > b.getNomCommune()|replace({'É' : 'E'})) %}
+            <li class ="commune visible {{ noeudCommune.getNomCommune()|first }}" style = "position :relative; padding:5px;">
+                {{ noeudCommune.getNomCommune() }}
+                <a style ='position:absolute; right:0' href="detailCommune/{{ noeudCommune.getGid() }}">(Détail)</a>
+            </li>
+        {% endfor %}
+    </ul>
+    <script src="../src/js/NoeudCommune.js"></script>
+{% endblock %}

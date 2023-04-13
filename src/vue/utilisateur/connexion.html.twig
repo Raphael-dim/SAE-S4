@@ -3,20 +3,25 @@
 {% block page_title %}Connexion{% endblock %}
 
 {% block page_content %}
-    <main>
-        <form action="{# lien vers la page de traitement #}" id="form-access" class="center" method="post">
+    <div>
+        <form method="POST" action="connexion">
             <fieldset>
                 <legend>Connexion</legend>
-                <div class="access-container">
-                    <label for="login">Login</label>
-                    <input id="login" type="text" name="login" required/>
-                </div>
-                <div class="access-container">
-                    <label for="password">Mot de passe</label>
-                    <input id="password" type="password" name="password" required/>
-                </div>
-                <input id="access-submit" type="submit" value="Se connecter">
+                <p class="InputAddOn">
+                    <label class="InputAddOn-item" for="login_id">Login</label>
+                    <input class="InputAddOn-field" type="text" value="" placeholder="Ex : rlebreton" name="login" id="login_id" required>
+                </p>
+                <p class="InputAddOn">
+                    <label class="InputAddOn-item" for="mdp_id">Mot de passe</label>
+                    <input class="InputAddOn-field" type="password" value="" placeholder="" name="mdp" id="mdp_id" required>
+                </p>
+                <p>
+                    <input class="InputAddOn-field" type="submit" value="Envoyer" />
+                </p>
+                <p>
+                    <a class="InputAddOn-field" href="./inscription" value="Créer un compte" />Créer un compte</a>
+                </p>
             </fieldset>
         </form>
-    </main>
+    </div>
 {% endblock %}

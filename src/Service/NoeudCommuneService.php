@@ -88,7 +88,7 @@ class NoeudCommuneService
             }
         }
 
-        echo "<br>";
+        /*echo "<br>";*/
 
         for($i = 0;$i<count($noeudsRoutier)-1;$i++){
             $results[] = (new NoeudRoutierRepository())->getShortestPathAstar($noeudsRoutier[$i]->getGid(), $noeudsRoutier[$i+1]->getGid());
@@ -100,7 +100,9 @@ class NoeudCommuneService
         if (ConnexionUtilisateur::estConnecte()) {
             $trajet = new Trajet(ConnexionUtilisateur::getLoginUtilisateurConnecte(), $noeudsCommune[0]->getGid(),
                 end($noeudsCommune)->getGid(), date('Y-m-d : H:i:s'));
-            (new TrajetRepository())->ajouter($trajet);
+            if(is_null((new TrajetRepository())->recupererPar(["gid_commune_depart" => $noeudsCommune[0]->getGid(),"gid_commune_arrivee" => end($noeudsCommune)->getGid()])[0])){
+                (new TrajetRepository())->ajouter($trajet);
+            }
         }
 
         $distance = 0;
@@ -120,6 +122,7 @@ class NoeudCommuneService
         $parametres["noeuds"] = $noeudsRoutier;
         $parametres["distance"] = $distance;
         $parametres["troncons"] = $troncons;
+        $parametres["nomsCommune"] = $nomsCommune;
         $t2 = microtime(true);
         $parametres["temps"] = round($t2 - $t1,2);
         return $parametres;

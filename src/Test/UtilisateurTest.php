@@ -1,48 +1,89 @@
 <?php
 
-namespace App\PlusCourtChemin\Test;
-
-use Ensemble;
+use App\PlusCourtChemin\Modele\Repository\UtilisateurRepository;
+use App\PlusCourtChemin\Service\Exception\ServiceException;
+use App\PlusCourtChemin\Service\UtilisateurService;
 use PHPUnit\Framework\TestCase;
 
 class UtilisateurTest extends TestCase
 {
-
-    private $ensembleTeste;
+    private $UtilisateurRepository;
 
     //On réinitialise l'ensemble avant chaque test
     protected function setUp(): void
     {
-        parent::setUp();
-        $this->ensembleTeste = new Ensemble();
+        $this->UtilisateurRepository = new UtilisateurRepository();
     }
 
-    public function testVideDepart()
-    {
-        $this->assertEquals(0, $this->ensembleTeste->getTaille());
+    /* TEST CREATION */
+
+    /*public function testCreerHTMLCharUtilisateur(){
+        try {
+            $result = UtilisateurService::verificationCreation("<h1>utilisateur1</h1>","<strong>Joseph</strong>","<!--Dupont-->","123456789","123456789","toto@gmail.com");
+        } catch (ServiceException $e) {
+            $this->assertTrue(true, $e->getMessage());
+            return;
+        }
+
+        $this->assertNotNull($result, "L'utilisateur est null");
+        $this->assertNotEmpty($result, "L'utilisateur est vide");
+        $this->assertTrue($result->getLogin() == "&lt;h1&gt;utilisateur1&lt;/h1&gt;", "Le chemin n'est pas un array");
+        $this->assertTrue($result->getPrenom() == "&lt;strong&gt;Joseph&lt;/strong&gt;", "Le chemin n'est pas un array");
+        $this->assertTrue($result->getNom() == "&lt;!--Dupont--&gt;", "Le chemin n'est pas un array");
+    }*/
+
+    public function testCreerUtilisateurMauvaisMDP(){
+        try {
+            $result = UtilisateurService::verificationCreation("utilisateur1","Joseph","Dupont","123456789","password","toto@gmail.com");
+        } catch (ServiceException $e) {
+            echo "ERREUR GERE, " . $e->getMessage();
+            $this->assertTrue(true, $e->getMessage());
+            return;
+        }
+
+        $this->assertNotNull($result, "L'utilisateur est null");
+        $this->assertNotEmpty($result, "L'utilisateur est vide");
+        $this->assertTrue($result->getLogin() == "password" || $result->getLogin() == "123456789", "/!\ Utilisateur créer malgré mot de passe différent");
     }
 
-    public function testAjout()
-    {
-        $this->assertFalse($this->ensembleTeste->contient(7));
-        $this->ensembleTeste->ajouter(7);
-        $this->assertTrue($this->ensembleTeste->contient(7));
-        $this->assertEquals(1, $this->ensembleTeste->getTaille());
-        //On n'ajoute pas deux fois dans un ensemble, donc la taille doit rester à 1
-        $this->ensembleTeste->ajouter(7);
-        $this->assertEquals(1, $this->ensembleTeste->getTaille());
+    public function testCreerUtilisateurMauvaisMail(){
+        try {
+            $result = UtilisateurService::verificationCreation("utilisateur1","Joseph","Dupont","123456789","123456789","toto.gmail.com");
+        } catch (ServiceException $e) {
+            echo "ERREUR GERE, " . $e->getMessage();
+            $this->assertTrue(true, $e->getMessage());
+            return;
+        }
+
+        $this->assertNotNull($result, "L'utilisateur est null");
+        $this->assertNotEmpty($result, "L'utilisateur est vide");
+        $this->assertTrue(str_contains($result->getEmail(), '@') && str_contains($result->getEmail(), '.'), "/!\ Utilisateur créer malgré mot de passe différent");
     }
 
-    public function testPop()
-    {
-        $this->ensembleTeste->ajouter(1);
-        $this->ensembleTeste->ajouter(2);
-        $this->ensembleTeste->ajouter(3);
-        $this->assertEquals(3, $this->ensembleTeste->pop());
-        $this->assertEquals(2, $this->ensembleTeste->pop());
-        $this->assertEquals(1, $this->ensembleTeste->pop());
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage("L'ensemble est vide!");
-        $this->ensembleTeste->pop();
+    /* TEST CONNEXION */
+    public function testConnexionUtilisateurInexistant(){
+        try {
+            $result = UtilisateurService::verificationConnexion("inexistant","eee");
+        } catch (ServiceException $e) {
+            echo "ERREUR GERE, " . $e->getMessage();
+            $this->assertTrue(true, $e->getMessage());
+            return;
+        }
+
+        $this->assertNotNull($result, "L'utilisateur est null");
+        $this->assertNotEmpty($result, "L'utilisateur est vide");
+    }
+
+    public function testConnexionUtilisateurMauvaisMDP(){
+        try {
+            $result = UtilisateurService::verificationConnexion("makloufiy","paslebon");
+        } catch (ServiceException $e) {
+            echo "ERREUR GERE, " . $e->getMessage();
+            $this->assertTrue(true, $e->getMessage());
+            return;
+        }
+
+        $this->assertNotNull($result, "L'utilisateur est null");
+        $this->assertNotEmpty($result, "L'utilisateur est vide");
     }
 }
