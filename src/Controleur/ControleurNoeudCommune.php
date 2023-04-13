@@ -64,10 +64,11 @@ class ControleurNoeudCommune extends ControleurGenerique
 
     public static function plusCourtChemin(): Response
     {
-        $plusCourtChemin = [
+        $parametres = [
             "pagetitle" => "Plus court chemin",
             "cheminVueBody" => "noeudCommune/plusCourtChemin.php"
         ];
+        $plusCourtChemin = [];
 
         if (!empty($_POST)) {
             try{
@@ -79,6 +80,6 @@ class ControleurNoeudCommune extends ControleurGenerique
             MessageFlash::ajouter('success', 'Temps d\'execution: '.$plusCourtChemin["temps"]." s");
         }
 
-        return ControleurNoeudCommune::afficherVue('vueGenerale.php', $plusCourtChemin);
+        return ControleurNoeudCommune::afficherVue('vueGenerale.php', array_merge($parametres,$plusCourtChemin));
     }
 }

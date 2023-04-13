@@ -59,7 +59,7 @@ class NoeudCommuneService
     {
         $parametres = [
             "pagetitle" => "Plus court chemin",
-            "cheminVueBody" => "noeudCommune/plusCourtChemin.php",
+            "cheminVueBody" => "noeudCommune/plusCourtChemin.php"
         ];
 
         $t1 = microtime(true);
@@ -68,7 +68,7 @@ class NoeudCommuneService
         $noeudRoutierRepository = new NoeudRoutierRepository();
 
         foreach($nomsCommune as $nom){
-            $noeudsCommune[] = $noeudCommuneRepository->recupererPar(["nom_comm" => $nom])[0];
+            $noeudsCommune[] = isset($noeudCommuneRepository->recupererPar(["nom_comm" => $nom])[0])? $noeudCommuneRepository->recupererPar(["nom_comm" => $nom])[0]:null;
             if(is_null(end($noeudsCommune)) || empty(end($noeudsCommune))){
                 throw new ServiceException("La ville " . $nom . " n'existe pas");
             }
