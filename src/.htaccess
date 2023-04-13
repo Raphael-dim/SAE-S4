@@ -1,1 +1,2 @@
-Require all denied
+RewriteCond %{REQUEST_URI} !\.(?:css|js)$ [NC]
+RewriteRule ^paymethod/ - [L,F]

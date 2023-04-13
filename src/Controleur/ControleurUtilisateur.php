@@ -93,6 +93,8 @@ class ControleurUtilisateur extends ControleurGenerique
                 return ControleurNoeudCommune::rediriger("creerDepuisFormulaire");
             }
 
+            (new UtilisateurRepository())->ajouter($utilisateur);
+
             VerificationEmail::envoiEmailValidation($utilisateur);
 
             MessageFlash::ajouter("success", "L'utilisateur a bien été créé !");
@@ -117,17 +119,12 @@ class ControleurUtilisateur extends ControleurGenerique
             return ControleurUtilisateur::rediriger("utilisateurs");
         }
 
-        $loginHTML = htmlspecialchars($idUtilisateur);
-        $prenomHTML = htmlspecialchars($utilisateur->getPrenom());
-        $nomHTML = htmlspecialchars($utilisateur->getNom());
-        $emailHTML = htmlspecialchars($utilisateur->getEmail());
-
         return ControleurUtilisateur::afficherTwig('utilisateur/maj.html.twig',[
             "page_title" => "Mise à jour d'un utilisateur",
-            "loginHTML" => $loginHTML,
-            "prenomHTML" => $prenomHTML,
-            "nomHTML" => $nomHTML,
-            "emailHTML" => $emailHTML,
+            "login" => $idUtilisateur,
+            "prenom" => $utilisateur->getPrenom(),
+            "nom" => $utilisateur->getNom(),
+            "email" => $utilisateur->getEmail(),
             "estAdmin" => $utilisateur->getEstAdmin(),
             "method" => Configuration::getDebug() ? "get" : "post",
         ]);

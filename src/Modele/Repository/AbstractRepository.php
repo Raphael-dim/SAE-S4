@@ -176,6 +176,7 @@ abstract class AbstractRepository
         $objetFormatTableau = $object->exporterEnFormatRequetePreparee();
         var_dump($objetFormatTableau);
         try {
+            var_dump($objetFormatTableau);
             $pdoStatement->execute($objetFormatTableau);
             return true;
         } catch (PDOException $exception) {
