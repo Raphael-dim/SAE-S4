@@ -16,10 +16,11 @@ class PlusCourtCheminTest extends TestCase {
         $this->noeudRoutierRepository = new NoeudRoutierRepository();
     }
 
-    private function testPathBetween2($nomCommune1, $nomCommune2) {
+    private function testCheminEntreX($nomsCommune) {
         try {
-            $result = NoeudCommuneService::calculPlusCourtChemin([$nomCommune1,$nomCommune2]);
+            $result = NoeudCommuneService::calculPlusCourtChemin($nomsCommune);
         } catch (ServiceException $e) {
+            echo "ERREUR GERE, " . $e->getMessage();
             $this->assertTrue(true, $e->getMessage());
             return;
         }
@@ -29,34 +30,62 @@ class PlusCourtCheminTest extends TestCase {
         $this->assertIsArray($result, "Le chemin n'est pas un array");
     }
 
-    public function testPathBetween2Random() {
+    public function testCheminEntre2Aleatoire() {
         $randomNom1 = (new NoeudCommuneRepository())->recupererPar(["gid" => random_int(1,34836)])[0]->getNomCommune();
         $randomNom2 = (new NoeudCommuneRepository())->recupererPar(["gid" => random_int(1,34836)])[0]->getNomCommune();
 
-        $this->testPathBetween2($randomNom1, $randomNom2);
+        $this->testCheminEntreX([$randomNom1, $randomNom2]);
     }
 
-    public function testPathBetweenFranceCorse() {
+    public function testCheminEntre4Aleatoire() {
+        $randomNom1 = (new NoeudCommuneRepository())->recupererPar(["gid" => random_int(1,34836)])[0]->getNomCommune();
+        $randomNom2 = (new NoeudCommuneRepository())->recupererPar(["gid" => random_int(1,34836)])[0]->getNomCommune();
+        $randomNom3 = (new NoeudCommuneRepository())->recupererPar(["gid" => random_int(1,34836)])[0]->getNomCommune();
+        $randomNom4 = (new NoeudCommuneRepository())->recupererPar(["gid" => random_int(1,34836)])[0]->getNomCommune();
+
+        $this->testCheminEntreX([$randomNom1, $randomNom2, $randomNom3, $randomNom4]);
+    }
+
+    public function testCheminEntre2FranceCorse() {
         $nomFrance = "Paris";
         $nomCorse = "Bastia";
 
-        $this->testPathBetween2($nomFrance, $nomCorse);
+        $this->testCheminEntreX([$nomFrance, $nomCorse]);
     }
 
-    public function testPathBetweenUnexisting() {
-        $nomFrance = "Inexistant";
-        $nomCorse = "VilleQuiExistePas";
+    public function testCheminEntre4FranceCorse() {
+        $nomFrance1 = "Paris";
+        $nomCorse = "Bastia";
+        $nomFrance2 = "Montpellier";
+        $nomFrance3 = "Sevran";
 
-        $this->testPathBetween2($nomFrance, $nomCorse);
+        $this->testCheminEntreX([$nomFrance1, $nomFrance2, $nomCorse, $nomFrance3]);
     }
 
-    /** test1000RandomPath
+    public function testCheminEntreInexistants() {
+        $nomInexistant1 = "Inexistant";
+        $nomInexistant2 = "VilleQuiExistePas";
+
+        $this->testCheminEntreX([$nomInexistant1, $nomInexistant2]);
+    }
+
+    /** test10CheminAleatoire
      * Test plusieurs chemins aléatoire
      *
-     * !ATTENTION! 20 itérations en configuration Postgres ~1 minute de test */
-    public function test20RandomPath() {
-        for($i = 0;$i<20;$i++){
-            $this->testPathBetween2Random();
+     * !ATTENTION! 10 itérations en configuration Postgres ~30 secondes de test */
+    public function test10CheminEntre2Aleatoire() {
+        for($i = 0;$i<10;$i++){
+            $this->testCheminEntre2Aleatoire();
+        }
+    }
+
+    /** test10CheminAleatoire
+     * Test plusieurs chemins aléatoire
+     *
+     * !ATTENTION! 10 itérations en configuration Postgres ~1 minute 30 de test */
+    public function test10CheminEntre4Aleatoire() {
+        for($i = 0;$i<10;$i++){
+            $this->testCheminEntre4Aleatoire();
         }
     }
 }

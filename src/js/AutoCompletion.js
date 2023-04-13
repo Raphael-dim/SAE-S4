@@ -229,7 +229,7 @@ function miseAJourMap(villes, nomVille) {
 
 /***** ESCALES ******/
 let nbEscale = 0;
-let noms = JSON.parse(document.currentScript.dataset.communes);
+let noms = JSON.parse(document.currentScript.dataset.nomcommunes);
 
 for (let i = 0; i < noms.length - 2; i++) {
     addEscale();
