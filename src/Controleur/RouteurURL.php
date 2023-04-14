@@ -234,7 +234,7 @@ class RouteurURL
         }
 
         $twig->addGlobal('connectedUser', ConnexionUtilisateur::getLoginUtilisateurConnecte());
-        $twig->addGlobal('adminUser', ConnexionUtilisateur::getLoginUtilisateurConnecte());
+        $twig->addGlobal('adminUser', ConnexionUtilisateur::estAdministrateur());
         $twig->addGlobal('messagesFlash', MessageFlash::lireTousMessages());
 
         $reponse = call_user_func_array($controleur, $arguments);
