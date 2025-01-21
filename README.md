@@ -24,22 +24,6 @@
 
 ---
 
-## 🛠️ Technologies Used
-
-### **Frontend**
-- React.js for a responsive and modern user interface.
-- Leaflet.js for interactive map rendering.
-
-### **Backend**
-- Node.js and Express.js for a robust API.
-- MongoDB or PostgreSQL for user and trip data storage.
-
-### **Integrations**
-- Google Maps API for geographical and routing data.
-- Wikipedia API for city-related information.
-
----
-
 ## ✨ Future Enhancements
 
 - Support for public transportation and bike routes.
